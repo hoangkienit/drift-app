@@ -1,0 +1,35 @@
+{
+  "onboarding": {
+    "skip_button": "Bỏ qua",
+    "select_language": "Chọn ngôn ngữ",
+    "close_button": "Đóng",
+    "title_1": "Giao hàng nhanh chóng và đáng tin cậy, mọi lúc!",
+    "desc_1": "Nhận hàng đúng hẹn với mạng lưới chuyển phát nhanh đáng tin cậy của chúng tôi.",
+    "title_2": "Theo dõi đơn hàng của bạn theo thời gian thực",
+    "desc_2": "Biết chính xác vị trí giao hàng của bạn với cập nhật vị trí trực tiếp.",
+    "title_3": "Thanh toán an toàn ngay trên đầu ngón tay",
+    "desc_3": "Thanh toán thuận tiện và an toàn với nhiều phương thức thanh toán như thẻ, ví điện tử và hơn thế nữa."
+  },
+  "authentication": {
+  "signin": {
+    "login_header": "Đăng nhập",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "login_button": "Đăng nhập",
+    "signup_link": "Chưa có tài khoản? Đăng ký",
+    "forgot_password": "Quên mật khẩu?",
+    "or": "hoặc",
+    "login_w_fb": "Đăng nhập bằng Facebook",
+    "login_w_gg": "Đăng nhập bằng Google"
+  },
+  "signup": {
+    "signup_header": "Tạo tài khoản mới",
+    "fullname": "Họ và tên",
+    "password": "Mật khẩu",
+    "cf_password": "Xác nhận mật khẩu",
+    "signup_button": "Đăng ký",
+    "signin_link": "Đã có tài khoản? Đăng nhập"
+  }
+}
+
+}
