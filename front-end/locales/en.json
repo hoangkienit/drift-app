@@ -37,5 +37,15 @@
     "favorite": "Favourite",
     "profile": "Profile",
     "notification": "Notification"
+  },
+  "profile": {
+    "user_category": {
+      "payment": "Payments",
+      "setting": "Settings",
+      "address": "My Address",
+      "privacy_policy": "Privacy Policy",
+      "customer_support": "Customer Support",
+      "logout": "Log Out"
+    }
   }
 }

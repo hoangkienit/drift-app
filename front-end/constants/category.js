@@ -7,3 +7,12 @@ export const FoodCategories = [
     { id: "6", name: "Fried Chicken", image: require("../assets/images/food_category/chicken.png") },
   { id: "7", name: "Noodles", image: require("../assets/images/food_category/noodles.png") },
 ];
+
+export const UserCategories = [
+  {key: "payment", title: 'Payments', icon: 'card', link: "" },
+  {key: "setting", title: 'Settings', icon: 'settings', link: "" },
+  {key: "address", title: 'My Address', icon: 'location', link: "" },
+  {key: "privacy_policy", title: 'Privacy Policy', icon: 'lock-closed', link: "" },
+  {key: "customer_support", title: 'Customer Support', icon: 'help-circle', link: "" },
+  {key: "logout", title: 'Log Out', icon: 'log-out', link: "" },
+];

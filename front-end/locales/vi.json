@@ -37,6 +37,15 @@
     "favorite": "Yêu thích",
     "profile": "Tôi",
     "notification": "Thông báo"
+  },
+  "profile": {
+  "user_category": {
+    "payment": "Thanh toán",
+    "setting": "Cài đặt",
+    "address": "Địa chỉ của tôi",
+    "privacy_policy": "Chính sách bảo mật",
+    "customer_support": "Hỗ trợ khách hàng",
+    "logout": "Đăng xuất"
+    }
   }
-
 }
