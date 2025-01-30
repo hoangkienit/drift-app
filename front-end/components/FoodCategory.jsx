@@ -2,16 +2,17 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react
 import React from 'react'
 import { FoodCategories } from '../constants/category'
 
-const FoodCategory = () => {
+const FoodCategory = ({t}) => {
   return (
     <View style={styles.categoryContainer}>
-      <Text style={styles.categoryTitle}>Categories</Text>
+          <Text style={styles.categoryTitle}>{ t('home.category')}</Text>
           <FlatList
               style={{
                   paddingHorizontal: 20,
               }}
             data={FoodCategories}
-            horizontal
+              horizontal
+              nestedScrollEnabled={true}
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (

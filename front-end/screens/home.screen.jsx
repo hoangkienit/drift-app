@@ -5,11 +5,9 @@ import {
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
   Keyboard,
   TouchableWithoutFeedback,
   FlatList,
-  Image,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../constants/Colors";
@@ -17,8 +15,12 @@ import { getLocation, truncateText } from "../utils/location";
 import ImageCarousel from "../components/ImageCarousel";
 import FoodCategory from "../components/FoodCategory";
 import SearchBar from "../components/SearchBar";
+import { useTranslation } from "react-i18next";
+import FilterFacets from "../components/FilterFacets";
+import RestaurantList from "../components/RestaurantList";
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
   const [location, setLocation] = useState(null);
   const cartItemCount = 3; // Example cart count
 
@@ -28,58 +30,67 @@ export default function HomeScreen() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={styles.headerContainer}>
-        {/* Top Row: Location & Cart */}
-        <View style={styles.topRow}>
-          <View style={styles.locationContainer}>
-            <Text style={styles.locationTitle}>Location</Text>
-            <View style={styles.locationRow}>
-              <Icon name="location-outline" size={18} color="black" />
-              <Text style={styles.locationText}>
-                {location
-                  ? truncateText(
-                      `${location.name || ""}, ${location.street || ""}, ${location.district || ""}, ${location.city || ""}, ${location.country || ""}`,
-                      30
-                    )
-                  : "Loading..."}
-              </Text>
+      <View style={styles.container}>
+        <SafeAreaView style={{ backgroundColor: Colors.primary }}>
+          {/* Top Row: Location & Cart */}
+          <View style={styles.topRow}>
+            <View style={styles.locationContainer}>
+              <Text style={styles.locationTitle}>Location</Text>
+              <View style={styles.locationRow}>
+                <Icon name="location-outline" size={18} color="white" />
+                <Text style={styles.locationText}>
+                  {location
+                    ? truncateText(
+                        `${location.name || ""}, ${location.street || ""}, ${location.district || ""}, ${location.city || ""}, ${location.country || ""}`,
+                        40
+                      )
+                    : "Loading..."}
+                </Text>
+              </View>
             </View>
+
+            {/* Cart Icon with Badge */}
+            <TouchableOpacity style={styles.cartContainer}>
+              <Icon name="cart-outline" size={28} color={"white"} />
+              {cartItemCount > 0 && (
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{cartItemCount}</Text>
+                </View>
+              )}
+            </TouchableOpacity>
           </View>
 
-          {/* Cart Icon with Badge */}
-          <TouchableOpacity style={styles.cartContainer}>
-            <Icon name="cart-outline" size={28} color={Colors.primary} />
-            {cartItemCount > 0 && (
-              <View style={styles.badge}>
-                <Text style={styles.badgeText}>{cartItemCount}</Text>
-              </View>
-            )}
-          </TouchableOpacity>
+          {/* Search Bar */}
+          <SearchBar t={t} />
+        </SafeAreaView>
+          
+        {/* Restaurant List Card */}
+        <View style={{ flex: 1 }}>
+          <FlatList
+            ListHeaderComponent={
+              <>
+                <ImageCarousel nestedScrollEnabled={true} />
+                <FoodCategory t={t} nestedScrollEnabled={true} />
+                <FilterFacets t={t} />
+              </>
+            }
+            data={[]} // Empty array to avoid unnecessary rendering
+            keyExtractor={(_, index) => index.toString()}
+            renderItem={null}
+            ListEmptyComponent={<View style={{ height: 10 }} />}
+            ListFooterComponent={<RestaurantList nestedScrollEnabled={true} />}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            nestedScrollEnabled={true}
+          />
         </View>
-
-        {/* Search Bar */}
-        <View>
-          <SearchBar/>
-        </View>
-
-        {/* Banner Slider */}
-        <View>
-          <ImageCarousel />
-        </View>
-
-        {/* Food Categories */}
-        <View>
-          <FoodCategory/>
-        </View>
-      </SafeAreaView>
+      </View>
     </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+  container: {
+    flex: 1,
     backgroundColor: "#fff",
   },
   topRow: {
@@ -92,8 +103,8 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   locationTitle: {
-    fontSize: 12,
-    color: "gray",
+    fontSize: 13,
+    color: "white",
   },
   locationRow: {
     flexDirection: "row",
@@ -105,6 +116,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "montserrat-bold",
     marginLeft: 5,
+    color: "white",
   },
   cartContainer: {
     position: "relative",
@@ -128,3 +140,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+

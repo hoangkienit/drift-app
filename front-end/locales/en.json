@@ -47,5 +47,14 @@
       "customer_support": "Customer Support",
       "logout": "Log Out"
     }
+  },
+  "home": {
+    "search_bar_placeholder": "Search for food...",
+    "facets": {
+      "near_me": "Near Me",
+      "recommend": "Recommend",
+      "popular": "Popular"
+    },
+    "category": "Categories"
   }
 }

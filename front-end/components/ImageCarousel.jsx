@@ -77,6 +77,7 @@ const ImageCarousel = () => {
                 getItemLayout={getItemLayout}
                 onScroll={handleScroll}
                 showsHorizontalScrollIndicator={false}
+                nestedScrollEnabled={true}
             />
         </View>
     );
@@ -88,11 +89,11 @@ const styles = StyleSheet.create({
         height: 200,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: "#fff"
     },
     bannerImage: {
         width: '100%',
         height: '100%',
-        borderRadius: 10,
     },
     dotContainer: {
         position: 'absolute',

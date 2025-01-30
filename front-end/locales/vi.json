@@ -39,13 +39,22 @@
     "notification": "Thông báo"
   },
   "profile": {
-  "user_category": {
-    "payment": "Thanh toán",
-    "setting": "Cài đặt",
-    "address": "Địa chỉ của tôi",
-    "privacy_policy": "Chính sách bảo mật",
-    "customer_support": "Hỗ trợ khách hàng",
-    "logout": "Đăng xuất"
+    "user_category": {
+      "payment": "Thanh toán",
+      "setting": "Cài đặt",
+      "address": "Địa chỉ của tôi",
+      "privacy_policy": "Chính sách bảo mật",
+      "customer_support": "Hỗ trợ khách hàng",
+      "logout": "Đăng xuất"
     }
+  },
+  "home": {
+    "search_bar_placeholder": "Tìm kiếm...",
+    "facets": {
+      "near_me": "Gần tôi",
+      "recommend": "Đề xuất",
+      "popular": "Phổ biến"
+    },
+    "category": "Danh mục"
   }
 }
