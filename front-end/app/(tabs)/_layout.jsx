@@ -1,21 +1,30 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import { Tabs } from 'expo-router'
+import { Tabs, useNavigation } from 'expo-router'
 import TabBar from '../../components/TabBar'
+import { useTranslation } from 'react-i18next'
 
 export default function TabLayout() {
+    const { t } = useTranslation();
   return (
       <Tabs
           tabBar={props => <TabBar {...props} />}
       >
           <Tabs.Screen name='home' options={{
-              title: 'Home',
+              title: t('tabbar.home'),
+              headerShown: false
           }} />
           <Tabs.Screen name='order' options={{
-              title: 'Order'
+              title: t('tabbar.order')
+          }} />
+          <Tabs.Screen name='favorite' options={{
+              title: t('tabbar.favorite')
+          }} />
+          <Tabs.Screen name='notification' options={{
+              title: t('tabbar.notification')
           }}/>
           <Tabs.Screen name='profile' options={{
-              title: 'Profile'
+              title: t('tabbar.profile')
           }}/>
     </Tabs>
   )

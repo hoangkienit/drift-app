@@ -30,5 +30,12 @@
       "signup_button": "Sign Up",
       "signin_link": "Already have an account? Login"
     }
+  },
+  "tabbar": {
+    "home": "Home",
+    "order": "Order",
+    "favorite": "Favourite",
+    "profile": "Profile",
+    "notification": "Notification"
   }
 }

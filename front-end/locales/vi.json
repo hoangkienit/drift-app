@@ -29,7 +29,14 @@
     "cf_password": "Xác nhận mật khẩu",
     "signup_button": "Đăng ký",
     "signin_link": "Đã có tài khoản? Đăng nhập"
+    }
+  },
+  "tabbar": {
+    "home": "Trang chủ",
+    "order": "Đơn hàng",
+    "favorite": "Yêu thích",
+    "profile": "Tôi",
+    "notification": "Thông báo"
   }
-}
 
 }

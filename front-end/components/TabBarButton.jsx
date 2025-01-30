@@ -1,7 +1,6 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native'
 import React, { useEffect } from 'react'
-import { Colors } from "../constants/Colors"
-import { icons } from '../configs/icons';
+import { icons } from '../constants/icons';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 const TabBarButton = (props) => {
@@ -25,7 +24,7 @@ const TabBarButton = (props) => {
         const top = interpolate(
             scale.value,
             [0, 1],
-            [0, 8]
+            [0, 9]
         );
 
         return {
@@ -58,6 +57,7 @@ const TabBarButton = (props) => {
         <Animated.Text style={
             [{
                 color,
+                fontSize: 11,
                 fontFamily: 'montserrat-medium'
             }, animatedTextStyle]}>
                 {label}
