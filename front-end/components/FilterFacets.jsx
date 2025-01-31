@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   facetContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    marginVertical: 10,
+    //marginVertical: 10,
   },
   facetButton: {
     paddingVertical: 10,

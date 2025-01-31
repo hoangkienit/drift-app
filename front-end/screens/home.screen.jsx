@@ -63,26 +63,24 @@ export default function HomeScreen() {
           {/* Search Bar */}
           <SearchBar t={t} />
         </SafeAreaView>
-          
+
         {/* Restaurant List Card */}
-        <View style={{ flex: 1 }}>
-          <FlatList
-            ListHeaderComponent={
-              <>
-                <ImageCarousel nestedScrollEnabled={true} />
-                <FoodCategory t={t} nestedScrollEnabled={true} />
-                <FilterFacets t={t} />
-              </>
-            }
-            data={[]} // Empty array to avoid unnecessary rendering
-            keyExtractor={(_, index) => index.toString()}
-            renderItem={null}
-            ListEmptyComponent={<View style={{ height: 10 }} />}
-            ListFooterComponent={<RestaurantList nestedScrollEnabled={true} />}
-            contentContainerStyle={{ paddingBottom: 20 }}
-            nestedScrollEnabled={true}
-          />
-        </View>
+        <FlatList
+          style={styles.restaurantList}
+          ListHeaderComponent={
+            <>
+              <ImageCarousel nestedScrollEnabled={true} />
+              <FoodCategory t={t} nestedScrollEnabled={true} />
+              <FilterFacets t={t} />
+            </>
+          }
+          data={[]} // Empty array to avoid unnecessary rendering
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={null}
+          ListEmptyComponent={<View style={{ height: 10 }} />}
+          ListFooterComponent={<RestaurantList />}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -139,5 +137,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
   },
+  restaurantList: {
+    flex: 1,
+  }
 });
-
