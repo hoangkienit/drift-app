@@ -48,12 +48,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     //marginVertical: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 2, height: 2 },
+    shadowRadius: 4,
   },
   facetButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: "#f5f5f5",
-    width:"30%"
+    backgroundColor: "#fff",
+    width:"32%"
   },
   selectedFacet: {
       //backgroundColor: Colors.primary,

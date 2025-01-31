@@ -56,5 +56,19 @@
       "popular": "Phổ biến"
     },
     "category": "Danh mục"
+  },
+  "favorite": {
+    "no_favorite_restaurant": "Không có nhà hàng yêu thích."
+  },
+  "restaurant": {
+    "detail": {
+      "search_placeholder": "Tìm kiếm trong nhà hàng này...",
+      "minutes": "phút"
+    },
+    "card": {
+      "minutes": "phút",
+      "closed": "Đóng cửa",
+      "open": "Đang mở"
+    }
   }
 }

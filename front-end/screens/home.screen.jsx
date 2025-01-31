@@ -78,7 +78,7 @@ export default function HomeScreen() {
           keyExtractor={(_, index) => index.toString()}
           renderItem={null}
           ListEmptyComponent={<View style={{ height: 10 }} />}
-          ListFooterComponent={<RestaurantList />}
+          ListFooterComponent={<RestaurantList t={t} />}
           contentContainerStyle={{ paddingBottom: 100 }}
         />
       </View>

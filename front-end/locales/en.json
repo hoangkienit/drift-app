@@ -56,5 +56,19 @@
       "popular": "Popular"
     },
     "category": "Categories"
+  },
+  "favorite": {
+    "no_favorite_restaurant": "No favorite restaurants yet."
+  },
+  "restaurant": {
+    "detail": {
+      "search_placeholder": "Search in this restaurant...",
+      "minutes": "min"
+    },
+    "card": {
+      "minutes": "min",
+      "closed": "Closed",
+      "open": "Open"
+    }
   }
 }
