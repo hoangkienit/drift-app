@@ -21,7 +21,8 @@ export default function TabLayout() {
               title: t('tabbar.favorite')
           }} />
           <Tabs.Screen name='notification' options={{
-              title: t('tabbar.notification')
+              title: t('tabbar.notification'),
+              headerShown: false,
           }}/>
           <Tabs.Screen name='profile' options={{
               title: t('tabbar.profile')
