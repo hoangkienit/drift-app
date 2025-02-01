@@ -72,5 +72,19 @@
       "closed": "Closed",
       "open": "Open"
     }
+  },
+  "order": {
+    "header_title": "Orders",
+    "filter": {
+      "all": "All",
+      "pending": "Pending",
+      "processing": "Processing",
+      "delivered": "Delivered"
+    },
+    "card": {
+      "order_time": "Order time",
+      "shipper": "Shipped by",
+      "total": "Total"
+    }
   }
 }

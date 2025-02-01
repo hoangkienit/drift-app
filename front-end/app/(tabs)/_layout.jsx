@@ -3,6 +3,7 @@ import React from 'react'
 import { Tabs, useNavigation } from 'expo-router'
 import TabBar from '../../components/TabBar'
 import { useTranslation } from 'react-i18next'
+import { Colors } from '../../constants/Colors'
 
 export default function TabLayout() {
     const { t } = useTranslation();
@@ -15,7 +16,8 @@ export default function TabLayout() {
               headerShown: false
           }} />
           <Tabs.Screen name='order' options={{
-              title: t('tabbar.order')
+              title: t('tabbar.order'),
+              headerShown: false
           }} />
           <Tabs.Screen name='favorite' options={{
               title: t('tabbar.favorite')
