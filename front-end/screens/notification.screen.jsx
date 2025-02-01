@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 import NotificationCategory from '../components/NotificationCategory';
 import NotificationList from '../components/NotificationList';
+import { useNavigation } from 'expo-router';
 
 export default function NotificationScreen() {
+  const navigation = useNavigation();
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const notifications = {
@@ -21,9 +23,16 @@ export default function NotificationScreen() {
     ]
   };
 
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: false
+    })
+  })
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Thông báo</Text>
+      <SafeAreaView>
+        <Text style={styles.header}>Thông báo</Text>
       
       {/* Hiển thị danh mục thông báo */}
       {Object.keys(notifications).map((category) => (
@@ -39,6 +48,7 @@ export default function NotificationScreen() {
       {selectedCategory && (
         <NotificationList notifications={notifications[selectedCategory]} />
       )}
+      </SafeAreaView>
     </View>
   );
 }
