@@ -1,10 +1,7 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import NotificationScreen from '../../screens/NotificationScreen.jsx';
 
 export default function Notification() {
-  return (
-    <View>
-      <Text>Notification</Text>
-    </View>
-  )
+  return <NotificationScreen />;
 }
