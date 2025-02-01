@@ -5,7 +5,7 @@ import RestaurantCard from "../components/RestaurantCard";
 const restaurantData = [
   {
     id: "1",
-    avatar: "https://picsum.photos/id/237/200/300",
+    avatar: "https://fastly.picsum.photos/id/47/4272/2848.jpg?hmac=G8dXSLa-ngBieraQt5EORu-4r6tveX3fhvBTZM0Y8xM",
     name: "Sushi Place",
     rating: 4.0,
     distance: 1.2,

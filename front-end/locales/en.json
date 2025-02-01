@@ -40,6 +40,8 @@
   },
   "profile": {
     "user_category": {
+      "notification": "Notification",
+      "manage_account": "Manage Account",
       "payment": "Payments",
       "setting": "Settings",
       "address": "My Address",

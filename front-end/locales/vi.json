@@ -40,6 +40,8 @@
   },
   "profile": {
     "user_category": {
+      "notification": "Thông báo",
+      "manage_account": "Quản lí tài khoản",
       "payment": "Thanh toán",
       "setting": "Cài đặt",
       "address": "Địa chỉ của tôi",

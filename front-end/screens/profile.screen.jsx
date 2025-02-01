@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import React, { useEffect } from 'react'
-import UserCategory from '../components/UserCategory';
+import UserProfileCategory from '../components/UserProfileCategory';
 import { useNavigation } from 'expo-router';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Colors } from '../constants/Colors';
@@ -28,18 +28,10 @@ export default function ProfileScreen() {
               <Text style={styles.name}>Hoàng Kiện</Text>
               <Text style={styles.phone}>(+84)123456789</Text>
             </View>
-            <TouchableOpacity style={styles.editButton}>
-              <FontAwesome5 name="user-edit" size={22} color="white" style={styles.editIcon} />
-            </TouchableOpacity>
           </View>
     
           {/* User Category */}
-              <UserCategory t={t} />
-              
-              <View style={styles.app_author_container}>
-                  <Text style={styles.app_author}>App version: 1.0.1 BETA</Text>
-                  <Text style={styles.app_author}>Developed by Hoangkienit & Minhsangit1008</Text>
-            </View>
+              <UserProfileCategory t={t} />
           </SafeAreaView>
         </View>
   )
@@ -61,7 +53,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     borderRadius: 40,
-    backgroundColor: Colors.primary,
+    backgroundColor: "#fff",
     paddingHorizontal: 10,
     paddingVertical: 10
   },
@@ -78,12 +70,12 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
       marginBottom: 5,
-      color: "#fff",
+      color: "gray",
     fontFamily: 'montserrat-bold'
   },
   phone: {
     fontSize: 13,
-      color: '#fff',
+      color: 'gray',
     fontFamily: 'montserrat-medium'
   },
     editButton: {
@@ -92,19 +84,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  editIcon: {
-    width: 30,
-    height: 22,
-    },
-    app_author_container: {
-  justifyContent: 'center',
-  alignItems: 'center',
-  marginTop: 20,
-},
-app_author: {
-  textAlign: 'center',
-  fontSize: 13, 
-    color: '#666',
-  fontFamily: "montserrat-medium"
-},
 });

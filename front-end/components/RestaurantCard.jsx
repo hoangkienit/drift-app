@@ -21,7 +21,7 @@ const RestaurantCard = ({ id, avatar, name, rating, distance, minutes, t, isOpen
 
       <View style={styles.infoContainer}>
         {/* Open/Closed Box */}
-        <View style={[styles.openStatus, { backgroundColor: isOpen ? Colors.primary : "#e6e8e8" }]}>
+        <View style={[styles.openStatus, { backgroundColor: isOpen ? "#B2DFDB" : "#e6e8e8" }]}>
           <Text style={styles.openStatusText}>{isOpen ? t("restaurant.card.open") : t("restaurant.card.closed")}</Text>
         </View>
 

@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const RestaurantDetailScreen = ({ props, t }) => {
-  const { id, name, rating, minutes, avatar } = props; // Changed distance to rating
+  const { id, name, rating, minutes, avatar } = props;
   const router = useRouter();
   const scrollY = useRef(new Animated.Value(0)).current;
   const insets = useSafeAreaInsets(); // Get SafeArea insets
