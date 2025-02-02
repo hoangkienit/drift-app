@@ -10,11 +10,11 @@ const ImageCarousel = () => {
     const carouselData = [
         {
             id: "1",
-            image: require("../assets/images/banner/banner_1.png")
+            image: require("../../assets/images/banner/banner_1.png")
         },
         {
             id: "2",
-            image: require("../assets/images/banner/banner_2.png")
+            image: require("../../assets/images/banner/banner_2.png")
         }
     ];
 

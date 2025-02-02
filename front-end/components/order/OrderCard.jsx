@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useTranslation } from 'react-i18next';
+import { translateStatus } from '../../utils/translate';
 
 const OrderCard = ({ item }) => {
   const { t } = useTranslation();
@@ -13,13 +14,6 @@ const OrderCard = ({ item }) => {
       case 'Delivered': return { backgroundColor: '#32CD32' };
       default: return { backgroundColor: '#000' };
     }
-  };
-
-  const translateStatus = (status) => {
-    if (status === 'Pending') return t('order.filter.pending');
-    if (status === 'Processing') return t('order.filter.processing');
-    if (status === 'Delivered') return t('order.filter.delivered');
-    return status; // Default return if no match
   };
 
   const getIcon = (status) => {

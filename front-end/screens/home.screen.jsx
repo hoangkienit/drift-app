@@ -12,12 +12,12 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../constants/Colors";
 import { getLocation, truncateText } from "../utils/location";
-import ImageCarousel from "../components/ImageCarousel";
-import FoodCategory from "../components/FoodCategory";
-import SearchBar from "../components/SearchBar";
+import ImageCarousel from "../components/home/ImageCarousel";
+import FoodCategory from "../components/home/FoodCategory";
+import SearchBar from "../components/home/SearchBar";
 import { useTranslation } from "react-i18next";
-import FilterFacets from "../components/FilterFacets";
-import RestaurantList from "../components/RestaurantList";
+import FilterFacets from "../components/home/FilterFacets";
+import RestaurantList from "../components/home/RestaurantList";
 
 export default function HomeScreen() {
   const { t } = useTranslation();

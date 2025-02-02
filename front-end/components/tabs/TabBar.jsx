@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { PlatformPressable } from '@react-navigation/elements';
 import { useLinkBuilder, useTheme } from '@react-navigation/native';
-import { Colors } from "../constants/Colors"
+import { Colors } from "../../constants/Colors"
 
 import TabBarButton from './TabBarButton';
 

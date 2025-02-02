@@ -1,6 +1,6 @@
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import React from 'react'
-import { FoodCategories } from '../constants/category'
+import { FoodCategories } from '../../constants/category'
 
 const FoodCategory = ({t}) => {
   return (

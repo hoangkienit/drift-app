@@ -83,6 +83,15 @@ const UserProfileCategory = ({ t }) => {
         </View>
         <Ionicons name="chevron-forward" size={22} color="#999" />
         </TouchableOpacity>
+
+        {/* About Us */}
+      <TouchableOpacity style={styles.item}>
+        <View style={styles.leftSection}>
+          <FontAwesome name="building" size={24} color="#666" style={styles.icon}/>
+          <Text style={styles.text}>{t(`profile.user_category.about_us`)}</Text>
+        </View>
+        <Ionicons name="chevron-forward" size={22} color="#999" />
+        </TouchableOpacity>
         
         {/* Log Out */}
       <TouchableOpacity style={styles.item}>
@@ -143,7 +152,7 @@ const styles = StyleSheet.create({
   flex: 1,
   textAlign: 'center',
   fontSize: 13, 
-    color: '#000',
+    color: '#fff',
   fontFamily: "montserrat-medium"
 },
 });

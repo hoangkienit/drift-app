@@ -47,7 +47,8 @@
       "address": "My Address",
       "privacy_policy": "Privacy Policy",
       "customer_support": "Customer Support",
-      "logout": "Log Out"
+      "logout": "Log Out",
+      "about_us": "About Us"
     }
   },
   "home": {
@@ -65,7 +66,10 @@
   "restaurant": {
     "detail": {
       "search_placeholder": "Search in this restaurant...",
-      "minutes": "min"
+      "minutes": "min",
+      "adjust_title": "Adjust",
+      "add_to_cart": "Add to Cart",
+      "enter_note": "Your note for restaurant"
     },
     "card": {
       "minutes": "min",
@@ -79,12 +83,21 @@
       "all": "All",
       "pending": "Pending",
       "processing": "Processing",
-      "delivered": "Delivered"
+      "delivered": "Delivered",
+      "title": "Filter",
+      "close_button": "Close"
     },
     "card": {
       "order_time": "Order time",
       "shipper": "Shipped by",
       "total": "Total"
+    }  
+  },
+  "notification": {
+      "header_tab": {
+        "all": "All",
+        "order": "Order",
+        "promotion": "Promotion"
     }
   }
 }

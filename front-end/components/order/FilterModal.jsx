@@ -1,31 +1,58 @@
-import React from 'react';
-import { Modal, View, Text, TouchableOpacity, StyleSheet, Animated, Easing } from 'react-native';
+import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Modal, View, Text, TouchableOpacity, StyleSheet, Animated, Easing, TouchableWithoutFeedback } from 'react-native';
+import { Colors } from '../../constants/Colors';
 
-const FilterModal = ({ modalVisible, closeModal, setStatusFilter, slideAnim }) => {
+const FilterModal = ({ modalVisible, closeModal, setStatusFilter }) => {
+  const { t } = useTranslation();
+  const slideAnim = new Animated.Value(300); // Start position below screen
+
+  useEffect(() => {
+    if (modalVisible) {
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 300,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(slideAnim, {
+        toValue: 300,
+        duration: 200,
+        easing: Easing.in(Easing.cubic),
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [modalVisible]);
+
   return (
-    <Modal animationType="none" transparent={true} visible={modalVisible} onRequestClose={closeModal}>
-      <View style={styles.modalBackdrop}>
-        <Animated.View style={[styles.modalContainer, { transform: [{ translateY: slideAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 0] }) }] }]}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Select Order Status</Text>
-            <TouchableOpacity style={styles.modalButton} onPress={() => { setStatusFilter('All'); closeModal(); }}>
-              <Text style={styles.modalButtonText}>All</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.modalButton} onPress={() => { setStatusFilter('Pending'); closeModal(); }}>
-              <Text style={styles.modalButtonText}>Pending</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.modalButton} onPress={() => { setStatusFilter('Processing'); closeModal(); }}>
-              <Text style={styles.modalButtonText}>Processing</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.modalButton} onPress={() => { setStatusFilter('Delivered'); closeModal(); }}>
-              <Text style={styles.modalButtonText}>Delivered</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-              <Text style={styles.closeButtonText}>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </Animated.View>
-      </View>
+    <Modal animationType="none" transparent visible={modalVisible} onRequestClose={closeModal}>
+      <TouchableWithoutFeedback onPress={closeModal}>
+        <View style={styles.modalBackdrop}>
+          <TouchableWithoutFeedback>
+            <Animated.View style={[styles.modalContainer, { transform: [{ translateY: slideAnim }] }]}>
+              <Text style={styles.modalTitle}>{t('order.filter.title')}</Text>
+              
+              {['All', 'Pending', 'Processing', 'Delivered'].map((status) => (
+                <TouchableOpacity
+                  key={status}
+                  style={styles.modalButton}
+                  onPress={() => {
+                    setStatusFilter(status);
+                    closeModal();
+                  }}
+                >
+                  <Text style={styles.modalButtonText}>{t(`order.filter.${status.toLowerCase()}`)}</Text>
+                </TouchableOpacity>
+              ))}
+
+              <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+                <Text style={styles.closeButtonText}>{t('order.filter.close_button')}</Text>
+              </TouchableOpacity>
+            </Animated.View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
@@ -33,42 +60,53 @@ const FilterModal = ({ modalVisible, closeModal, setStatusFilter, slideAnim }) =
 const styles = StyleSheet.create({
   modalBackdrop: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
   modalContainer: {
     backgroundColor: 'white',
     padding: 20,
-    borderRadius: 12,
-    width: '80%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    width: '100%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
     elevation: 10,
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10,
+    textAlign: 'center',
+    marginBottom: 15,
   },
   modalButton: {
-    paddingVertical: 10,
+    paddingVertical: 12,
     marginBottom: 10,
     backgroundColor: '#4CAF50',
     borderRadius: 8,
     alignItems: 'center',
+    elevation: 2,
   },
   modalButtonText: {
     color: 'white',
     fontSize: 16,
+    fontWeight: '600',
+    fontFamily: "montserrat-bold"
   },
   closeButton: {
-    paddingVertical: 10,
-    backgroundColor: '#f44336',
+    paddingVertical: 12,
+    backgroundColor: Colors.primary,
     borderRadius: 8,
     alignItems: 'center',
+    marginVertical: 10,
+    elevation: 2,
   },
   closeButtonText: {
     color: 'white',
     fontSize: 16,
+    fontFamily: "montserrat-bold"
   },
 });
 

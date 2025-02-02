@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
-import { Colors } from '../constants/Colors';
+import { Colors } from '../../constants/Colors';
 
 const facetsData = [
   { label: 'Near Me', value: 'near_me' },

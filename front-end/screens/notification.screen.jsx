@@ -1,68 +1,89 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
-import NotificationCategory from '../components/NotificationCategory';
-import NotificationList from '../components/NotificationList';
-import { useNavigation } from 'expo-router';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
+import { useState } from "react";
+import NotificationItem from "../components/notification/NotificationItem";
+import { Colors } from "../constants/Colors";
+import { translateNotificationTabBar } from "../utils/translate";
+import { notifications } from "../constants/data";
 
-export default function NotificationScreen() {
-  const navigation = useNavigation();
-  const [selectedCategory, setSelectedCategory] = useState(null);
+const NotificationScreen = () => {
+  const [selectedTab, setSelectedTab] = useState("All");
 
-  const notifications = {
-    "Cập nhật đơn hàng": [
-      { id: '1', text: 'Đơn hàng #12345 đã được giao thành công.' },
-      { id: '2', text: 'Đơn hàng #67890 đang được vận chuyển.' }
-    ],
-    "Khuyến mãi": [
-      { id: '3', text: 'Giảm 50% cho đơn hàng đầu tiên!' },
-      { id: '4', text: 'Flash Sale diễn ra vào 20:00 tối nay.' }
-    ],
-    "Thông tin đơn hàng": [
-      { id: '5', text: 'Bạn đã đặt hàng vào ngày 01/02/2025.' },
-      { id: '6', text: 'Hãy đánh giá sản phẩm bạn đã mua.' }
-    ]
-  };
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerShown: false
-    })
-  })
+  const filteredNotifications =
+    selectedTab === "All"
+      ? notifications
+      : notifications.filter((item) => item.type === selectedTab);
 
   return (
-    <View style={styles.container}>
-      <SafeAreaView>
-        <Text style={styles.header}>Thông báo</Text>
-      
-      {/* Hiển thị danh mục thông báo */}
-      {Object.keys(notifications).map((category) => (
-        <NotificationCategory
-          key={category}
-          category={category}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-        />
-      ))}
+    <SafeAreaView style={styles.safeContainer}>
+      <View style={styles.container}>
+        {/* Full Header Background */}
+        <View style={styles.header}>
+          <View style={styles.tabContainer}>
+            {["All", "Order", "Promotion"].map((tab) => (
+              <TouchableOpacity
+                key={tab}
+                style={[styles.tabButton, selectedTab === tab && styles.activeTab]}
+                onPress={() => setSelectedTab(tab)}
+              >
+                <Text
+                  style={[
+                    styles.tabText,
+                    selectedTab === tab && styles.activeTabText,
+                  ]}
+                >
+                  {translateNotificationTabBar(tab)}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
 
-      {/* Hiển thị danh sách thông báo khi chọn danh mục */}
-      {selectedCategory && (
-        <NotificationList notifications={notifications[selectedCategory]} />
-      )}
-      </SafeAreaView>
-    </View>
+        {/* Notification List */}
+        <FlatList
+          data={filteredNotifications}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <NotificationItem item={item} />}
+          contentContainerStyle={styles.listContainer}
+        />
+      </View>
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#fff'
-  },
+  safeContainer: { flex: 1, backgroundColor: Colors.primary },
+  container: { flex: 1, backgroundColor: "#fef5f5" },
   header: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 16
-  }
+    backgroundColor: Colors.primary,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+  },
+
+  /** TABS **/
+  tabContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "transparent",
+  },
+
+  tabButton: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: 10,
+  },
+  
+  activeTab: {
+    borderBottomWidth: 3,
+    borderBottomColor: "#fff", // White underline for active tab
+  },
+
+  tabText: { fontSize: 16, color: "#fff", opacity: 0.7, fontFamily: "montserrat-medium" },
+  activeTabText: { color: "#fff", fontWeight: "bold", opacity: 1, fontFamily: "montserrat-bold" },
+
+  /** LIST CONTAINER **/
+  listContainer: { padding: 10 },
 });
+
+export default NotificationScreen;

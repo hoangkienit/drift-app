@@ -1,10 +1,9 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import React, { useEffect } from 'react'
-import UserProfileCategory from '../components/UserProfileCategory';
+import UserProfileCategory from '../components/profile/UserProfileCategory';
 import { useNavigation } from 'expo-router';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { Colors } from '../constants/Colors';
 import { useTranslation } from 'react-i18next';
+import { Colors } from '../constants/Colors';
 
 export default function ProfileScreen() {
     const navigation = useNavigation();
@@ -40,9 +39,8 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0', 
+    backgroundColor: Colors.primary, 
     padding: 20,
-    marginTop: 50
   },
   header: {
     flexDirection: 'row',

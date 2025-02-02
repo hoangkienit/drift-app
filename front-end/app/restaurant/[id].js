@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
-import RestaurantDetailScreen from "../../screens/RestaurantDetail.screen";
+import RestaurantDetailScreen from "../../screens/restaurant_detail.screen";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 

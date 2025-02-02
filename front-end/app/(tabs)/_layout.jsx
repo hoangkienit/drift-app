@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { Tabs, useNavigation } from 'expo-router'
-import TabBar from '../../components/TabBar'
+import TabBar from '../../components/tabs/TabBar'
 import { useTranslation } from 'react-i18next'
 import { Colors } from '../../constants/Colors'
 

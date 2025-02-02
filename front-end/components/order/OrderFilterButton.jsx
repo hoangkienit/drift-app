@@ -1,12 +1,13 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { translateStatus } from '../../utils/translate';
 
 const OrderFilterButton = ({ openModal, statusFilter }) => {
   return (
     <TouchableOpacity style={styles.filterButton} onPress={openModal}>
       <Ionicons name="filter" size={20} color="#000" style={styles.filterIcon} />
-      <Text style={styles.filterButtonText}>{statusFilter}</Text>
+      <Text style={styles.filterButtonText}>{translateStatus(statusFilter)}</Text>
     </TouchableOpacity>
   );
 };

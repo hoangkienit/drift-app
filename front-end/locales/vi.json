@@ -47,7 +47,8 @@
       "address": "Địa chỉ của tôi",
       "privacy_policy": "Chính sách bảo mật",
       "customer_support": "Hỗ trợ khách hàng",
-      "logout": "Đăng xuất"
+      "logout": "Đăng xuất",
+      "about_us": "Về chúng tôi"
     }
   },
   "home": {
@@ -65,7 +66,10 @@
   "restaurant": {
     "detail": {
       "search_placeholder": "Tìm kiếm trong nhà hàng này...",
-      "minutes": "phút"
+      "minutes": "phút",
+      "adjust_title": "Điều chỉnh",
+      "add_to_cart": "Thêm vào giỏ hàng",
+      "enter_note": "Ghi chú cho nhà hàng"
     },
     "card": {
       "minutes": "phút",
@@ -79,12 +83,21 @@
       "all": "Tất cả",
       "pending": "Chờ xác nhận",
       "processing": "Đang thực hiện",
-      "delivered": "Đã giao"
+      "delivered": "Đã giao",
+      "title": "Bộ lọc",
+      "close_button": "Đóng"
     },
     "card": {
       "order_time": "Đặt hàng lúc",
       "shipper": "Giao hàng bởi",
       "total": "Tổng"
     }
-  }
+  },
+  "notification": {
+      "header_tab": {
+        "all": "Tất cả",
+        "order": "Đơn hàng",
+        "promotion": "Quảng cáo"
+      }
+    }
 }

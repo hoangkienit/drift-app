@@ -5,36 +5,7 @@ import OrderFilterButton from '../components/order/OrderFilterButton';
 import FilterModal from '../components/order/FilterModal';
 import OrderList from '../components/order/OrderList';
 import { Colors } from '../constants/Colors';
-
-const fakeOrders = [
-  {
-    orderId: 'ORD123456',
-    restaurantAvatar: 'https://fastly.picsum.photos/id/47/4272/2848.jpg?hmac=G8dXSLa-ngBieraQt5EORu-4r6tveX3fhvBTZM0Y8xM',
-    restaurantName: 'Pizza Palace',
-    orderDateTime: '2025-02-01 14:30',
-    totalPrice: 25.99,
-    shipperName: 'Mike Brown',
-    status: 'Pending',
-  },
-  {
-    orderId: 'ORD123457',
-    restaurantAvatar: 'https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68',
-    restaurantName: 'Sushi Express',
-    orderDateTime: '2025-02-01 15:00',
-    totalPrice: 18.50,
-    shipperName: 'Sarah Lee',
-    status: 'Processing',
-  },
-  {
-    orderId: 'ORD123458',
-    restaurantAvatar: 'https://fastly.picsum.photos/id/17/2500/1667.jpg?hmac=HD-JrnNUZjFiP2UZQvWcKrgLoC_pc_ouUSWv8kHsJJY',
-    restaurantName: 'Burger Town',
-    orderDateTime: '2025-02-01 16:00',
-    totalPrice: 30.75,
-    shipperName: 'David Smith',
-    status: 'Delivered',
-  },
-];
+import { fakeOrders } from '../constants/data';
 
 const OrderScreen = () => {
   const { t } = useTranslation();
@@ -109,7 +80,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   headerTitle: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
