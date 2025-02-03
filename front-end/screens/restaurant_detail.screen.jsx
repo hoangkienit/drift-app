@@ -5,10 +5,13 @@ import FloatingBackButton from "../components/restaurant/restaurant_detail/Float
 import RestaurantHeaderImage from "../components/restaurant/restaurant_detail/RestaurantHeaderImage";
 import RestaurantInfo from "../components/restaurant/restaurant_detail/RestaurantInfo";
 import FoodCard from '../components/restaurant/restaurant_detail/food/FoodCard';
-import { restaurantData } from "../constants/data";  // Ensure this imports the updated restaurant data
+import { restaurantData } from "../constants/data";
+import {useCartStore} from "../stores/useCartStore"
+import CartBottomButton from "../components/restaurant/restaurant_detail/CartBottomButton";
 
 const RestaurantDetailScreen = ({ props, t }) => {
   const { id, name, rating, minutes, avatar } = props;
+  const useCartStoreZustand = useCartStore();
   
   // Initialize scrollY as an Animated.Value
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -31,9 +34,11 @@ const RestaurantDetailScreen = ({ props, t }) => {
         <RestaurantInfo name={name} rating={rating} minutes={minutes} t={t} />
 
         {foodItemsForRestaurant.map((food) => (
-          <FoodCard key={food.id} food={food} t={t} />
+          <FoodCard key={food.id} food={food} t={t} restaurant={restaurant} useCartStore={useCartStoreZustand} />
         ))}
       </ScrollView>
+
+      <CartBottomButton t={ t} useCartStore={useCartStoreZustand} />
     </View>
   );
 };

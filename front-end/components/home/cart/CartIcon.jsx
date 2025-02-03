@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import CartModal from "./cart/CartModal";
+import CartModal from "./CartModal";
 
-const CartIcon = ({ cartItems = [] }) => {
+const CartIcon = ({ useCartStore, t }) => {
   const [cartVisible, setCartVisible] = useState(false); // Modal visibility state
+  const { cart } = useCartStore;
 
   return (
     <>
@@ -14,9 +15,9 @@ const CartIcon = ({ cartItems = [] }) => {
         onPress={() => setCartVisible(true)} // Open modal when clicked
       >
         <Icon name="cart-outline" size={28} color={"white"} />
-        {cartItems.length > 0 && (
+        {cart.length > 0 && (
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>{cartItems.length}</Text>
+            <Text style={styles.badgeText}>{cart.length}</Text>
           </View>
         )}
       </TouchableOpacity>
@@ -25,7 +26,8 @@ const CartIcon = ({ cartItems = [] }) => {
       <CartModal
         visible={cartVisible}
         onClose={() => setCartVisible(false)} // Close modal
-        cartItems={cartItems} // Pass cart items to the modal
+        useCartStore={useCartStore}
+        t ={t}
       />
     </>
   );

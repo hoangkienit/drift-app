@@ -63,7 +63,17 @@
       "recommend": "Recommend",
       "popular": "Popular"
     },
-    "category": "Categories"
+    "category": "Categories",
+    "cart_modal": {
+      "title": "Your Orders",
+      "empty_cart": "No foods in cart",
+      "total_price": "Total",
+      "place_order": "Place Order",
+      "confirm_remove_title": "Are you sure you want to delete?",
+      "confirm_remove_message": "This will remove this food from cart",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    }
   },
   "favorite": {
     "no_favorite_restaurant": "No favorite restaurants yet."
@@ -74,7 +84,8 @@
       "minutes": "min",
       "adjust_title": "Adjust",
       "add_to_cart": "Add to Cart",
-      "enter_note": "Your note for restaurant"
+      "enter_note": "Your note for restaurant",
+      "cart_title": "Cart"
     },
     "card": {
       "minutes": "min",

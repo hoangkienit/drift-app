@@ -63,7 +63,18 @@
       "recommend": "Đề xuất",
       "popular": "Phổ biến"
     },
-    "category": "Danh mục"
+    "category": "Danh mục",
+    "cart_modal": {
+      "title": "Giỏ hàng của bạn",
+      "empty_cart": "Có vẻ bạn quên đặt đồ ăn rồi ^^",
+      "total_price": "Tổng",
+      "place_order": "Đặt hàng",
+      "confirm_remove_title": "Bạn có chắc chắn muốn xóa chứ?",
+      "confirm_remove_message": "Hành động này sẽ xóa món này ra khỏi giỏ hàng",
+      "cancel": "Hủy",
+      "confirm": "Xác nhận"
+    }
+    
   },
   "favorite": {
     "no_favorite_restaurant": "Không có nhà hàng yêu thích."
@@ -74,7 +85,8 @@
       "minutes": "phút",
       "adjust_title": "Điều chỉnh",
       "add_to_cart": "Thêm vào giỏ hàng",
-      "enter_note": "Ghi chú cho nhà hàng"
+      "enter_note": "Ghi chú cho nhà hàng",
+      "cart_title": "Giỏ hàng"
     },
     "card": {
       "minutes": "phút",
