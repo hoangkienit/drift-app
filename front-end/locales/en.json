@@ -20,7 +20,11 @@
       "forgot_password": "Forgot Password?",
       "or": "or",
       "login_w_fb": "Login with Facebook",
-      "login_w_gg": "Login with Google"
+      "login_w_gg": "Login with Google",
+      "username": "Username",
+      "phone": "Phone Number",
+      "error_empty_fields": "All fields are required",
+      "error_login_failed": "Failed to login"
     },
     "signup": {
       "signup_header": "Create New Account",
@@ -28,7 +32,13 @@
       "password": "Password",
       "cf_password": "Confirm Password",
       "signup_button": "Sign Up",
-      "signin_link": "Already have an account? Login"
+      "signin_link": "Already have an account? Login",
+      "username": "Username",
+      "phone": "Phone Number",
+      "error_empty_fields": "All fields are required",
+      "error_register_failed": "Failed to register",
+      "error_not_match_pw": "Password does not match",
+      "success_register": "Your account have been created"
     }
   },
   "tabbar": {

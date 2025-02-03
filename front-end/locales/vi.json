@@ -20,7 +20,11 @@
     "forgot_password": "Quên mật khẩu?",
     "or": "hoặc",
     "login_w_fb": "Đăng nhập bằng Facebook",
-    "login_w_gg": "Đăng nhập bằng Google"
+    "login_w_gg": "Đăng nhập bằng Google",
+    "username": "Tên đăng nhập",
+      "phone": "Số điện thoại",
+      "error_empty_fields": "Không được trống các trường",
+      "error_login_failed": "Đăng nhập thất bại"
   },
   "signup": {
     "signup_header": "Tạo tài khoản mới",
@@ -28,7 +32,13 @@
     "password": "Mật khẩu",
     "cf_password": "Xác nhận mật khẩu",
     "signup_button": "Đăng ký",
-    "signin_link": "Đã có tài khoản? Đăng nhập"
+    "signin_link": "Đã có tài khoản? Đăng nhập",
+    "username": "Tên đăng nhập",
+    "phone": "Số điện thoại",
+    "error_empty_fields": "Không được để trống các trường",
+    "error_register_failed": "Đăng kí thất bại",
+    "error_not_match_pw": "Mật khẩu không khớp",
+    "success_register": "Tài khoản của bạn đã được tạo"
     }
   },
   "tabbar": {

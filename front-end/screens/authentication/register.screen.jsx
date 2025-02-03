@@ -11,7 +11,8 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
-  Keyboard
+  Keyboard,
+  ActivityIndicator
 } from 'react-native';
 import { useNavigation } from 'expo-router'; // For navigation
 import { Colors } from '@/constants/Colors'; // Customize colors
@@ -23,10 +24,12 @@ export default function Register() {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false); // Loading state
+  const [error, setError] = useState(''); // Error state
 
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -49,20 +52,28 @@ export default function Register() {
   });
 
   const handleRegister = () => {
+    // Reset error message
+    setError('');
+    setLoading(true);
+
     // Validate inputs
-    if (!name || !email || !password || !confirmPassword) {
-      Alert.alert('Validation', 'All fields are required.');
+    if (!username || !phone || !password || !confirmPassword) {
+      setLoading(false);
+      setError(`${t('authentication.signup.error_empty_fields')}`);
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert('Validation', 'Passwords do not match.');
+      setLoading(false);
+      setError(`${t('authentication.signup.error_not_match_pw')}`);
       return;
     }
 
-    // Add registration logic here, e.g., call an API to create the account
-    Alert.alert('Success', 'Account created successfully!');
-    navigation.navigate('Login'); // Navigate to login after successful registration
+    setTimeout(() => {
+      setLoading(false);
+      Alert.alert('Success', 'Account created successfully!');
+      navigation.replace('authentication/sign-in/index');
+    }, 2000); // Simulate loading time
   };
 
   return (
@@ -84,21 +95,24 @@ export default function Register() {
 
         <Text style={styles.title}>{ t('authentication.signup.signup_header')}</Text>
 
+        {/* Display error message */}
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
         {/* Name Input */}
         <TextInput
           style={styles.input}
-          placeholder={ t('authentication.signup.fullname')}
-          value={name}
-          onChangeText={setName}
+          placeholder={ t('authentication.signup.username')}
+          value={username}
+          onChangeText={setUsername}
           placeholderTextColor="#666"
         />
 
-        {/* Email Input */}
+        {/* Phone Input */}
         <TextInput
           style={styles.input}
-          placeholder='Email'
-          value={email}
-          onChangeText={setEmail}
+          placeholder={ t('authentication.signup.phone')}
+          value={phone}
+          onChangeText={setPhone}
           keyboardType="email-address"
           placeholderTextColor="#666"
         />
@@ -124,8 +138,12 @@ export default function Register() {
         />
 
         {/* Register Button */}
-        <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-          <Text style={styles.buttonText}>{ t('authentication.signup.signup_button')}</Text>
+        <TouchableOpacity style={styles.registerButton} onPress={handleRegister} disabled={loading}>
+          {loading ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>{ t('authentication.signup.signup_button')}</Text>
+          )}
         </TouchableOpacity>
 
         {/* Navigate to Login */}
@@ -187,5 +205,11 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 16,
     fontFamily: 'montserrat',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginBottom: 10,
+    textAlign: 'center',
   },
 });

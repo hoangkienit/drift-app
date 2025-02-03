@@ -13,7 +13,7 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: 'en', // Use the detected language
+    lng: 'vi', // Use the detected language
     fallbackLng: 'vi', // Fallback language if detection fails
     interpolation: {
       escapeValue: false,
