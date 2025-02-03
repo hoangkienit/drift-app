@@ -49,6 +49,11 @@
       "customer_support": "Customer Support",
       "logout": "Log Out",
       "about_us": "About Us"
+    },
+    "modal": {
+      "logout_title": "Are you sure you want to log out?",
+      "cancel": "Cancel",
+      "yes": "Yes, Log Out"
     }
   },
   "home": {

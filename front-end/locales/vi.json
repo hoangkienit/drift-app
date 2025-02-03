@@ -49,6 +49,11 @@
       "customer_support": "Hỗ trợ khách hàng",
       "logout": "Đăng xuất",
       "about_us": "Về chúng tôi"
+    },
+    "modal": {
+      "logout_title": "Bạn có chắc là muốn đăng xuất chứ?",
+      "cancel": "Hủy bỏ",
+      "yes": "Đăng xuất"
     }
   },
   "home": {

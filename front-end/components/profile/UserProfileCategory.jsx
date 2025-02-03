@@ -2,9 +2,19 @@ import { View, Text, TouchableOpacity, StyleSheet, Switch, ScrollView } from 're
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import React, { useState } from 'react';
+import LogoutModal from './LogoutModal';
 
-const UserProfileCategory = ({ t }) => {
+const UserProfileCategory = ({ t, router }) => {
   const [isEnabled, setIsEnabled] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
+   const handleLogout = () => {
+     // Logic to log out
+     //Clear asyncStorage
+     console.log('Logged out');
+     router.replace('/authentication/sign-in');
+    setModalVisible(false);
+  };
   
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 130 }}>
@@ -94,7 +104,7 @@ const UserProfileCategory = ({ t }) => {
         </TouchableOpacity>
         
         {/* Log Out */}
-      <TouchableOpacity style={styles.item}>
+      <TouchableOpacity style={styles.item} onPress={() => setModalVisible(true)}>
         <View style={styles.leftSection}>
           <Ionicons name="log-out" size={24} color="#666" style={styles.icon} />
           <Text style={styles.text}>{t(`profile.user_category.logout`)}</Text>
@@ -102,6 +112,14 @@ const UserProfileCategory = ({ t }) => {
         <Ionicons name="chevron-forward" size={22} color="#999" />
       </TouchableOpacity>
       </View>
+
+      <LogoutModal
+        visible={modalVisible}
+        onConfirm={handleLogout}
+        onCancel={() => setModalVisible(false)}
+        t={t}
+      />
+
      <View style={styles.app_author_container}>
         <Text style={styles.app_author}>App version: 1.0.1 BETA</Text>
         <Text style={styles.app_author}>Developed by Hoangkienit & Minhsangit1008</Text>
@@ -115,7 +133,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
-    marginTop: 5
+    marginTop: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4
   },
   item: {
     flexDirection: 'row',

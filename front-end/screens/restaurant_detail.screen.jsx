@@ -1,15 +1,23 @@
 import { View, ScrollView, Animated } from "react-native";
 import { useRef } from "react";
-import RestaurantHeader from "../components/restaurant/restaurant_detail/RestaurantHEader";
+import RestaurantHeader from "../components/restaurant/restaurant_detail/RestaurantHeader";
 import FloatingBackButton from "../components/restaurant/restaurant_detail/FloatingBackButton";
 import RestaurantHeaderImage from "../components/restaurant/restaurant_detail/RestaurantHeaderImage";
 import RestaurantInfo from "../components/restaurant/restaurant_detail/RestaurantInfo";
 import FoodCard from '../components/restaurant/restaurant_detail/food/FoodCard';
-import { foodItems } from "../constants/data";
+import { restaurantData } from "../constants/data";  // Ensure this imports the updated restaurant data
 
 const RestaurantDetailScreen = ({ props, t }) => {
   const { id, name, rating, minutes, avatar } = props;
+  
+  // Initialize scrollY as an Animated.Value
   const scrollY = useRef(new Animated.Value(0)).current;
+
+  // Find the restaurant data based on the restaurant id
+  const restaurant = restaurantData.find((restaurant) => restaurant.id === id);
+
+  // Access the specific food items for the restaurant
+  const foodItemsForRestaurant = restaurant ? restaurant.foodItems : [];
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -22,7 +30,7 @@ const RestaurantDetailScreen = ({ props, t }) => {
         <RestaurantHeaderImage avatar={avatar} />
         <RestaurantInfo name={name} rating={rating} minutes={minutes} t={t} />
 
-        {foodItems.map((food) => (
+        {foodItemsForRestaurant.map((food) => (
           <FoodCard key={food.id} food={food} t={t} />
         ))}
       </ScrollView>

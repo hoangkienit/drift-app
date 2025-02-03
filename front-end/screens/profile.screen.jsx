@@ -1,13 +1,14 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import React, { useEffect } from 'react'
 import UserProfileCategory from '../components/profile/UserProfileCategory';
-import { useNavigation } from 'expo-router';
+import { useNavigation, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '../constants/Colors';
 
 export default function ProfileScreen() {
     const navigation = useNavigation();
-    const { t } = useTranslation();
+  const { t } = useTranslation();
+  const router = useRouter();
 
     useEffect(() => {
         navigation.setOptions({
@@ -30,7 +31,7 @@ export default function ProfileScreen() {
           </View>
     
           {/* User Category */}
-              <UserProfileCategory t={t} />
+        <UserProfileCategory t={t} router={router} />
           </SafeAreaView>
         </View>
   )
