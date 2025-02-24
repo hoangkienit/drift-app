@@ -1,32 +1,43 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import UserProfileCategory from '../components/profile/UserProfileCategory';
 import { useNavigation, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '../constants/Colors';
+import { getUserData } from '../utils/storageHelper';
 
 export default function ProfileScreen() {
     const navigation = useNavigation();
   const { t } = useTranslation();
   const router = useRouter();
+  const [userData, setUserData] = useState(null);
 
-    useEffect(() => {
-        navigation.setOptions({
-            headerShown: false
-        })
-    })
+  const fetchData = async () => {
+    const data = await getUserData();
+      if (data) {
+        setUserData(data);
+      }
+  };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: false
+    });
+
+    fetchData();
+  }, []);
   return (
     <View style={styles.container}>
           <SafeAreaView>
               {/* User Information Header */}
           <View style={styles.header}>
             <Image
-              source={require('../assets/images/avatar.jpg')}
+            source={{uri: userData?.data?.user?.avatar}}
               style={styles.avatar}
             />
             <View style={styles.userInfo}>
-              <Text style={styles.name}>Hoàng Kiện</Text>
-              <Text style={styles.phone}>(+84)123456789</Text>
+            <Text style={styles.name}>{userData?.data?.user?.username}</Text>
+              <Text style={styles.phone}>{userData?.data?.user?.phone}</Text>
             </View>
           </View>
     

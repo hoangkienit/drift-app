@@ -1,0 +1,9 @@
+{
+  "USER_EXISTS": "Phone has been used by another account",
+  "SIGNUP_SUCCESS": "Sign up successfully",
+  "REGISTRATION_ERROR": "Error in registration process",
+  "USER_NOT_FOUND": "User not found",
+  "INVALID_PASSWORD": "Invalid password",
+  "LOGIN_SUCCESS": "Login successful",
+  "LOGIN_ERROR": "Error in login process"
+}

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Alert, TouchableWithoutFeedback, Keyboard, Text, StyleSheet } from 'react-native';
+import { View, Alert, TouchableWithoutFeedback, Keyboard, Text, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import { useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+
+// COMPONENTS
 import Logo from '../../components/authentication/sign-in/Logo';
 import InputField from '../../components/authentication/sign-in/InputField';
 import LoginButton from '../../components/authentication/sign-in/LoginButton';
@@ -10,6 +12,12 @@ import ErrorMessage from '../../components/authentication/sign-in/ErrorMessage';
 import ForgotPasswordLink from '../../components/authentication/sign-in/ForgotPasswordLink';
 import RegistrationLink from '../../components/authentication/sign-in/RegistrationLink';
 import OrDivider from '../../components/authentication/sign-in/OrDivider';
+
+// API
+import { login } from '../../api/authApi';
+
+// UTILS
+import { storeUserData } from '../../utils/storageHelper';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -21,21 +29,26 @@ const Login = () => {
   const [error, setError] = useState(null);
 
   const handleLogin = async () => {
-    if (!username || !password) {
-      setError(t('authentication.signin.error_empty_fields'));
-      return;
-    }
+    setError(null); // Clear the previous error
+
+    // REMEMBER TO VALIDATION INPUT IN HERE BEFORE SEND IT TO BACKEND
+    // if (!username || !password) {
+    //   setError(t('authentication.signin.error_empty_fields'));
+    //   return;
+    // }
 
     setLoading(true);
-    setError(null);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate network delay
+      const data = await login(username, password);
+      await storeUserData(data); // Store user data in local device
+      console.log(data);
+
       setLoading(false);
       navigation.replace('(tabs)'); // Home after successful login
     } catch (err) {
       setLoading(false);
-      setError(t('authentication.signin.error_login_failed'));
+      setError(err.message);
     }
   };
 
@@ -66,11 +79,18 @@ const Login = () => {
           />
           {error && <ErrorMessage message={error} />}
           <LoginButton onPress={handleLogin} loading={loading} t={t} />
-          <RegistrationLink onPress={() => navigation.replace('authentication/sign-up/index')} t={t} />
+          <RegistrationLink onPress={() => navigation.push('authentication/sign-up/index')} t={t} />
           <ForgotPasswordLink onPress={() => Alert.alert('Forgot Password', 'Redirect to reset password')} t={t} />
           <OrDivider t={t} />
-          <SocialLoginButton icon="facebook" text={t('authentication.signin.login_w_fb')} onPress={() => Alert.alert('Facebook Login', 'Redirect to Facebook login')} />
-          <SocialLoginButton icon="google" text={t('authentication.signin.login_w_gg')} onPress={() => Alert.alert('Google Login', 'Redirect to Google login')} />
+          
+          <SocialLoginButton icon="facebook" text={t('authentication.signin.login_w_fb')} onPress={() => {
+            setUsername('admin');
+            setPassword('123456');
+          }} />
+          <SocialLoginButton icon="google" text={t('authentication.signin.login_w_gg')} onPress={() => {
+            setUsername('hoangkien');
+            setPassword('hoangkien123');
+          }} />
         </View>
       </View>
     </TouchableWithoutFeedback>

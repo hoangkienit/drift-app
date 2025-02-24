@@ -95,7 +95,7 @@ const UserProfileCategory = ({ t, router }) => {
         </TouchableOpacity>
 
         {/* About Us */}
-      <TouchableOpacity style={styles.item}>
+      <TouchableOpacity style={styles.item} onPress={() => router.push('/profile/about_us')}>
         <View style={styles.leftSection}>
           <FontAwesome name="building" size={24} color="#666" style={styles.icon}/>
           <Text style={styles.text}>{t(`profile.user_category.about_us`)}</Text>

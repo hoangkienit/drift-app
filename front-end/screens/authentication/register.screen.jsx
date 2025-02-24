@@ -147,7 +147,7 @@ export default function Register() {
         </TouchableOpacity>
 
         {/* Navigate to Login */}
-        <TouchableOpacity onPress={() => navigation.replace('authentication/sign-in/index')}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.loginLink}>{ t('authentication.signup.signin_link')}</Text>
         </TouchableOpacity>
       </ScrollView>
