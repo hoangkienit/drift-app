@@ -17,6 +17,7 @@ import {
 import { useNavigation } from 'expo-router'; // For navigation
 import { Colors } from '@/constants/Colors'; // Customize colors
 import { useTranslation } from 'react-i18next';
+import { register } from '../../api/authApi';
 
 const { width, height } = Dimensions.get('window');
 
@@ -51,12 +52,12 @@ export default function Register() {
     };
   });
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     // Reset error message
     setError('');
     setLoading(true);
 
-    // Validate inputs
+    //Validate inputs
     if (!username || !phone || !password || !confirmPassword) {
       setLoading(false);
       setError(`${t('authentication.signup.error_empty_fields')}`);
@@ -69,11 +70,14 @@ export default function Register() {
       return;
     }
 
-    setTimeout(() => {
+    try {
+      await register(username, phone, password);
       setLoading(false);
-      Alert.alert('Success', 'Account created successfully!');
-      navigation.replace('authentication/sign-in/index');
-    }, 2000); // Simulate loading time
+      navigation.goBack();
+    } catch (err) {
+      setLoading(false);
+      setError(err.message);
+    }
   };
 
   return (

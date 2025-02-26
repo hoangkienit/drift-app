@@ -4,7 +4,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import React, { useState } from 'react';
 import LogoutModal from './LogoutModal';
 
-const UserProfileCategory = ({ t, router }) => {
+const UserProfileCategory = ({ t, router, user }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -31,7 +31,7 @@ const UserProfileCategory = ({ t, router }) => {
       </TouchableOpacity>
 
       {/* Account */}
-      <TouchableOpacity style={styles.item}>
+      <TouchableOpacity style={styles.item} onPress={() => router.push('profile/account_management')}>
         <View style={styles.leftSection}>
           <FontAwesome name="user" size={24} color="#666" style={styles.icon} />
           <Text style={styles.text}>{t(`profile.user_category.manage_account`)}</Text>

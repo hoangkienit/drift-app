@@ -1,94 +1,44 @@
+const AuthService = require("../services/auth.service");
 const { loginValidation, registerValidation } = require("../utils/validation");
-const User = require('../models/user.model');
-const getMessage = require("../utils/getMessage");
 
-const RegisterController = async (req, res) => { 
-    try {
-        const { username, phone, password } = req.body;
-        const lang = req.headers['accept-language'];
+class AuthController {
+  // 🔹 Register User
+  static async register(req, res) {
+    const lang = req.headers["accept-language"];
+    const { username, phone, password } = req.body;
 
-        //Validation
-        const { error } = registerValidation(req.body, lang);
-        if (error) return res.status(400).json({
-            success: false,
-            message: error.details[0].message
-        });
-        
-        // 🛑 Check if phone exists
-        const existUser = await User.findOne({ phone });
-        if (existUser) {
-            return res.status(400).json({
-                success: false,
-                message: getMessage("USER_EXISTS", lang)
-            });
-        }
-
-        // ✅ Create User
-        await User.create({ username, phone, password });
-
-        return res.status(201).json({
-            success: true,
-            message: getMessage("SIGNUP_SUCCESS", lang)
-        });
-
-    } catch (error) {
-        console.error("Register error:", error);
-        res.status(500).json({
-            success: false,
-            message: getMessage("REGISTRATION_ERROR", lang)
-        });
+    // ✅ Validate input
+    const { error } = registerValidation(req.body, lang);
+    if (error) {
+      return res.status(400).json({ success: false, message: error.details[0].message });
     }
-};
 
-const LoginController = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const lang = req.headers['accept-language'];
-
-        // Validation
-        const { error } = loginValidation(req.body,lang);
-        if (error) return res.status(400).send({
-            success: false,
-            message: error.details[0].message
-        });
-
-        const user = await User.findOne({ username });
-        if (!user) {
-            return res.status(404).send({
-                success: false,
-                message: getMessage("USER_NOT_FOUND", lang)
-            });
-        }
-
-        // Dummy password check (Replace with real password hashing later)
-        if (user.password !== password) {
-            return res.status(401).json({
-                success: false,
-                message: getMessage("INVALID_PASSWORD", lang)
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            message: getMessage("LOGIN_SUCCESS", lang),
-            data: {
-                user: {
-                    username: user.username,
-                    phone: user.phone,
-                    address: user.address,
-                    avatar: user.profileImg
-                },
-                accessToken: "No Token"
-            }
-        });
-
+      const response = await AuthService.register({ username, phone, password, lang });
+      return res.status(201).json({ success: true, message: response.message });
     } catch (error) {
-        console.error("Login error:", error);
-        res.status(500).json({
-            success: false,
-            message: getMessage("LOGIN_ERROR", lang)
-        });
+      return res.status(400).json({ success: false, message: error.message });
     }
-};
+  }
 
-module.exports = { RegisterController, LoginController };
+  // 🔹 Login User
+  static async login(req, res) {
+    const lang = req.headers["accept-language"];
+    const { username, password } = req.body;
+
+    // ✅ Validate input
+    const { error } = loginValidation(req.body, lang);
+    if (error) {
+      return res.status(400).json({ success: false, message: error.details[0].message });
+    }
+
+    try {
+      const response = await AuthService.login({ username, password, lang });
+      return res.status(200).json({ success: true, message: "Login successful", data: response });
+    } catch (error) {
+      return res.status(400).json({ success: false, message: error.message });
+    }
+  }
+}
+
+module.exports = AuthController;

@@ -32,7 +32,7 @@ export default function ProfileScreen() {
               {/* User Information Header */}
           <View style={styles.header}>
             <Image
-            source={{uri: userData?.data?.user?.avatar}}
+            source={{uri: userData?.data?.user?.profileImg}}
               style={styles.avatar}
             />
             <View style={styles.userInfo}>
@@ -42,7 +42,7 @@ export default function ProfileScreen() {
           </View>
     
           {/* User Category */}
-        <UserProfileCategory t={t} router={router} />
+        <UserProfileCategory t={t} router={router}/>
           </SafeAreaView>
         </View>
   )

@@ -64,6 +64,12 @@
       "logout_title": "Are you sure you want to log out?",
       "cancel": "Cancel",
       "yes": "Yes, Log Out"
+    },
+    "account_management": {
+      "title": "Account Management",
+      "edit_profile_button": "Edit information",
+      "change_pw_button": "Change password",
+      "delete_account": "Delete account"
     }
   },
   "home": {
