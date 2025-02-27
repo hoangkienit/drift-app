@@ -1,7 +1,8 @@
 const UserService = require("../services/user.service");
+const { updateInformationValidation } = require("../utils/validation");
 
 class UserController {
-    // Get all users
+    // 🔹 Get All Users
     static async getUsers(req, res) {
         try {
             const users = await UserService.getUsers();
@@ -17,7 +18,7 @@ class UserController {
         }
     }
 
-    // Get user by ID
+    // 🔹 Get User By ID
     static async getUserById(req, res) {
         try {
             const { id } = req.params;
@@ -39,6 +40,38 @@ class UserController {
                 success: false,
                 message: "Failed to fetch user"
             });
+        }
+    }
+
+    // 🔹 Update User Information
+    static updateUser = async (req, res) => {
+        const lang = req.headers["accept-language"];
+        const { id } = req.params;
+        const { email, phone } = req.body;
+
+        // ✅ Validate input
+        const { error } = updateInformationValidation(req.body, lang);
+        if (error) {
+            return res.status(400).json({ success: false, message: error.details[0].message });
+        }
+
+        try {
+             
+            const response = await UserService.updateUser({id, email, phone, lang});
+
+            // If success
+            return res.status(200).json({
+                success: true,
+                message: response.message,
+                data: response
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(500).send({
+                success: false,
+                message: 'Error in Update User API',
+                error
+            })
         }
     }
 }

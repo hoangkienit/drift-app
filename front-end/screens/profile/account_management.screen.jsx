@@ -2,29 +2,40 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { Colors } from "../constants/Colors";
-import { getUserData } from '../utils/storageHelper';
+import { Colors } from "../../constants/Colors";
+import { getUserData } from '../../utils/storageHelper';
 import { useTranslation } from "react-i18next";
+import { router, useRouter } from "expo-router";
+import { useFocusEffect } from '@react-navigation/native';
 
 const AccountManagementScreen = () => {
-    const navigation = useNavigation();
-    const { t } = useTranslation();
-    const [userData, setUserData] = useState(null);
-    
-      const fetchData = async () => {
-        const data = await getUserData();
-          if (data) {
-            setUserData(data);
-          }
-    };
-    
-    useEffect(() => {
-        navigation.setOptions({
-            headerShown: false
-        });
+  const navigation = useNavigation();
+  const router = useRouter();
+  const { t } = useTranslation();
+  const [userData, setUserData] = useState(null);
+     
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: false
+    });    
+  }, [navigation]);
 
-        fetchData();
-    })
+  const fetchUserData = async () => {
+        try {
+          const data = await getUserData();
+        if (data) {
+          setUserData(data);
+        }
+        } catch (error) {
+          console.log("Error");
+        }
+      };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUserData();
+    }, [])
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -42,7 +53,7 @@ const AccountManagementScreen = () => {
         <Image source={{ uri: userData?.data?.user?.profileImg }} style={styles.avatar} />
         <View style={styles.profileInfo}>
           <Text style={styles.name}>{userData?.data?.user?.username}</Text>
-          <Text style={styles.email}>{userData?.data?.user?.phone}</Text>
+          <Text style={styles.email}>{userData?.data?.user?.email}</Text>
         </View>
         <TouchableOpacity style={styles.changeAvatarButton}>
           <Ionicons name="camera" size={24} color="#fff" />
@@ -50,19 +61,29 @@ const AccountManagementScreen = () => {
       </View>
       
       {/* Menu Items */}
-      <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("EditProfile")}>
+      <TouchableOpacity style={styles.menuItem} onPress={() => {
+        router.push({
+          pathname: "/profile/account_management/edit_information",
+          params: {
+            userId: userData?.data?.user?._id,
+            username: userData?.data?.user?.username,
+            phone: userData?.data?.user?.phone,
+            email: userData?.data?.user?.email
+          }
+        });
+      }}>
         <Ionicons name="person-outline" size={24} color={Colors.primary} />
-        <Text style={styles.menuText}>{ t('profile.account_management.edit_profile_button') }</Text>
+        <Text style={[styles.menuText, {color: Colors.primary}]}>{ t('profile.account_management.edit_profile_button') }</Text>
       </TouchableOpacity>
       
       <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("ChangePassword")}>
         <Ionicons name="key-outline" size={24} color={Colors.primary} />
-        <Text style={styles.menuText}>{ t('profile.account_management.change_pw_button') }</Text>
+        <Text style={[styles.menuText, {color: Colors.primary}]}>{ t('profile.account_management.change_pw_button') }</Text>
       </TouchableOpacity>
       
       <TouchableOpacity style={styles.menuItem} onPress={() => console.log("Logging out...")}> 
-        <Ionicons name="trash-sharp" size={24} color={'red'} />
-        <Text style={[styles.menuText, {color: 'red'}]}>{ t('profile.account_management.delete_account') }</Text>
+        <Ionicons name="trash-sharp" size={24} color={Colors.primary} />
+        <Text style={[styles.menuText, {color: Colors.primary}]}>{ t('profile.account_management.delete_account') }</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -117,7 +138,7 @@ const styles = StyleSheet.create({
       fontFamily: 'montserrat-bold'
   },
   email: {
-    fontSize: 16,
+    fontSize: 13,
       color: "#f6f6f6",
     fontFamily: 'montserrat-medium'
   },
@@ -130,7 +151,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#eee",
   },
   menuText: {
-    fontSize: 18,
+    fontSize: 16,
       marginLeft: 20,
     fontFamily: 'montserrat-medium'
   },

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../constants/Colors';
+import { Colors } from '../../constants/Colors';
 
 const AboutUsScreen = () => {
     const navigation = useNavigation();
@@ -23,7 +23,7 @@ const AboutUsScreen = () => {
                 </View>
 
                 {/* Logo */}
-                <Image source={require('../assets/images/splash_icon.png')} style={styles.logo} />
+                <Image source={require('../../assets/images/splash_icon.png')} style={styles.logo} />
 
                 {/* App Information */}
                 <Text style={styles.title}>Welcome to Our Food Delivery App!</Text>

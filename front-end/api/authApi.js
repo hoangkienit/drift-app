@@ -1,11 +1,10 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const API_URL = "http://192.168.1.115:3000/api/v1/auth";
+import { BASE_API_URL } from "../constants/constants";
 
 export const login = async (username, password) => {
   try {
-    const response = await axios.post(`${API_URL}/login`, { username, password }, {
+    const response = await axios.post(`${BASE_API_URL}/auth/login`, { username, password }, {
       headers: { "accept-language": await AsyncStorage.getItem('userLanguage') }
     });
 
@@ -21,9 +20,9 @@ export const login = async (username, password) => {
   }
 };
 
-export const register = async (username, phone, password) => {
+export const register = async (username, email, phone, password) => {
   try {
-    const response = await axios.post(`${API_URL}/registration`, { username, phone, password }, {
+    const response = await axios.post(`${BASE_API_URL}/auth/registration`, { username, email, phone, password }, {
       headers: { "accept-language": await AsyncStorage.getItem('userLanguage') }
     });
 

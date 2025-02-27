@@ -1,9 +1,11 @@
 {
   "USER_EXISTS": "Số điện thoại đã được sử dụng bởi tài khoản khác",
+  "EMAIL_EXISTS": "Email đã được sử dụng bởi tài khoản khác",
   "SIGNUP_SUCCESS": "Đăng ký thành công",
   "REGISTRATION_ERROR": "Lỗi trong quá trình đăng ký",
   "USER_NOT_FOUND": "Không tìm thấy người dùng",
   "INVALID_PASSWORD": "Mật khẩu không đúng",
   "LOGIN_SUCCESS": "Đăng nhập thành công",
-  "LOGIN_ERROR": "Lỗi trong quá trình đăng nhập"
+  "LOGIN_ERROR": "Lỗi trong quá trình đăng nhập",
+  "UPDATE_INFORMATION_SUCCESS": "Thông tin người dùng đã được cập nhật"
 }

@@ -5,6 +5,11 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
     phone: {
         type: String,
         required: true,
@@ -27,6 +32,11 @@ const userSchema = mongoose.Schema({
     profileImg: {
         type: String,
         default: 'https://cdn1.iconfinder.com/data/icons/user-pictures/101/malecostume-512.png'
+    },
+    status: {
+        type: String,
+        enum: ['active', 'in-active'],
+        default: 'active'
     }
 }, { timestamps: true });
 

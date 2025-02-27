@@ -122,7 +122,7 @@ const UserProfileCategory = ({ t, router, user }) => {
 
      <View style={styles.app_author_container}>
         <Text style={styles.app_author}>App version: 1.0.1 BETA</Text>
-        <Text style={styles.app_author}>Developed by Hoangkienit & Minhsangit1008</Text>
+        <Text style={styles.app_author}>Developed by Hoangkienit</Text>
     </View> 
   </ScrollView>
   );

@@ -69,7 +69,12 @@
       "title": "Quản lý tài khoản",
       "edit_profile_button": "Chỉnh sửa thông tin",
       "change_pw_button": "Đổi mật khẩu",
-      "delete_account": "Xóa tài khoản"
+      "delete_account": "Xóa tài khoản",
+      "edit_account_information": {
+        "header_title": "Chỉnh sửa thông tin",
+        "username": "Tên đăng nhập",
+        "phone": "Số điện thoại"
+      }
 }
 
   },

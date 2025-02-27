@@ -5,6 +5,7 @@ import { useNavigation, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '../constants/Colors';
 import { getUserData } from '../utils/storageHelper';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function ProfileScreen() {
     const navigation = useNavigation();
@@ -12,7 +13,7 @@ export default function ProfileScreen() {
   const router = useRouter();
   const [userData, setUserData] = useState(null);
 
-  const fetchData = async () => {
+  const fetchUserData = async () => {
     const data = await getUserData();
       if (data) {
         setUserData(data);
@@ -24,8 +25,13 @@ export default function ProfileScreen() {
       headerShown: false
     });
 
-    fetchData();
   }, []);
+
+  useFocusEffect(
+      React.useCallback(() => {
+        fetchUserData();
+      }, [])
+    );
   return (
     <View style={styles.container}>
           <SafeAreaView>
@@ -37,7 +43,7 @@ export default function ProfileScreen() {
             />
             <View style={styles.userInfo}>
             <Text style={styles.name}>{userData?.data?.user?.username}</Text>
-              <Text style={styles.phone}>{userData?.data?.user?.phone}</Text>
+              <Text style={styles.phone}>{userData?.data?.user?.email}</Text>
             </View>
           </View>
     

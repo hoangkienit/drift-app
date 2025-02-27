@@ -5,11 +5,17 @@ const getMessage = require("../utils/getMessage");
 
 class AuthService {
   // 🔹 Register a new user
-  static async register({ username, phone, password, lang }) {
+  static async register({ username, email, phone, password, lang }) {
     // 🛑 Check if user already exists
     const existUser = await User.findOne({ phone }).lean();
     if (existUser) {
       throw new Error(getMessage("USER_EXISTS", lang));
+    }
+
+    // 🛑 Check if user already exists
+    const existEmail = await User.findOne({ email }).lean();
+    if (existEmail) {
+      throw new Error(getMessage("EMAIL_EXISTS", lang));
     }
 
     // 🔒 Hash password
@@ -17,14 +23,14 @@ class AuthService {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // ✅ Create user
-    await User.create({ username, phone, password: hashedPassword });
+    await User.create({ username, email, phone, password: hashedPassword });
 
     return { message: getMessage("SIGNUP_SUCCESS", lang) };
   }
 
   // 🔹 Login user and generate JWT
   static async login({ username, password, lang }) {
-    const user = await User.findOne({ username }).lean();
+    const user = await User.findOne({ username });
     if (!user) {
       throw new Error(getMessage("USER_NOT_FOUND", lang));
     }
@@ -40,13 +46,10 @@ class AuthService {
       expiresIn: process.env.ACCESS_TOKEN_EXPIRY || "15m",
     });
 
+    user.password = undefined;
+
     return {
-      user: {
-        username: user.username,
-        phone: user.phone,
-        address: user.address,
-        profileImg: user.profileImg,
-      },
+      user: user,
       accessToken,
     };
   }

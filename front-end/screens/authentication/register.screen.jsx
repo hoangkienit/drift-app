@@ -26,6 +26,7 @@ export default function Register() {
   const { t } = useTranslation();
 
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -71,7 +72,7 @@ export default function Register() {
     }
 
     try {
-      await register(username, phone, password);
+      await register(username, email, phone, password);
       setLoading(false);
       navigation.goBack();
     } catch (err) {
@@ -111,13 +112,22 @@ export default function Register() {
           placeholderTextColor="#666"
         />
 
+        {/* Email Input */}
+        <TextInput
+          style={styles.input}
+          placeholder={"Email"}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          placeholderTextColor="#666"
+        />
+
         {/* Phone Input */}
         <TextInput
           style={styles.input}
           placeholder={ t('authentication.signup.phone')}
           value={phone}
           onChangeText={setPhone}
-          keyboardType="email-address"
           placeholderTextColor="#666"
         />
 

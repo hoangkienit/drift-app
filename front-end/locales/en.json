@@ -69,7 +69,12 @@
       "title": "Account Management",
       "edit_profile_button": "Edit information",
       "change_pw_button": "Change password",
-      "delete_account": "Delete account"
+      "delete_account": "Delete account",
+      "edit_account_information": {
+        "header_title": "Edit Information",
+        "username": "Username",
+        "phone": "Phone"
+      }
     }
   },
   "home": {

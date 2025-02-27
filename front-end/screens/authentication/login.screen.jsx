@@ -41,8 +41,8 @@ const Login = () => {
 
     try {
       const data = await login(username, password);
-      await storeUserData(data); // Store user data in local device
       console.log(data);
+      await storeUserData(data); // Store user data in local device
 
       setLoading(false);
       navigation.replace('(tabs)'); // Home after successful login

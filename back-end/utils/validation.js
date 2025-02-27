@@ -9,7 +9,8 @@ const messages = {
     "string.max": "Cannot exceed {#limit} characters.",
     "any.required": "This field is required.",
     "string.pattern.base": "Password must be 6-15 characters, containing only letters and numbers.",
-    "string.pattern.phone": "Phone number must be between 10-15 digits."
+    "string.pattern.phone": "Phone number must be between 10-15 digits.",
+    "string.email": "Invalid email format." 
   },
   vi: {
     "string.base": "Phải là chuỗi ký tự.",
@@ -18,9 +19,11 @@ const messages = {
     "string.max": "Không được vượt quá {#limit} ký tự.",
     "any.required": "Trường này là bắt buộc.",
     "string.pattern.base": "Mật khẩu chỉ chứa chữ và số, từ 6-15 ký tự.",
-    "string.pattern.phone": "Số điện thoại phải có từ 10-15 chữ số."
+    "string.pattern.phone": "Số điện thoại phải có từ 10-15 chữ số.",
+    "string.email": "Định dạng email không hợp lệ."
   }
 };
+
 
 // Login Validation Schema
 const loginValidation = (data, lang = "en") => {
@@ -41,6 +44,10 @@ const loginValidation = (data, lang = "en") => {
 const registerValidation = (data, lang = "en") => {
   const schema = Joi.object({
     username: Joi.string().min(3).max(30).required().messages(messages[lang]),
+    email: Joi.string().email({ tlds: { allow: false } }).required().messages({
+      ...messages[lang],
+      "string.email": messages[lang]["string.email"]
+    }),
     phone: Joi.string()
       .pattern(new RegExp("^[0-9]{10,15}$"))
       .required()
@@ -59,4 +66,27 @@ const registerValidation = (data, lang = "en") => {
   return schema.validate(data, { abortEarly: false });
 };
 
-module.exports = { loginValidation, registerValidation };
+// Update Information Validation Schema
+const updateInformationValidation = (data, lang = "en") => {
+  const schema = Joi.object({
+    email: Joi.string().email({ tlds: { allow: false } }).required().messages({
+      ...messages[lang],
+      "string.email": messages[lang]["string.email"]
+    }),
+    phone: Joi.string()
+      .pattern(new RegExp("^[0-9]{10,15}$"))
+      .required()
+      .messages({
+        ...messages[lang],
+        "string.pattern.base": messages[lang]["string.pattern.phone"]
+      })
+  });
+
+  return schema.validate(data, { abortEarly: false });
+};
+
+module.exports = {
+  loginValidation,
+  registerValidation,
+  updateInformationValidation
+};

@@ -9,6 +9,9 @@ router.get('/users', authMiddleware, UserController.getUsers);
 // GET USER BY ID || GET
 router.get("/get/:id", authMiddleware, UserController.getUserById);
 
+// UPDATE USER INFORMATION || PUT
+router.put("/update-user/:id",  UserController.updateUser);
+
 // UPDATE USER PASSWORD BY ID || PUT
 
 // RESET USER PASSWORD || PUT
