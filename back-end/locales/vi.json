@@ -7,5 +7,7 @@
   "INVALID_PASSWORD": "Mật khẩu không đúng",
   "LOGIN_SUCCESS": "Đăng nhập thành công",
   "LOGIN_ERROR": "Lỗi trong quá trình đăng nhập",
-  "UPDATE_INFORMATION_SUCCESS": "Thông tin người dùng đã được cập nhật"
+  "UPDATE_INFORMATION_SUCCESS": "Thông tin người dùng đã được cập nhật",
+  "UPDATE_PASSWORD_SUCCESS": "Mật khẩu người dùng đã được cập nhật",
+  "INVALID_OLD_PASSWORD": "Mật khẩu cũ không đúng"
 }

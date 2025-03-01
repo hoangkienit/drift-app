@@ -1,5 +1,5 @@
 const UserService = require("../services/user.service");
-const { updateInformationValidation } = require("../utils/validation");
+const { updateInformationValidation, updatePasswordValidation } = require("../utils/validation");
 
 class UserController {
     // 🔹 Get All Users
@@ -49,6 +49,10 @@ class UserController {
         const { id } = req.params;
         const { email, phone } = req.body;
 
+        if (!id || !email || !phone) {
+            return res.status(400).json({ success: false, message: "Missing fields" });
+        }
+
         // ✅ Validate input
         const { error } = updateInformationValidation(req.body, lang);
         if (error) {
@@ -71,6 +75,40 @@ class UserController {
                 success: false,
                 message: 'Error in Update User API',
                 error
+            })
+        }
+    }
+
+    // 🔹 Update User Password
+    static updatePassword = async (req, res) => {
+        const lang = req.headers["accept-language"];
+        const { id } = req.params;
+        const { oldPassword, newPassword } = req.body;
+
+        if (!id || !oldPassword || !newPassword) {
+            return res.status(400).json({ success: false, message: "Missing fields" });
+        }
+
+        // ✅ Validate input
+        const { error } = updatePasswordValidation(req.body, lang);
+        if (error) {
+            return res.status(400).json({ success: false, message: error.details[0].message });
+        }
+
+        try {
+             
+            const response = await UserService.updatePassword({id, newPassword, oldPassword, lang});
+
+            // If success
+            return res.status(200).json({
+                success: true,
+                message: response.message,
+                data: response
+            });
+        } catch (error) {
+            res.status(500).send({
+                success: false,
+                message: error.message,
             })
         }
     }

@@ -27,7 +27,7 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
         default: 'client',
-        enum: ['client', 'admin', 'vendor', 'driver']
+        enum: ['client', 'admin', 'merchant', 'driver']
     },
     profileImg: {
         type: String,
@@ -35,8 +35,13 @@ const userSchema = mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['active', 'in-active'],
+        enum: ['active', 'in-active', 'banned'],
         default: 'active'
+    },
+    restaurant: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Restaurant',
+        default: null 
     }
 }, { timestamps: true });
 

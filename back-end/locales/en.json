@@ -7,5 +7,7 @@
   "INVALID_PASSWORD": "Invalid password",
   "LOGIN_SUCCESS": "Login successful",
   "LOGIN_ERROR": "Error in login process",
-  "UPDATE_INFORMATION_SUCCESS": "User information has been updated"
+  "UPDATE_INFORMATION_SUCCESS": "User information has been updated",
+  "UPDATE_PASSWORD_SUCCESS": "User password has been updated",
+  "INVALID_OLD_PASSWORD": "Invalid old password"
 }

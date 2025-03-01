@@ -80,13 +80,34 @@ const updateInformationValidation = (data, lang = "en") => {
         ...messages[lang],
         "string.pattern.base": messages[lang]["string.pattern.phone"]
       })
-  });
+  }).unknown(true);
 
+  return schema.validate(data, { abortEarly: false });
+};
+
+// Update Information Validation Schema
+const updatePasswordValidation = (data, lang = "en") => {
+  const schema = Joi.object({
+    oldPassword: Joi.string()
+      .min(6)
+      .max(15)
+      .pattern(new RegExp("^[A-Za-z0-9]{6,15}$"))
+      .required()
+      .messages(messages[lang]),
+    newPassword: Joi.string()
+      .min(6)
+      .max(15)
+      .pattern(new RegExp("^[A-Za-z0-9]{6,15}$"))
+      .required()
+      .messages(messages[lang]),
+}).unknown(true);
+  
   return schema.validate(data, { abortEarly: false });
 };
 
 module.exports = {
   loginValidation,
   registerValidation,
-  updateInformationValidation
+  updateInformationValidation,
+  updatePasswordValidation
 };
