@@ -38,7 +38,12 @@
       "error_empty_fields": "All fields are required",
       "error_register_failed": "Failed to register",
       "error_not_match_pw": "Password does not match",
-      "success_register": "Your account have been created"
+      "success_register": "Your account have been created",
+      "client_title": "Client",
+      "merchant_title": "Merchant",
+      "driver_title": "Driver",
+      "modal_success_title": "Registration Successful",
+      "modal_success_message": "Your account has been created successfully. You can now log in"
     }
   },
   "tabbar": {

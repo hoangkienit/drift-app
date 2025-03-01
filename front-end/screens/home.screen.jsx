@@ -11,27 +11,6 @@ export default function HomeScreen() {
   const [location, setLocation] = useState(null);
   const useCartStoreZustand = useCartStore();
   
-  const cartItems = [
-  {
-    id: 1,
-    name: "Cheese Burger",
-    image: "https://example.com/cheeseburger.jpg",
-    restaurant: "Burger King",
-  },
-  {
-    id: 2,
-    name: "French Fries",
-    image: "https://example.com/fries.jpg",
-    restaurant: "Burger King",
-  },
-  {
-    id: 3,
-    name: "Margherita Pizza",
-    image: "https://example.com/pizza.jpg",
-    restaurant: "Pizza Hut",
-  },
-];
-
 
   useEffect(() => {
     getLocation(setLocation);

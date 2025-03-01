@@ -9,5 +9,6 @@
   "LOGIN_ERROR": "Error in login process",
   "UPDATE_INFORMATION_SUCCESS": "User information has been updated",
   "UPDATE_PASSWORD_SUCCESS": "User password has been updated",
-  "INVALID_OLD_PASSWORD": "Invalid old password"
+  "INVALID_OLD_PASSWORD": "Invalid old password",
+  "INVALID_SELECTED_ROLE": "Invalid role selected"
 }

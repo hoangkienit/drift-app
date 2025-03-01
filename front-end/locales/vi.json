@@ -38,7 +38,12 @@
     "error_empty_fields": "Không được để trống các trường",
     "error_register_failed": "Đăng kí thất bại",
     "error_not_match_pw": "Mật khẩu không khớp",
-    "success_register": "Tài khoản của bạn đã được tạo"
+    "success_register": "Tài khoản của bạn đã được tạo",
+    "client_title": "Khách hàng",
+    "merchant_title": "Người bán",
+    "driver_title": "Tài xế",
+    "modal_success_title": "Đăng ký thành công",
+    "modal_success_message": "Tài khoản của bạn đã được tạo thành công. Bạn có thể đăng nhập ngay bây giờ."
     }
   },
   "tabbar": {

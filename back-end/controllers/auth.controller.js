@@ -5,7 +5,7 @@ class AuthController {
   // 🔹 Register User
   static async register(req, res) {
     const lang = req.headers["accept-language"];
-    const { username, email, phone, password } = req.body;
+    const { username, email, phone, password, role } = req.body;
 
     // ✅ Validate input
     const { error } = registerValidation(req.body, lang);
@@ -14,7 +14,7 @@ class AuthController {
     }
 
     try {
-      const response = await AuthService.register({ username, email, phone, password, lang });
+      const response = await AuthService.register({ username, email, phone, password, role, lang });
       return res.status(201).json({ success: true, message: response.message });
     } catch (error) {
       return res.status(400).json({ success: false, message: error.message });

@@ -35,7 +35,7 @@ const loginValidation = (data, lang = "en") => {
       .pattern(new RegExp("^[A-Za-z0-9]{6,15}$"))
       .required()
       .messages(messages[lang]),
-  });
+  }).unknown(true);;
 
   return schema.validate(data, { abortEarly: false });
 };
@@ -61,7 +61,7 @@ const registerValidation = (data, lang = "en") => {
       .pattern(new RegExp("^[A-Za-z0-9]{6,15}$"))
       .required()
       .messages(messages[lang]),
-  });
+  }).unknown(true);;
 
   return schema.validate(data, { abortEarly: false });
 };

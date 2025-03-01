@@ -5,7 +5,13 @@ const getMessage = require("../utils/getMessage");
 
 class AuthService {
   // 🔹 Register a new user
-  static async register({ username, email, phone, password, lang }) {
+  static async register({ username, email, phone, password, role, lang }) {
+    // ✅ Check if the role is valid
+    const allowedRoles = ['client', 'admin', 'merchant', 'driver'];
+    if (!allowedRoles.includes(role)) {
+      throw new Error(getMessage("INVALID_SELECTED_ROLE", lang));
+    }
+    
     // 🛑 Check if user already exists
     const existUser = await User.findOne({ phone }).lean();
     if (existUser) {
@@ -23,7 +29,13 @@ class AuthService {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // ✅ Create user
-    await User.create({ username, email, phone, password: hashedPassword });
+    await User.create({
+      username,
+      email,
+      phone,
+      password: hashedPassword,
+      role
+    });
 
     return { message: getMessage("SIGNUP_SUCCESS", lang) };
   }

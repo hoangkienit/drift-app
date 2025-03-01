@@ -20,9 +20,9 @@ export const login = async (username, password) => {
   }
 };
 
-export const register = async (username, email, phone, password) => {
+export const register = async (username, email, phone, password, role) => {
   try {
-    const response = await axios.post(`${BASE_API_URL}/auth/registration`, { username, email, phone, password }, {
+    const response = await axios.post(`${BASE_API_URL}/auth/registration`, { username, email, phone, password, role }, {
       headers: { "accept-language": await AsyncStorage.getItem('userLanguage') }
     });
 

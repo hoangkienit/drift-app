@@ -46,7 +46,22 @@ const Login = () => {
       await storeAccessToken(response.data.accessToken);
 
       setLoading(false);
-      navigation.replace('(tabs)'); // Home after successful login
+
+      // Role checking
+      switch (response.data.user.role) {
+        case 'client':
+           navigation.replace('(tabs)');
+          break;
+        case 'merchant':
+           navigation.replace('(tabs_merchant)');
+          break;
+        case 'driver':
+           navigation.replace('(tabs)');
+          break;
+      
+        default:
+          break;
+      }
     } catch (err) {
       setLoading(false);
       setError(err.message);

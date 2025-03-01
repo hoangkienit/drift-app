@@ -40,7 +40,7 @@ const userSchema = mongoose.Schema({
     },
     restaurant: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Restaurant',
+        ref: 'Merchant',
         default: null 
     }
 }, { timestamps: true });
