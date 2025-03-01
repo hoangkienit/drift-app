@@ -17,7 +17,7 @@ import OrDivider from '../../components/authentication/sign-in/OrDivider';
 import { login } from '../../api/authApi';
 
 // UTILS
-import { storeUserData } from '../../utils/storageHelper';
+import { storeUserData, storeAccessToken } from '../../utils/storageHelper';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -40,9 +40,10 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const data = await login(username, password);
-      console.log(data);
-      await storeUserData(data); // Store user data in local device
+      const response = await login(username, password);
+      console.log("Login data: ", response);
+      await storeUserData(response); // Store user data in local device
+      await storeAccessToken(response.data.accessToken);
 
       setLoading(false);
       navigation.replace('(tabs)'); // Home after successful login

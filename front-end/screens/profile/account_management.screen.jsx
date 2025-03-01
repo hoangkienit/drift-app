@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, StyleSheet, SafeAreaView } from "r
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../constants/Colors";
-import { getUserData } from '../../utils/storageHelper';
+import { getUserData, getAccessToken } from '../../utils/storageHelper';
 import { useTranslation } from "react-i18next";
 import { router, useRouter } from "expo-router";
 import { useFocusEffect } from '@react-navigation/native';
@@ -61,11 +61,12 @@ const AccountManagementScreen = () => {
       </View>
       
       {/* Menu Items */}
-      <TouchableOpacity style={styles.menuItem} onPress={() => {
+      <TouchableOpacity style={styles.menuItem} onPress={ async () => {
         router.push({
           pathname: "/profile/account_management/edit_information",
           params: {
             userId: userData?.data?.user?._id,
+            accessToken: await getAccessToken(),
             username: userData?.data?.user?.username,
             phone: userData?.data?.user?.phone,
             email: userData?.data?.user?.email
@@ -76,7 +77,15 @@ const AccountManagementScreen = () => {
         <Text style={[styles.menuText, {color: Colors.primary}]}>{ t('profile.account_management.edit_profile_button') }</Text>
       </TouchableOpacity>
       
-      <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("ChangePassword")}>
+      <TouchableOpacity style={styles.menuItem} onPress={async () => {
+        router.push({
+          pathname: "/profile/account_management/update_password",
+          params: {
+            userId: userData?.data?.user?._id,
+            accessToken: await getAccessToken(),
+          }
+        });
+      }}>
         <Ionicons name="key-outline" size={24} color={Colors.primary} />
         <Text style={[styles.menuText, {color: Colors.primary}]}>{ t('profile.account_management.change_pw_button') }</Text>
       </TouchableOpacity>

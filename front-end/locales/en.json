@@ -73,7 +73,15 @@
       "edit_account_information": {
         "header_title": "Edit Information",
         "username": "Username",
-        "phone": "Phone"
+        "phone": "Phone",
+        "save_button": "Save"
+      },
+      "update_password": {
+        "header_title": "Update password",
+        "current_password": "Your current password",
+        "new_password": "New password",
+        "confirm_password": "Confirm password",
+        "save_button": "Save"
       }
     }
   },

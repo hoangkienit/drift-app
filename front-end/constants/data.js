@@ -18,7 +18,7 @@ export const restaurantData = [
         id: 1,
         name: 'Sushi Roll',
         price: 12.99,
-        toppings: ['Salmon', 'Avocado', 'Cucumber'],
+        toppings: [],
         imageUrl: 'https://www.thefieryvegetarian.com/wp-content/uploads/2021/01/sweet-potato-sushi-1-10-720x720.jpg',
       },
       {
