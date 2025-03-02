@@ -87,7 +87,14 @@
         "new_password": "New password",
         "confirm_password": "Confirm password",
         "save_button": "Save"
-      }
+      },
+      "permission_denied": "Permission Denied",
+      "denied_message": "You have denied access to your gallery. Please enable it in settings.",
+      "alert_cancel_button": "Cancel",
+      "alert_open_setting_button": "Open Settings",
+      "avatar_update_success": "Avatar updated successfully!",
+      "avatar_update_failed": "Failed to update avatar. Please try again."
+
     }
   },
   "home": {

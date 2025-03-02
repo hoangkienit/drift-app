@@ -3,15 +3,16 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import React, { useState } from 'react';
 import LogoutModal from './LogoutModal';
+import { clearUserData, clearAccessToken } from '../../utils/storageHelper';
 
 const UserProfileCategory = ({ t, router, user }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
    const handleLogout = () => {
-     // Logic to log out
      //Clear asyncStorage
-     console.log('Logged out');
+     clearUserData();
+     clearAccessToken();
      router.replace('/authentication/sign-in');
     setModalVisible(false);
   };

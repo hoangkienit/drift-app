@@ -87,7 +87,13 @@
         "new_password": "Mật khẩu mới",
         "confirm_password": "Xác nhận mật khẩu mới",
         "save_button": "Lưu"
-      }
+      },
+      "permission_denied": "Quyền bị từ chối",
+      "denied_message": "Bạn đã từ chối quyền truy cập vào thư viện. Vui lòng bật trong cài đặt.",
+      "alert_cancel_button": "Hủy",
+      "alert_open_setting_button": "Mở cài đặt",
+      "avatar_update_success": "Cập nhật ảnh đại diện thành công!",
+      "avatar_update_failed": "Cập nhật ảnh đại diện thất bại. Vui lòng thử lại."
 }
 
   },

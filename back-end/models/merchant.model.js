@@ -1,5 +1,15 @@
 const mongoose = require('mongoose');
 
+const addressSchema = new mongoose.Schema({
+    street: { type: String, required: true },
+    city: { type: String, required: true },
+    state: { type: String, required: true },
+    postalCode: { type: String, required: true },
+    country: { type: String, required: true },
+    latitude: { type: Number, required: false },
+    longitude: { type: Number, required: false }
+});
+
 const merchantSchema = mongoose.Schema({
     name: {
         type: String,
@@ -17,7 +27,7 @@ const merchantSchema = mongoose.Schema({
         unique: true // Ensures a vendor owns only one restaurant
     },
     address: {
-        type: String,
+        type: addressSchema,
         required: true
     },
     phone: {

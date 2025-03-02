@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Image, StyleSheet, SafeAreaView } from "react-native";
+import { View, Text, TouchableOpacity, Image, StyleSheet, SafeAreaView, Alert, Linking, Modal, ActivityIndicator } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../constants/Colors";
-import { getUserData, getAccessToken } from '../../utils/storageHelper';
+import { getUserData, getAccessToken, storeUserData, clearUserData } from '../../utils/storageHelper';
 import { useTranslation } from "react-i18next";
 import { router, useRouter } from "expo-router";
 import { useFocusEffect } from '@react-navigation/native';
+import { updateAvatar } from "../../api/userApi";
 
 const AccountManagementScreen = () => {
   const navigation = useNavigation();
   const router = useRouter();
   const { t } = useTranslation();
   const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
      
   useEffect(() => {
     navigation.setOptions({
@@ -37,6 +42,67 @@ const AccountManagementScreen = () => {
     }, [])
   );
 
+  const pickImage = async () => {
+  try {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (status === "denied") {
+      Alert.alert(
+        t('profile.account_management.permission_denied'),
+        t('profile.account_management.denied_message'),
+        [
+          { text: t('profile.account_management.alert_cancel_button'), style: "cancel" },
+          { text: t('profile.account_management.alert_open_setting_button'), onPress: () => Linking.openSettings() }
+        ]
+      );
+      return;
+    }
+
+    if (status !== "granted") {
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: 'images',
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    });
+
+    if (!result.canceled) {
+      const selectedImage = result.assets[0].uri;
+      handleUpdateAvatar(selectedImage);
+    } else {
+      console.log("User cancelled image selection");
+    }
+  } catch (error) {
+    console.error("Error selecting image:", error);
+  }
+  };
+  
+  const handleUpdateAvatar = async (imageUri) => {
+    try {
+      setLoading(true);
+      const accessToken = await getAccessToken();
+      const response = await updateAvatar(userData?.data?.user?._id, accessToken, imageUri);
+      
+      // Clear the old user data and replace with the new
+      clearUserData();
+      await storeUserData(response);
+
+      fetchUserData();
+
+      setModalMessage(`✅ ${t('profile.account_management.avatar_update_success')}`);
+      setModalVisible(true);
+    } catch (error) {
+      setModalMessage(t('profile.account_management.avatar_update_failed'));
+      setModalVisible(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -55,10 +121,29 @@ const AccountManagementScreen = () => {
           <Text style={styles.name}>{userData?.data?.user?.username}</Text>
           <Text style={styles.email}>{userData?.data?.user?.email}</Text>
         </View>
-        <TouchableOpacity style={styles.changeAvatarButton}>
+        <TouchableOpacity style={styles.changeAvatarButton} onPress={pickImage}>
           <Ionicons name="camera" size={24} color="#fff" />
+          {/* {loading ? <ActivityIndicator size="large" color="#fff" /> : <Ionicons name="camera" size={24} color="#fff" />} */}
         </TouchableOpacity>
       </View>
+
+      {loading && <View style={styles.loaderContainer}>
+        <View style={styles.loaderBox}>
+          <ActivityIndicator size="large" color={"#ffff"} />
+        </View>
+      </View>}
+
+      {/* Notification Modal */}
+      <Modal animationType="fade" transparent={true} visible={modalVisible}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>{modalMessage}</Text>
+            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalButton}>
+              <Text style={styles.modalButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       
       {/* Menu Items */}
       <TouchableOpacity style={styles.menuItem} onPress={ async () => {
@@ -163,6 +248,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
       marginLeft: 20,
     fontFamily: 'montserrat-medium'
+  },
+  modalContainer: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" },
+  modalContent: { width: 300, backgroundColor: "#fff", padding: 20, borderRadius: 10, alignItems: "center" },
+  modalText: { fontSize: 16, marginBottom: 10, fontFamily: 'montserrat-medium' },
+  modalButton: { backgroundColor: Colors.primary, padding: 10, borderRadius: 5, paddingHorizontal: 20 },
+  modalButtonText: { color: "#fff", fontSize: 16, fontFamily: 'montserrat-medium' },
+  loaderContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    zIndex: 1000,
+    pointerEvents: "auto",
+  },
+  loaderBox: {
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

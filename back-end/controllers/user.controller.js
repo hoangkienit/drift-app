@@ -1,4 +1,5 @@
 const UserService = require("../services/user.service");
+const AvatarService = require('../services/avatar.service');
 const { updateInformationValidation, updatePasswordValidation } = require("../utils/validation");
 
 class UserController {
@@ -112,6 +113,38 @@ class UserController {
             })
         }
     }
+
+    static async uploadAvatar(req, res) {
+        const { id } = req.params;
+
+    try {
+      if (!req.file) {
+        return res.status(400).json({ success: false, error: 'No file uploaded' });
+        }
+
+        // Fetch current user to get old avatar URL
+        const user = await UserService.getUserById(id);
+        
+        const imageUrl = await AvatarService.processAndUploadAvatar(req.file, user.profileImg);
+
+        if (!imageUrl) {
+            return res.status(500).json({ success: false, error: "Image upload failed" });
+        }
+        
+        const updatedUser = await UserService.updateAvatar({id, imageUrl})
+
+      res.json({
+        success: true,
+        message: 'Image uploaded successfully!',
+          data: {
+            user: updatedUser
+        },
+      });
+    } catch (error) {
+        console.log("Error", error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  }
 }
 
 module.exports = UserController;
