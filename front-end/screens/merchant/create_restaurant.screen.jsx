@@ -1,115 +1,150 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
-
-const INDEX_URL = 'https://cdn.jsdelivr.net/gh/thien0291/vietnam_dataset@1.0.0/Index.json';
+import { useNavigation } from "expo-router";
+import React, { useState, useEffect ,useLayoutEffect } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import DropDownPicker from "react-native-dropdown-picker";
+import { Colors } from "../../constants/Colors";
 
 const CreateRestaurantScreen = () => {
-  const [provinces, setProvinces] = useState([]); 
+  const navigation = useNavigation();
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "Tạo Nhà Hàng", // Tiêu đề của header
+      headerStyle: {
+        backgroundColor: Colors.primary,
+      },
+      headerTitleStyle: {
+        color: "#fff",
+        fontWeight: "bold",
+        fontFamily: 'montserrat-bold'
+      },
+      headerTintColor: "#fff",
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={28} color="#fff" />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
+
+  const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
-  const [selectedProvince, setSelectedProvince] = useState(null);
+
+  const [selectedCity, setSelectedCity] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedWard, setSelectedWard] = useState(null);
-  const [loading, setLoading] = useState(true);
+
+  const [openCity, setOpenCity] = useState(false);
+  const [openDistrict, setOpenDistrict] = useState(false);
+  const [openWard, setOpenWard] = useState(false);
 
   useEffect(() => {
-    fetch(INDEX_URL)
-      .then(response => response.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setProvinces(data);
-        } else {
-          console.error('Error: Expected an array but received:', data);
-          setProvinces([]);
-        }
+    fetch("https://cdn.jsdelivr.net/gh/thien0291/vietnam_dataset@1.0.0/Index.json")
+      .then((res) => res.json())
+      .then((data) => {
+        const cityOptions = Object.keys(data).map((city) => ({
+          label: city,
+          value: data[city].code,
+        }));
+        setCities(cityOptions);
       })
-      .catch(error => {
-        console.error('Error fetching provinces:', error);
-      })
-      .finally(() => setLoading(false));
+      .catch((err) => console.error("Error fetching cities:", err));
   }, []);
 
-  const handleProvinceChange = (provinceCode) => {
-    setSelectedProvince(provinceCode);
-    setSelectedDistrict(null);
-    setSelectedWard(null);
-    setDistricts([]);
-    setWards([]);
+  useEffect(() => {
+    if (!selectedCity) return;
 
-    if (provinceCode) {
-      const provinceDataUrl = `https://cdn.jsdelivr.net/gh/thien0291/vietnam_dataset@1.0.0/data/${provinceCode}.json`;
-      fetch(provinceDataUrl)
-        .then(response => response.json())
-        .then(data => {
-          if (data?.districts && Array.isArray(data.districts)) {
-            setDistricts(data.districts);
-          } else {
-            console.error(`Invalid data for province ${provinceCode}:`, data);
-            setDistricts([]);
-          }
+    fetch(`https://cdn.jsdelivr.net/gh/thien0291/vietnam_dataset@1.0.0/data/${selectedCity}.json`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.district) return;
+
+        const districtOptions = data.district.map((district) => ({
+          label: `${district.pre ? district.pre + " " : ""}${district.name}`,
+          value: district.name,
+        }));
+
+        setDistricts(districtOptions);
+        setSelectedDistrict(null);
+        setWards([]);
+      })
+      .catch((err) => console.error("Error fetching districts:", err));
+  }, [selectedCity]);
+
+  useEffect(() => {
+  if (!selectedDistrict || !selectedCity) return;
+
+  fetch(`https://cdn.jsdelivr.net/gh/thien0291/vietnam_dataset@1.0.0/data/${selectedCity}.json`)
+    .then((res) => res.json())
+    .then((data) => {
+      if (!data.district) return;
+
+      const districtData = data.district.find((d) => d.name === selectedDistrict);
+      if (!districtData || !Array.isArray(districtData.ward)) return;
+
+      const wardSet = new Set();
+      const uniqueWards = districtData.ward
+        .map((ward, index) => {
+          const fullName = `${ward.pre ? ward.pre + " " : ""}${ward.name}`;
+          const uniqueValue = `${ward.pre ? ward.pre + "_" : ""}${ward.name}_${index}`; // Ensure uniqueness
+          return { label: fullName, value: uniqueValue };
         })
-        .catch(error => {
-          console.error('Error fetching district data:', error);
-          setDistricts([]);
+        .filter((ward) => {
+          if (wardSet.has(ward.value)) return false;
+          wardSet.add(ward.value);
+          return true;
         });
-    }
-  };
 
-  const handleDistrictChange = (districtCode) => {
-    setSelectedDistrict(districtCode);
-    setSelectedWard(null);
-    setWards([]);
+      setWards(uniqueWards);
+      setSelectedWard(null);
+    })
+    .catch((err) => console.error("Error fetching wards:", err));
+}, [selectedDistrict, selectedCity]);
 
-    const district = districts.find(d => d.code === districtCode);
-    if (district?.wards && Array.isArray(district.wards)) {
-      setWards(district.wards);
-    } else {
-      console.error(`No wards found for district ${districtCode}`);
-      setWards([]);
-    }
-  };
-
-  if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
-  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Select Province</Text>
-      <RNPickerSelect
-        onValueChange={handleProvinceChange}
-        items={provinces.map(province => ({
-          label: province.name,
-          value: province.code
-        }))}
-        placeholder={{ label: "Select a province", value: null }}
-        value={selectedProvince}
-        style={pickerStyles}
+      <Text style={styles.label}>Chọn Tỉnh/Thành phố:</Text>
+      <DropDownPicker
+        open={openCity}
+        value={selectedCity}
+        items={cities}
+        setOpen={setOpenCity}
+        setValue={setSelectedCity}
+        setItems={setCities}
+        placeholder="Chọn tỉnh/thành phố..."
+        containerStyle={styles.dropdown}
+        zIndex={4000}
       />
 
-      <Text style={styles.label}>Select District</Text>
-      <RNPickerSelect
-        onValueChange={handleDistrictChange}
-        items={districts.length ? districts.map(district => ({
-          label: district.name,
-          value: district.code
-        })) : []}
-        placeholder={{ label: "Select a district", value: null }}
+      <Text style={styles.label}>Chọn Quận/Huyện:</Text>
+      <DropDownPicker
+        open={openDistrict}
         value={selectedDistrict}
-        style={pickerStyles}
+        items={districts}
+        setOpen={setOpenDistrict}
+        setValue={setSelectedDistrict}
+        setItems={setDistricts}
+        placeholder="Chọn quận/huyện..."
+        containerStyle={styles.dropdown}
+        disabled={!selectedCity}
+        zIndex={3000}
       />
 
-      <Text style={styles.label}>Select Ward</Text>
-      <RNPickerSelect
-        onValueChange={setSelectedWard}
-        items={wards.length ? wards.map(ward => ({
-          label: ward.name,
-          value: ward.code
-        })) : []}
-        placeholder={{ label: "Select a ward", value: null }}
+      <Text style={styles.label}>Chọn Phường/Xã:</Text>
+      <DropDownPicker
+        open={openWard}
         value={selectedWard}
-        style={pickerStyles}
+        items={wards}
+        setOpen={setOpenWard}
+        setValue={setSelectedWard}
+        setItems={setWards}
+        placeholder="Chọn phường/xã..."
+        containerStyle={styles.dropdown}
+        disabled={!selectedDistrict}
+        zIndex={2000}
       />
     </View>
   );
@@ -118,38 +153,17 @@ const CreateRestaurantScreen = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     flex: 1,
   },
   label: {
     fontSize: 16,
-    fontWeight: 'bold',
-    marginVertical: 5,
-  }
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  dropdown: {
+    marginBottom: 20,
+  },
 });
-
-const pickerStyles = {
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 4,
-    color: 'black',
-    paddingRight: 30,
-    marginBottom: 10,
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 4,
-    color: 'black',
-    marginBottom: 10,
-  },
-};
 
 export default CreateRestaurantScreen;

@@ -156,5 +156,13 @@
         "order": "Order",
         "promotion": "Promotion"
     }
+  },
+  "merchant": {
+    "no_restaurant_modal": {
+      "modal_title": "No Restaurant Found",
+      "modal_message": "You need to own a restaurant to access the dashboard.",
+      "create_restaurant_button": "Create restaurant",
+      "log_out_button": "Log out"
+    }
   }
 }

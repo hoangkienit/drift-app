@@ -157,5 +157,14 @@
         "order": "Đơn hàng",
         "promotion": "Quảng cáo"
       }
+  },
+  "merchant": {
+    "no_restaurant_modal": {
+      "modal_title": "Không tìm thấy nhà hàng",
+      "modal_message": "Bạn cần sở hữu một nhà hàng để truy cập bảng điều khiển.",
+      "create_restaurant_button": "Tạo nhà hàng",
+      "log_out_button": "Đăng xuất"
     }
+  }
+
 }

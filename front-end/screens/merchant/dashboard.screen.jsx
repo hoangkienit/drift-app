@@ -12,12 +12,17 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from 'react-native-vector-icons';
+import { FontAwesome } from "@expo/vector-icons";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Colors } from '@/constants/Colors';
-import { useRouter } from 'expo-router';
+import { useNavigation, useRouter } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 export default function DashboardScreen() {
   const router = useRouter();
+  const navigation = useNavigation();
+  const { t } = useTranslation();
 
   const [restaurant, setRestaurant] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -43,16 +48,26 @@ export default function DashboardScreen() {
       //   ],
       // };
 
+      
+    }, 1000);
+  }, []);
+
+  useFocusEffect(
+      React.useCallback(() => {
+        fetchRestaurantData();
+      }, [navigation])
+  );
+  
+  const fetchRestaurantData = async() => {
       const fakeRestaurant = null;
 
       setRestaurant(fakeRestaurant);
       setModalVisible(!fakeRestaurant);
       setLoading(false);
-    }, 1000);
-  }, []);
+  }
 
   const handleCreateRestaurant = () => {
-    router.replace('merchant/create-restaurant');
+    router.push('merchant/create-restaurant');
     setModalVisible(false);
   };
 
@@ -77,16 +92,25 @@ export default function DashboardScreen() {
       <Modal transparent={true} visible={modalVisible} animationType="fade">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>No Restaurant Found</Text>
+            <Text style={styles.modalTitle}>{ t('merchant.no_restaurant_modal.modal_title')}</Text>
             <Text style={styles.modalText}>
-              You need to create a restaurant to access the dashboard.
+              { t('merchant.no_restaurant_modal.modal_message')}
             </Text>
-            <TouchableOpacity
-              style={styles.createButton}
-              onPress={handleCreateRestaurant}
-            >
-              <Text style={styles.createButtonText}>+ Create Restaurant</Text>
-            </TouchableOpacity>
+            {/* Create Restaurant Button */}
+      <TouchableOpacity style={styles.createButton} onPress={handleCreateRestaurant}>
+        <FontAwesome name="plus" size={18} color="#fff" style={styles.buttonIcon} />
+        <Text style={styles.createButtonText}>
+          {t("merchant.no_restaurant_modal.create_restaurant_button")}
+        </Text>
+      </TouchableOpacity>
+
+      {/* Log Out Button */}
+      <TouchableOpacity style={styles.logOutButton}>
+        <FontAwesome name="sign-out" size={18} color="#fff" style={styles.buttonIcon} />
+        <Text style={styles.logOutButtonText}>
+          {t("merchant.no_restaurant_modal.log_out_button")}
+        </Text>
+      </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -277,52 +301,62 @@ const styles = StyleSheet.create({
   pending: {
     color: 'orange',
   },
-  modalContainer: {
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
-},
-modalContent: {
-  width: '85%',
-  backgroundColor: 'white',
-  padding: 25,
-  borderRadius: 15,
-  alignItems: 'center',
-  elevation: 5, // Adds shadow on Android
-  shadowColor: '#000', // Adds shadow on iOS
-  shadowOffset: { width: 0, height: 4 },
-  shadowOpacity: 0.3,
-  shadowRadius: 5,
-},
-modalTitle: {
-  fontSize: 20,
-  fontWeight: 'bold',
-  color: '#333',
-  marginBottom: 10,
-},
-modalText: {
-  fontSize: 16,
-  color: '#666',
-  textAlign: 'center',
-  marginBottom: 20,
-},
-createButton: {
-  backgroundColor: '#ff6f00',
-  paddingVertical: 12,
-  paddingHorizontal: 25,
-  borderRadius: 10,
-  elevation: 2,
-  shadowColor: '#ff6f00',
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.3,
-  shadowRadius: 3,
-},
-createButtonText: {
-  fontSize: 16,
-  fontWeight: 'bold',
-  color: 'white',
-  textAlign: 'center',
+   modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  modalText: {
+    fontSize: 14,
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  createButton: {
+    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.primary,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    marginBottom: 10,
+    width: "80%"
+  },
+  logOutButton: {
+    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#dc3545",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    width: "80%"
+  },
+  buttonIcon: {
+    marginRight: 10,
+  },
+  createButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  logOutButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 loaderContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });
