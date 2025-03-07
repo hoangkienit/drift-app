@@ -163,6 +163,25 @@
       "modal_message": "You need to own a restaurant to access the dashboard.",
       "create_restaurant_button": "Create restaurant",
       "log_out_button": "Log out"
+    },
+    "create_restaurant": {
+      "title_header": "Create Restaurant",
+      "fast_food": "Fast Food",
+      "casual_dining": "Casual Dining",
+      "fine_dining": "Fine Dining",
+      "cafe": "Cafe",
+      "bakery": "Bakery",
+      "other": "Other",
+      "restaurant_name": "Restaurant name",
+      "restaurant_description": "Restaurant description",
+      "choose_category": "Choose category",
+      "house_number": "House number",
+      "street_name": "Street name",
+      "choose_city": "Choose city/province",
+      "choose_district": "Choose district",
+      "choose_ward": "Choose ward",
+      "close_modal_button": "Close",
+      "register_button": "Sign Up"
     }
   }
 }

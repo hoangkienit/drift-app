@@ -1,24 +1,25 @@
 import { useNavigation } from "expo-router";
-import React, { useState, useEffect ,useLayoutEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native";
+import React, { useState, useEffect, useLayoutEffect } from "react";
+import { 
+  View, Text, StyleSheet, TextInput, KeyboardAvoidingView, 
+  ScrollView, Platform, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Modal, FlatList
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import DropDownPicker from "react-native-dropdown-picker";
 import { Colors } from "../../constants/Colors";
+import { useTranslation } from "react-i18next";
+import { translateRestaurantCategory } from "../../utils/translate";
+
 
 const CreateRestaurantScreen = () => {
   const navigation = useNavigation();
+  const { t } = useTranslation();
+
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Tạo Nhà Hàng", // Tiêu đề của header
-      headerStyle: {
-        backgroundColor: Colors.primary,
-      },
-      headerTitleStyle: {
-        color: "#fff",
-        fontWeight: "bold",
-        fontFamily: 'montserrat-bold'
-      },
+      title: t('merchant.create_restaurant.title_header'),
+      headerStyle: { backgroundColor: Colors.primary },
+      headerTitleStyle: { color: "#fff", fontWeight: "bold", fontFamily: "montserrat-bold" },
       headerTintColor: "#fff",
       headerLeft: () => (
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -28,142 +29,176 @@ const CreateRestaurantScreen = () => {
     });
   }, [navigation]);
 
+  const [categories, setCategories] = useState([
+    { label: translateRestaurantCategory("fast_food"), value: "fast_food" },
+    { label: translateRestaurantCategory("casual_dining"), value: "casual_dining" },
+    { label: translateRestaurantCategory("fine_dining"), value: "fine_dining" },
+    { label: translateRestaurantCategory("cafe"), value: "cafe" },
+    { label: translateRestaurantCategory("bakery"), value: "bakery" },
+    { label: translateRestaurantCategory("other"), value: "other" },
+  ]);
+
+  const [restaurantName, setRestaurantName] = useState('');
+  const [restaurantDescription, setRestaurantDescription] = useState('');
+  const [houseNumber, setHouseNumber] = useState('');
+  const [streetName, setStreetName] = useState('');
+
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
 
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedWard, setSelectedWard] = useState(null);
-
-  const [openCity, setOpenCity] = useState(false);
-  const [openDistrict, setOpenDistrict] = useState(false);
-  const [openWard, setOpenWard] = useState(false);
+  
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalData, setModalData] = useState([]);
+  const [modalType, setModalType] = useState(null);
 
   useEffect(() => {
     fetch("https://cdn.jsdelivr.net/gh/thien0291/vietnam_dataset@1.0.0/Index.json")
       .then((res) => res.json())
       .then((data) => {
-        const cityOptions = Object.keys(data).map((city) => ({
-          label: city,
-          value: data[city].code,
-        }));
-        setCities(cityOptions);
+        setCities(Object.keys(data).map((city) => ({ label: city, value: data[city].code })));
       })
       .catch((err) => console.error("Error fetching cities:", err));
   }, []);
 
   useEffect(() => {
-    if (!selectedCity) return;
+  if (!selectedCity) return;
 
-    fetch(`https://cdn.jsdelivr.net/gh/thien0291/vietnam_dataset@1.0.0/data/${selectedCity}.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (!data.district) return;
+  fetch(`https://cdn.jsdelivr.net/gh/thien0291/vietnam_dataset@1.0.0/data/${selectedCity?.value}.json`)
+    .then((res) => res.json())
+    .then((data) => {
+      if (!data || !data.district) return;
+      setDistricts(data.district.map((d) => ({ label: d.name, value: d.name })));
+      setSelectedDistrict(null);  // Reset district khi đổi city
+      setWards([]);  // Reset ward khi đổi city
+    })
+    .catch((err) => console.error("Error fetching districts:", err));
+}, [selectedCity]);
 
-        const districtOptions = data.district.map((district) => ({
-          label: `${district.pre ? district.pre + " " : ""}${district.name}`,
-          value: district.name,
-        }));
-
-        setDistricts(districtOptions);
-        setSelectedDistrict(null);
-        setWards([]);
-      })
-      .catch((err) => console.error("Error fetching districts:", err));
-  }, [selectedCity]);
 
   useEffect(() => {
   if (!selectedDistrict || !selectedCity) return;
 
-  fetch(`https://cdn.jsdelivr.net/gh/thien0291/vietnam_dataset@1.0.0/data/${selectedCity}.json`)
+  fetch(`https://cdn.jsdelivr.net/gh/thien0291/vietnam_dataset@1.0.0/data/${selectedCity?.value}.json`)
     .then((res) => res.json())
     .then((data) => {
-      if (!data.district) return;
-
-      const districtData = data.district.find((d) => d.name === selectedDistrict);
+      if (!data || !data.district) return;
+      const districtData = data.district.find((d) => d.name === selectedDistrict?.label);
       if (!districtData || !Array.isArray(districtData.ward)) return;
-
-      const wardSet = new Set();
-      const uniqueWards = districtData.ward
-        .map((ward, index) => {
-          const fullName = `${ward.pre ? ward.pre + " " : ""}${ward.name}`;
-          const uniqueValue = `${ward.pre ? ward.pre + "_" : ""}${ward.name}_${index}`; // Ensure uniqueness
-          return { label: fullName, value: uniqueValue };
-        })
-        .filter((ward) => {
-          if (wardSet.has(ward.value)) return false;
-          wardSet.add(ward.value);
-          return true;
-        });
-
-      setWards(uniqueWards);
-      setSelectedWard(null);
+      
+      setWards(districtData.ward.map((w) => ({ label: w.name, value: w.name })));
+      setSelectedWard(null);  // Reset ward when district changes
     })
     .catch((err) => console.error("Error fetching wards:", err));
 }, [selectedDistrict, selectedCity]);
 
 
+  const openModal = (type, data) => {
+    setModalType(type);
+    setModalData(data);
+    setModalVisible(true);
+  };
+
+  const handleSelect = (item) => {
+    if (modalType === "category") setSelectedCategory(item);
+    if (modalType === "city") setSelectedCity(item);
+    if (modalType === "district") setSelectedDistrict(item);
+    if (modalType === "ward") setSelectedWard(item);
+    setModalVisible(false);
+  };
+
+  const handleRegister = async () => {
+    console.log(restaurantName, restaurantDescription, selectedCategory, houseNumber, streetName, selectedCity, selectedDistrict, selectedWard);
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Chọn Tỉnh/Thành phố:</Text>
-      <DropDownPicker
-        open={openCity}
-        value={selectedCity}
-        items={cities}
-        setOpen={setOpenCity}
-        setValue={setSelectedCity}
-        setItems={setCities}
-        placeholder="Chọn tỉnh/thành phố..."
-        containerStyle={styles.dropdown}
-        zIndex={4000}
-      />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+  <KeyboardAvoidingView 
+    behavior={Platform.OS === "ios" ? "padding" : "height"} 
+    style={{ flex: 1 }}
+  >
+    <ScrollView 
+      contentContainerStyle={{ padding: 10, flexGrow: 1 }}
+      keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="on-drag"
+      nestedScrollEnabled={true} 
+        >
+          <TextInput style={styles.textInput} placeholder={t('merchant.create_restaurant.restaurant_name')} placeholderTextColor={'gray'} onChangeText={setRestaurantName}/>
+          <TextInput style={styles.textInput} placeholder={t('merchant.create_restaurant.restaurant_description')} placeholderTextColor={'gray'} onChangeText={setRestaurantDescription}/>
+      <TouchableOpacity onPress={() => openModal("category", categories)}>
+        <Text style={styles.textInput}>{selectedCategory?.label || t('merchant.create_restaurant.choose_category')}</Text>
+          </TouchableOpacity>
+          
+          <TextInput style={styles.textInput} placeholder={t('merchant.create_restaurant.house_number')} placeholderTextColor={'gray'} onChangeText={setHouseNumber}/>
+          <TextInput style={styles.textInput} placeholder={t('merchant.create_restaurant.street_name')} placeholderTextColor={'gray'} onChangeText={setStreetName}/>
 
-      <Text style={styles.label}>Chọn Quận/Huyện:</Text>
-      <DropDownPicker
-        open={openDistrict}
-        value={selectedDistrict}
-        items={districts}
-        setOpen={setOpenDistrict}
-        setValue={setSelectedDistrict}
-        setItems={setDistricts}
-        placeholder="Chọn quận/huyện..."
-        containerStyle={styles.dropdown}
-        disabled={!selectedCity}
-        zIndex={3000}
-      />
+      <TouchableOpacity onPress={() => openModal("city", cities)}>
+        <Text style={styles.textInput}>{selectedCity?.label || t('merchant.create_restaurant.choose_city')}</Text>
+      </TouchableOpacity>
 
-      <Text style={styles.label}>Chọn Phường/Xã:</Text>
-      <DropDownPicker
-        open={openWard}
-        value={selectedWard}
-        items={wards}
-        setOpen={setOpenWard}
-        setValue={setSelectedWard}
-        setItems={setWards}
-        placeholder="Chọn phường/xã..."
-        containerStyle={styles.dropdown}
-        disabled={!selectedDistrict}
-        zIndex={2000}
-      />
-    </View>
+      <TouchableOpacity onPress={() => openModal("district", districts)} disabled={!selectedCity}>
+        <Text style={styles.textInput}>{selectedDistrict?.label || t('merchant.create_restaurant.choose_district')}</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => openModal("ward", wards)} disabled={!selectedDistrict}>
+        <Text style={styles.textInput}>{selectedWard?.label || t('merchant.create_restaurant.choose_ward')}</Text>
+      </TouchableOpacity>
+          
+      <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
+        <Text style={styles.registerText}>{t('merchant.create_restaurant.register_button')}</Text>
+      </TouchableOpacity>
+        </ScrollView> 
+        <Modal visible={modalVisible} animationType="fade" transparent>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <FlatList
+                  data={modalData}
+                  keyExtractor={(item) => item.value}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => handleSelect(item)}>
+                      <Text style={styles.modalItem}>{item.label}</Text>
+                    </TouchableOpacity>
+                  )}
+                />
+                <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Text style={styles.modalClose}>{ t('merchant.create_restaurant.close_modal_button')}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+  </KeyboardAvoidingView>
+  
+</TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: "#fff",
-    flex: 1,
+  container: { flex: 1, backgroundColor: "#fff" },
+  contentWrapper: { padding: 10, flexGrow: 1 },
+  textInput: { borderWidth: 1, padding: 15, marginBottom: 15, borderRadius: 5, backgroundColor: "#fff", fontFamily: "montserrat-medium" },
+  modalContainer: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" },
+  modalContent: { backgroundColor: "white", padding: 20, borderRadius: 10, width: "80%",height: "60%" },
+  modalItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: "#ddd", fontFamily: "montserrat-medium" },
+  modalClose: { textAlign: "center", color: "red", marginTop: 10, fontFamily: "montserrat-medium" },
+  registerButton: {
+    backgroundColor: Colors.primary,
+    padding: 15,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 2, height: 0 },
+    shadowRadius: 4
   },
-  label: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  dropdown: {
-    marginBottom: 20,
-  },
+  registerText: {
+    textAlign: 'center',
+    color: "#fff",
+    fontFamily: "montserrat-medium",
+    fontSize: 16
+  }
 });
 
 export default CreateRestaurantScreen;

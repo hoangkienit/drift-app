@@ -1,14 +1,71 @@
 const mongoose = require('mongoose');
 
 const addressSchema = new mongoose.Schema({
-    street: { type: String, required: true },
-    city: { type: String, required: true },
-    state: { type: String, required: true },
-    postalCode: { type: String, required: true },
-    country: { type: String, required: true },
-    latitude: { type: Number, required: false },
-    longitude: { type: Number, required: false }
-});
+    house_number: {
+    type: String,
+    required: true,
+    trim: true,
+    description: "House or building number (e.g., 123A, 45B)."
+  },
+  street_name: {
+    type: String,
+    required: true,
+    trim: true,
+    description: "Street name (e.g., Nguyễn Huệ, Lý Thường Kiệt)."
+  },
+  ward_commune: {
+    type: String,
+    required: true,
+    trim: true,
+    description: "Ward (Phường) or Commune (Xã) in urban and rural areas."
+  },
+  district: {
+    type: String,
+    required: true,
+    trim: true,
+    description: "District (Quận for urban areas, Huyện for rural areas)."
+  },
+  city: {
+    type: String,
+    required: true,
+    trim: true,
+    description: "City or municipality (e.g., TP. Hồ Chí Minh, Hà Nội)."
+  },
+  province: {
+    type: String,
+    trim: true,
+    description: "Province name (only needed for areas outside major cities)."
+  },
+  postal_code: {
+    type: String,
+    match: /^[0-9]{6}$/,
+    description: "Vietnamese postal code (6-digit format)."
+  },
+  country: {
+    type: String,
+    required: true,
+    enum: ["Vietnam"],
+      description: "Country name (fixed as 'Vietnam').",
+    default: "Vietnam"
+  },
+  latitude: {
+    type: Number,
+    min: -90,
+    max: 90,
+    description: "GPS latitude coordinate for precise location."
+  },
+  longitude: {
+    type: Number,
+    min: -180,
+    max: 180,
+    description: "GPS longitude coordinate for precise location."
+  },
+  formatted_address: {
+    type: String,
+    description: "Full formatted address as a single string."
+  }
+}, { timestamps: true });
+
 
 const merchantSchema = mongoose.Schema({
     name: {
@@ -30,11 +87,6 @@ const merchantSchema = mongoose.Schema({
         type: addressSchema,
         required: true
     },
-    phone: {
-        type: String,
-        required: true,
-        unique: true
-    },
     logo: {
         type: String,
         default: 'https://cdn-icons-png.flaticon.com/512/1995/1995478.png'
@@ -46,8 +98,8 @@ const merchantSchema = mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: ['Fast Food', 'Casual Dining', 'Fine Dining', 'Cafe', 'Bakery', 'Other'],
-        default: 'Other'
+        enum: ['fast_food', 'casual_dining', 'fine_dining', 'cafe', 'bakery', 'other'],
+        default: 'other'
     },
     foods: [
         {

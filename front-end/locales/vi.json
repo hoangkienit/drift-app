@@ -164,6 +164,25 @@
       "modal_message": "Bạn cần sở hữu một nhà hàng để truy cập bảng điều khiển.",
       "create_restaurant_button": "Tạo nhà hàng",
       "log_out_button": "Đăng xuất"
+    },
+    "create_restaurant": {
+      "title_header": "Tạo Nhà Hàng",
+      "fast_food": "Thức Ăn Nhanh",
+      "casual_dining": "Ăn Uống Bình Dân",
+      "fine_dining": "Ăn Uống Sang Trọng",
+      "cafe": "Cà Phê",
+      "bakery": "Bánh",
+      "other": "Khác",
+      "restaurant_name": "Tên Nhà Hàng",
+      "restaurant_description": "Mô tả Nhà Hàng",
+      "choose_category": "Chọn Danh Mục",
+      "house_number": "Số Nhà",
+      "street_name": "Tên Đường",
+      "choose_city": "Chọn Tỉnh/Thành phố",
+      "choose_district": "Chọn Quận/Huyện",
+      "choose_ward": "Chọn Phường/Xã",
+      "close_modal_button": "Đóng",
+      "register_button": "Đăng Ký"
     }
   }
 
