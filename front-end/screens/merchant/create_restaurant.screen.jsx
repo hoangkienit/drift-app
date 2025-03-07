@@ -1,13 +1,17 @@
 import { useNavigation } from "expo-router";
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { 
-  View, Text, StyleSheet, TextInput, KeyboardAvoidingView, 
-  ScrollView, Platform, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Modal, FlatList
+  View, Text, StyleSheet, TextInput, KeyboardAvoidingView, TouchableOpacity,
+  ScrollView, Platform, TouchableWithoutFeedback, Keyboard,  Modal, FlatList, ActivityIndicator
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../constants/Colors";
 import { useTranslation } from "react-i18next";
 import { translateRestaurantCategory } from "../../utils/translate";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { validateMerchantRegister } from "../../utils/validation";
+import { createNewRestaurant } from "../../api/merchantApi";
+import { getAccessToken, getUserData } from "../../utils/storageHelper";
 
 
 const CreateRestaurantScreen = () => {
@@ -55,6 +59,9 @@ const CreateRestaurantScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalData, setModalData] = useState([]);
   const [modalType, setModalType] = useState(null);
+
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetch("https://cdn.jsdelivr.net/gh/thien0291/vietnam_dataset@1.0.0/Index.json")
@@ -112,68 +119,105 @@ const CreateRestaurantScreen = () => {
   };
 
   const handleRegister = async () => {
-    console.log(restaurantName, restaurantDescription, selectedCategory, houseNumber, streetName, selectedCity, selectedDistrict, selectedWard);
+    
+    try {
+      setLoading(true);
+      setError(null);
+      const err = validateMerchantRegister(restaurantName, restaurantDescription, houseNumber, streetName, t);
+      if (err != null) {
+        setError({ message: err });
+      }
+      const user = await getUserData();
+      const accessToken = await getAccessToken();
+      const response = await createNewRestaurant(
+                user.data?.user?._id,
+                accessToken,
+                restaurantName,
+                restaurantDescription,
+                selectedCategory?.value,
+                houseNumber,
+                streetName,
+                selectedCity?.label,
+                selectedDistrict?.label,
+        selectedWard?.label);
+      
+      console.log(response?.data?.merchant?.address?.house_number);
+
+      setLoading(false);
+      
+    } catch (error) {
+      console.error("Error in merchant API: ", error);
+      setError({ message: error.message });
+    }
   }
 
+  
+
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-  <KeyboardAvoidingView 
-    behavior={Platform.OS === "ios" ? "padding" : "height"} 
-    style={{ flex: 1 }}
-  >
-    <ScrollView 
-      contentContainerStyle={{ padding: 10, flexGrow: 1 }}
-      keyboardShouldPersistTaps="handled"
-      keyboardDismissMode="on-drag"
-      nestedScrollEnabled={true} 
+  <GestureHandlerRootView style={{ flex: 1 }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === "ios" ? "padding" : "height"} 
+        style={{ flex: 1 }}
         >
+        <ScrollView 
+          contentContainerStyle={{ padding: 10, flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          nestedScrollEnabled={true} 
+          >
+            {error && <Text style={styles.errorText}>*{error.message}</Text>}
           <TextInput style={styles.textInput} placeholder={t('merchant.create_restaurant.restaurant_name')} placeholderTextColor={'gray'} onChangeText={setRestaurantName}/>
           <TextInput style={styles.textInput} placeholder={t('merchant.create_restaurant.restaurant_description')} placeholderTextColor={'gray'} onChangeText={setRestaurantDescription}/>
-      <TouchableOpacity onPress={() => openModal("category", categories)}>
-        <Text style={styles.textInput}>{selectedCategory?.label || t('merchant.create_restaurant.choose_category')}</Text>
-          </TouchableOpacity>
           
+            <TouchableOpacity onPressIn={() => { openModal("category", categories); Keyboard.dismiss() }}>
+            <Text style={styles.textInput}>{selectedCategory?.label || t('merchant.create_restaurant.choose_category')}</Text>
+          </TouchableOpacity>
+
           <TextInput style={styles.textInput} placeholder={t('merchant.create_restaurant.house_number')} placeholderTextColor={'gray'} onChangeText={setHouseNumber}/>
           <TextInput style={styles.textInput} placeholder={t('merchant.create_restaurant.street_name')} placeholderTextColor={'gray'} onChangeText={setStreetName}/>
 
-      <TouchableOpacity onPress={() => openModal("city", cities)}>
-        <Text style={styles.textInput}>{selectedCity?.label || t('merchant.create_restaurant.choose_city')}</Text>
-      </TouchableOpacity>
+            <TouchableOpacity onPressIn={() => { openModal("city", cities); Keyboard.dismiss() }}>
+            <Text style={styles.textInput}>{selectedCity?.label || t('merchant.create_restaurant.choose_city')}</Text>
+          </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => openModal("district", districts)} disabled={!selectedCity}>
-        <Text style={styles.textInput}>{selectedDistrict?.label || t('merchant.create_restaurant.choose_district')}</Text>
-      </TouchableOpacity>
+            <TouchableOpacity onPressIn={() => { openModal("district", districts); Keyboard.dismiss() }} disabled={!selectedCity}>
+            <Text style={styles.textInput}>{selectedDistrict?.label || t('merchant.create_restaurant.choose_district')}</Text>
+          </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => openModal("ward", wards)} disabled={!selectedDistrict}>
-        <Text style={styles.textInput}>{selectedWard?.label || t('merchant.create_restaurant.choose_ward')}</Text>
-      </TouchableOpacity>
-          
-      <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-        <Text style={styles.registerText}>{t('merchant.create_restaurant.register_button')}</Text>
-      </TouchableOpacity>
+          <TouchableOpacity onPressIn={() => openModal("ward", wards)} disabled={!selectedDistrict}>
+            <Text style={styles.textInput}>{selectedWard?.label || t('merchant.create_restaurant.choose_ward')}</Text>
+          </TouchableOpacity>
+
+            <TouchableOpacity style={styles.registerButton} onPressIn={handleRegister}>
+              {loading ? <ActivityIndicator size="small" color="#fff" /> : <Text style={styles.registerText}>{t('merchant.create_restaurant.register_button')}</Text>}
+            
+          </TouchableOpacity>
         </ScrollView> 
-        <Modal visible={modalVisible} animationType="fade" transparent>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <FlatList
-                  data={modalData}
-                  keyExtractor={(item) => item.value}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => handleSelect(item)}>
-                      <Text style={styles.modalItem}>{item.label}</Text>
-                    </TouchableOpacity>
-                  )}
-                />
-                <TouchableOpacity onPress={() => setModalVisible(false)}>
+
+        <Modal visible={modalVisible} animationType="fade" transparent pointerEvents="auto">
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <FlatList
+                data={modalData}
+                keyExtractor={(item) => item.value}
+                renderItem={({ item }) => (
+                  <TouchableOpacity onPress={() => handleSelect(item)}>
+                    <Text style={styles.modalItem}>{item.label}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+              <TouchableOpacity onPressIn={() => setModalVisible(false)}>
                 <Text style={styles.modalClose}>{ t('merchant.create_restaurant.close_modal_button')}</Text>
-                </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
             </View>
-          </Modal>
-  </KeyboardAvoidingView>
-  
-</TouchableWithoutFeedback>
-  );
+          </View>
+        </Modal>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
+  </GestureHandlerRootView>
+);
+
 };
 
 const styles = StyleSheet.create({
@@ -198,6 +242,12 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "montserrat-medium",
     fontSize: 16
+  },
+  errorText: {
+    fontFamily: "montserrat-medium",
+    fontSize: 16,
+    color: "red",
+    padding: 5
   }
 });
 

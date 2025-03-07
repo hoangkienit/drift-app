@@ -36,11 +36,6 @@ const addressSchema = new mongoose.Schema({
     trim: true,
     description: "Province name (only needed for areas outside major cities)."
   },
-  postal_code: {
-    type: String,
-    match: /^[0-9]{6}$/,
-    description: "Vietnamese postal code (6-digit format)."
-  },
   country: {
     type: String,
     required: true,

@@ -47,3 +47,36 @@ export const validateRegister = (email, username, password, confirmPassword, t) 
   
   return null;
 };
+
+export const validateMerchantRegister = (
+  restaurantName,
+  restaurantDescription,
+  houseNumber,
+  streetName, t) => {
+  if (!restaurantName || !restaurantDescription || !houseNumber || !streetName) {
+    return t('authentication.signup.error_empty_fields');
+  }
+  
+  const vietnameseRegex = /^[a-zA-ZÀ-ỹ0-9&\-\s]+$/u; // Supports Vietnamese characters
+  if (!vietnameseRegex.test(restaurantName)) {
+    return t('merchant.create_restaurant.error_invalid_restaurant_name');
+  }
+
+  const descriptionRegex = /^[a-zA-ZÀ-ỹ0-9\s]+$/u; // Supports Vietnamese characters
+  if (!descriptionRegex.test(restaurantDescription)) {
+    return t('merchant.create_restaurant.error_invalid_restaurant_description');
+  }
+
+  const houseNumberRegex = /^[a-zA-ZÀ-ỹ0-9\s\/]+$/u; // Supports Vietnamese characters
+  if (!houseNumberRegex.test(houseNumber)) {
+    return t('merchant.create_restaurant.error_invalid_house_number');
+  }
+
+  const streetNameRegex = /^[a-zA-ZÀ-ỹ\s]+$/u; // Supports Vietnamese characters
+  if (!streetNameRegex.test(streetName)) {
+    return t('merchant.create_restaurant.error_invalid_street_name');
+  }
+  
+  return null;
+};
+

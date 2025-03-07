@@ -21,6 +21,7 @@ app.use(morgan('dev'));
 // ROUTES
 app.use('/api/v1/auth', require('./routes/auth.route'));
 app.use('/api/v1/user', require('./routes/user.route'));
+app.use('/api/v1/merchant', require('./routes/merchant.route'));
 
 app.get('/', (req, res) => {
     return res.status(200).send("Hello world!");

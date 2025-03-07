@@ -181,7 +181,13 @@
       "choose_district": "Choose district",
       "choose_ward": "Choose ward",
       "close_modal_button": "Close",
-      "register_button": "Sign Up"
+      "register_button": "Sign Up",
+      "error_invalid_restaurant_name": "Invalid restaurant name",
+      "error_invalid_restaurant_description": "Invalid restaurant description",
+      "error_invalid_house_number": "Invalid house number",
+      "error_invalid_street_name": "Invalid street name",
+      "error_no_results_found": "No location results found. Please try again later!",
+      "error_fetching_data_failed": "Failed to get location. Please try again later!"
     }
   }
 }

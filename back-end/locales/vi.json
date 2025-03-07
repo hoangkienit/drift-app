@@ -10,5 +10,7 @@
   "UPDATE_INFORMATION_SUCCESS": "Thông tin người dùng đã được cập nhật",
   "UPDATE_PASSWORD_SUCCESS": "Mật khẩu người dùng đã được cập nhật",
   "INVALID_OLD_PASSWORD": "Mật khẩu cũ không đúng",
-  "INVALID_SELECTED_ROLE": "Vai trò được chọn không hợp lệ"
+  "INVALID_SELECTED_ROLE": "Vai trò được chọn không hợp lệ",
+  "FETCH_LOCATION_ERROR": "Không thể tìm vị trí",
+  "NOT_FOUND_LOCATION_ERROR": "Không tìm thấy vị trí"
 }

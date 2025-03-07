@@ -182,7 +182,13 @@
       "choose_district": "Chọn Quận/Huyện",
       "choose_ward": "Chọn Phường/Xã",
       "close_modal_button": "Đóng",
-      "register_button": "Đăng Ký"
+      "register_button": "Đăng Ký",
+      "error_invalid_restaurant_name": "Tên nhà hàng không hợp lệ",
+      "error_invalid_restaurant_description": "Mô tả nhà hàng không hợp lệ",
+      "error_invalid_house_number": "Số nhà không hợp lệ",
+      "error_invalid_street_name": "Tên đường không hợp lệ",
+      "error_no_results_found": "Không tìm thấy kết quả vị trí. Vui lòng thử lại sau!",
+      "error_fetching_data_failed": "Không thể lấy vị trí. Vui lòng thử lại sau!" 
     }
   }
 
