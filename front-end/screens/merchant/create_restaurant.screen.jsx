@@ -1,4 +1,4 @@
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { 
   View, Text, StyleSheet, TextInput, KeyboardAvoidingView, TouchableOpacity,
@@ -12,6 +12,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { validateMerchantRegister } from "../../utils/validation";
 import { createNewRestaurant } from "../../api/merchantApi";
 import { getAccessToken, getUserData } from "../../utils/storageHelper";
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 
 const CreateRestaurantScreen = () => {
@@ -57,6 +58,7 @@ const CreateRestaurantScreen = () => {
   const [selectedWard, setSelectedWard] = useState(null);
   
   const [modalVisible, setModalVisible] = useState(false);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [modalData, setModalData] = useState([]);
   const [modalType, setModalType] = useState(null);
 
@@ -142,12 +144,13 @@ const CreateRestaurantScreen = () => {
         selectedWard?.label);
       
       console.log(response?.data?.merchant?.address?.house_number);
-
+      setSuccessModalVisible(true);
       setLoading(false);
       
     } catch (error) {
-      console.error("Error in merchant API: ", error);
+      //console.error("Error in merchant API: ", error);
       setError({ message: error.message });
+      setLoading(false);
     }
   }
 
@@ -195,6 +198,7 @@ const CreateRestaurantScreen = () => {
           </TouchableOpacity>
         </ScrollView> 
 
+          {/** User pick modal */}
         <Modal visible={modalVisible} animationType="fade" transparent pointerEvents="auto">
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
@@ -212,6 +216,19 @@ const CreateRestaurantScreen = () => {
               </TouchableOpacity>
             </View>
           </View>
+          </Modal>
+          
+          {/** Restaurant created success modal */}
+          <Modal visible={successModalVisible} animationType="fade" transparent pointerEvents="auto">
+          <View style={styles.successModalContainer}>
+              <View style={styles.successModalContent}>
+                <AntDesign name="checkcircle" size={35} color="green" style={styles.successIcon} />
+                <Text style={styles.successModalItem}>{ t('merchant.create_restaurant.success_restaurant_created')}</Text>
+                <TouchableOpacity onPressIn={() => { setSuccessModalVisible(false); navigation.goBack()}}>
+                <Text style={styles.successModalClose}>{ t('merchant.create_restaurant.close_modal_button')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </Modal>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
@@ -226,8 +243,8 @@ const styles = StyleSheet.create({
   textInput: { borderWidth: 1, padding: 15, marginBottom: 15, borderRadius: 5, backgroundColor: "#fff", fontFamily: "montserrat-medium" },
   modalContainer: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" },
   modalContent: { backgroundColor: "white", padding: 20, borderRadius: 10, width: "80%",height: "60%" },
-  modalItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: "#ddd", fontFamily: "montserrat-medium" },
-  modalClose: { textAlign: "center", color: "red", marginTop: 10, fontFamily: "montserrat-medium" },
+  modalItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: "#ddd", fontFamily: "montserrat-medium"},
+  modalClose: { textAlign: "center", color: "red", marginTop: 10, fontFamily: "montserrat-bold" },
   registerButton: {
     backgroundColor: Colors.primary,
     padding: 15,
@@ -248,6 +265,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "red",
     padding: 5
+  },
+  successModalContainer: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" },
+  successModalContent: { backgroundColor: "white",justifyContent: "center", padding: 20, borderRadius: 10, width: "auto",height: "auto", maxWidth: "80%", maxHeight: "80%" },
+  successModalItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: "#ddd", fontFamily: "montserrat-medium", textAlign: "center", fontSize: 15, color: "green" },
+  successModalClose: { textAlign: "center", color: "gray", marginTop: 10, fontFamily: "montserrat-bold" },
+  successIcon: {
+    textAlign: 'center'
   }
 });
 

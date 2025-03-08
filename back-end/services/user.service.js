@@ -48,7 +48,7 @@ class UserService {
         user.password = hashedPassword;
         await user.save();
 
-        return {message: getMessage("UPDATE_PASSWORD_SUCCESS")}
+        return {message: getMessage("UPDATE_PASSWORD_SUCCESS", lang)}
     }
 
     // UPDATE USER AVATAR

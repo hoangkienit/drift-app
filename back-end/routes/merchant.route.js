@@ -5,7 +5,7 @@ const MerchantController = require('../controllers/merchant.controller');
 
 
 // CREATE NEW RESTAURANT || POST
-router.post('/create-restaurant/:id', authMiddleware, MerchantController.createNewRestaurant);
+router.post('/create-restaurant/:id',   MerchantController.createNewRestaurant);
 
 
 module.exports = router;

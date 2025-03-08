@@ -1,10 +1,11 @@
 const AuthService = require("../services/auth.service");
+const getLanguage = require("../utils/getLanguage");
 const { loginValidation, registerValidation } = require("../utils/validation");
 
 class AuthController {
   // 🔹 Register User
   static async register(req, res) {
-    const lang = req.headers["accept-language"];
+    const lang = getLanguage(req.headers["accept-language"]);
     const { username, email, phone, password, role } = req.body;
 
     // ✅ Validate input
@@ -23,9 +24,10 @@ class AuthController {
 
   // 🔹 Login User
   static async login(req, res) {
-    const lang = req.headers["accept-language"];
+    const lang = getLanguage(req.headers["accept-language"]);
     const { username, password } = req.body;
 
+    console.log("Login: ", lang);
     // ✅ Validate input
     const { error } = loginValidation(req.body, lang);
     if (error) {

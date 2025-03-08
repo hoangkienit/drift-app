@@ -1,54 +1,54 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from "expo-secure-store";
 
 export const storeUserData = async (userData) => {
   try {
-    await AsyncStorage.setItem('user', JSON.stringify(userData));
+    await SecureStore.setItemAsync("user", JSON.stringify(userData), {
+      keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+    });
   } catch (error) {
-    console.error('Error saving user data', error);
+    console.error("Error saving user data", error);
   }
 };
 
 export const getUserData = async () => {
   try {
-    const jsonValue = await AsyncStorage.getItem('user');
-
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
+    const jsonValue = await SecureStore.getItemAsync("user");
+    return jsonValue ? JSON.parse(jsonValue) : null;
   } catch (error) {
-    console.error('Error retrieving user data', error);
+    console.error("Error retrieving user data", error);
   }
 };
 
 export const clearUserData = async () => {
   try {
-    await AsyncStorage.removeItem('user');
+    await SecureStore.deleteItemAsync("user");
   } catch (error) {
-    console.error('Error clearing user data', error);
+    console.error("Error clearing user data", error);
   }
-  
 };
 
 export const storeAccessToken = async (accessToken) => {
   try {
-    await AsyncStorage.setItem('accessToken', accessToken);
+    await SecureStore.setItemAsync("accessToken", accessToken, {
+      keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+    });
   } catch (error) {
-    console.error('Error saving access token', error);
+    console.error("Error saving access token", error);
   }
 };
 
 export const getAccessToken = async () => {
   try {
-    const accessToken = await AsyncStorage.getItem('accessToken');
-
-    return accessToken != null ? accessToken : null;
+    return await SecureStore.getItemAsync("accessToken");
   } catch (error) {
-    console.error('Error retrieving access token', error);
+    console.error("Error retrieving access token", error);
   }
 };
 
 export const clearAccessToken = async () => {
   try {
-    await AsyncStorage.removeItem('accessToken');
+    await SecureStore.deleteItemAsync("accessToken");
   } catch (error) {
-    console.error('Error clearing access token', error);
+    console.error("Error clearing access token", error);
   }
 };

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const addressSchema = new mongoose.Schema({
     house_number: {
     type: String,
@@ -61,58 +60,38 @@ const addressSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-
-const merchantSchema = mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        unique: true
+const merchantSchema = new mongoose.Schema({
+    name: { type: String, required: true, unique: true },
+    description: { type: String, default: '' },
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
+    address: { type: addressSchema, required: true },
+    logo: { type: String, default: 'https://cdn-icons-png.flaticon.com/512/1995/1995478.png' },
+    coverImage: { type: String, default: 'https://cdn.pixabay.com/photo/2017/01/22/19/20/restaurant-2002917_1280.jpg' },
+    category: { 
+        type: String, 
+        required: true, 
+        enum: ['fast_food', 'casual_dining', 'fine_dining', 'cafe', 'bakery', 'other'], 
+        default: 'other' 
     },
-    description: {
-        type: String,
-        default: ''
+    foods: [{ type: mongoose.Schema.Types.ObjectId, ref: 'FoodItem' }],
+    operatingHours: {
+        open: { type: String, default: "08:00 AM" },
+        close: { type: String,  default: "10:00 PM" }
     },
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-        unique: true // Ensures a vendor owns only one restaurant
+    paymentMethods: { 
+        type: [String], 
+        enum: ['cash', 'credit_card', 'momo', 'paypal'], 
+        default: ['cash', 'credit_card'] 
     },
-    address: {
-        type: addressSchema,
-        required: true
-    },
-    logo: {
-        type: String,
-        default: 'https://cdn-icons-png.flaticon.com/512/1995/1995478.png'
-    },
-    coverImage: {
-        type: String,
-        default: 'https://cdn.pixabay.com/photo/2017/01/22/19/20/restaurant-2002917_1280.jpg'
-    },
-    category: {
-        type: String,
-        required: true,
-        enum: ['fast_food', 'casual_dining', 'fine_dining', 'cafe', 'bakery', 'other'],
-        default: 'other'
-    },
-    foods: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'FoodItem'
-        }
-    ],
-    rating: {
-        type: Number,
-        default: 0,
-        min: 0,
-        max: 5
-    },
-    status: {
-        type: String,
-        enum: ['open', 'closed'],
-        default: 'open'
-    }
+    reviews: [{
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        rating: { type: Number, min: 0, max: 5 },
+        comment: { type: String }
+    }],
+    menu: [{ type: mongoose.Schema.Types.ObjectId, ref: 'FoodItem' }],
+    rating: { type: Number, default: 0, min: 0, max: 5 },
+    status: { type: String, enum: ['open', 'closed'], default: 'closed' },
+    //isVerified: { type: Boolean, default: false }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Merchant', merchantSchema);

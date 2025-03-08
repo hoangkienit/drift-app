@@ -12,5 +12,6 @@
   "INVALID_OLD_PASSWORD": "Invalid old password",
   "INVALID_SELECTED_ROLE": "Invalid role selected",
   "FETCH_LOCATION_ERROR": "Failed to fetch location",
-  "NOT_FOUND_LOCATION_ERROR": "Location not found"
+  "NOT_FOUND_LOCATION_ERROR": "Location not found",
+  "RESTAURANT_ALREADY_EXISTED": "Restaurant name is already existed"
 }

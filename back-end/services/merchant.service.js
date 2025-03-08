@@ -4,9 +4,17 @@ const axios = require('axios')
 
 
 class MerchantService {
-    static async createRestaurant(id, data) {
+    static async createRestaurant({ id , lang}, data) {
         const query = `${data.houseNumber} ${data.streetName}, Phường ${data.selectedWard}, ${data.selectedDistrict}, ${data.selectedCity}`;
-        const location = await MerchantService.searchLocation(query);
+
+        // Check restaurant exist
+        const existedRestaurantName = await Merchant.findOne({ name: data.restaurantName });
+        if (existedRestaurantName) {
+            console.log(existedRestaurantName);
+            throw new Error(getMessage("RESTAURANT_ALREADY_EXISTED", lang));
+        }
+        
+        const location = await MerchantService.searchLocation(query, lang);
 
         //Create new merchant
         const newMerchant = new Merchant({
@@ -35,12 +43,12 @@ class MerchantService {
         const savedMerchant = await newMerchant.save();
         return savedMerchant;
     }
-    static async searchLocation(query) {
+    static async searchLocation(query, lang) {
         try {
             const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${process.env.MAPBOX_ACCESS_TOKEN}&limit=1`;
             const response = await axios.get(url);
             if (response.data.features.length === 0) {
-                throw new Error(getMessage("NOT_FOUND_LOCATION_ERROR"));
+                throw new Error(getMessage("NOT_FOUND_LOCATION_ERROR", lang));
             }
             const location = response.data.features[0]; // Get first result
             
@@ -51,7 +59,7 @@ class MerchantService {
             };
         } catch (error) {
             console.error("Error fetching location:", error.message);
-            throw new Error(getMessage("FETCH_LOCATION_ERROR"));
+            throw new Error(getMessage("FETCH_LOCATION_ERROR", lang));
         }
     }
 }

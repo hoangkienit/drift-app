@@ -1,14 +1,23 @@
 const mongoose = require('mongoose');
 
-const foodItemSchema = mongoose.Schema({
-    restaurant: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Merchant',
-        required: true
-    },
+const toppingSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true
+    },
+    price: {
+        type: Number,
+        required: true,
+        min: 0
+    }
+});
+
+const foodItemSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        trim: true
     },
     description: {
         type: String,
@@ -21,29 +30,28 @@ const foodItemSchema = mongoose.Schema({
     },
     category: {
         type: String,
-        required: true
+        required: true,
+        enum: ['appetizer', 'main_course', 'dessert', 'drink', 'other'],
+        default: 'other'
     },
     image: {
         type: String,
-        default: 'https://cdn-icons-png.flaticon.com/512/1046/1046784.png'
+        default: 'https://cdn-icons-png.flaticon.com/512/1046/1046750.png'
     },
-    availability: {
-        type: Boolean,
-        default: true
+    merchant: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Merchant',
+        required: true
     },
-    outOfStock: {
+    status: {
+        type: String,
+        enum: ['available', 'unavailable'],
+        default: 'available'
+    },
+    toppings: [toppingSchema], // Embedded toppings
+    isCustomizable: {
         type: Boolean,
         default: false
-    },
-    toppings: [{
-        name: { type: String, required: true },
-        price: { type: Number, required: true, min: 0 }
-    }],
-    rating: {
-        type: Number,
-        default: 0,
-        min: 0,
-        max: 5
     }
 }, { timestamps: true });
 

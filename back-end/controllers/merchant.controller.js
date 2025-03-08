@@ -1,4 +1,5 @@
 const MerchantService = require("../services/merchant.service");
+const getLanguage = require("../utils/getLanguage");
 const { updateInformationValidation, updatePasswordValidation } = require("../utils/validation");
 
 class MerchantController {
@@ -17,7 +18,8 @@ class MerchantController {
             } = req.body;
 
             const { id } = req.params;
-            const result = await MerchantService.createRestaurant(id, req.body);
+            const lang = getLanguage(req.headers["accept-language"]);
+            const result = await MerchantService.createRestaurant({ id , lang}, req.body);
 
             return res.status(200).json({
                 success: true,
@@ -27,6 +29,7 @@ class MerchantController {
                 }
             })
         } catch (error) {
+            console.log(error.message)
             return res.status(500).json({
                 success: false,
                 message: error.message

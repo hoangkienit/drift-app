@@ -10,7 +10,6 @@ import {
   ActivityIndicator,
   Platform
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from 'react-native-vector-icons';
 import { FontAwesome } from "@expo/vector-icons";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -18,11 +17,13 @@ import { Colors } from '@/constants/Colors';
 import { useNavigation, useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 export default function DashboardScreen() {
   const router = useRouter();
   const navigation = useNavigation();
   const { t } = useTranslation();
+
 
   const [restaurant, setRestaurant] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -59,7 +60,23 @@ export default function DashboardScreen() {
   );
   
   const fetchRestaurantData = async() => {
-      const fakeRestaurant = null;
+    //const fakeRestaurant = null;
+    const fakeRestaurant = {
+        id: '1',
+        name: 'Golden Sushi',
+        owner: 'John Doe',
+        revenue: '12.500.000VND',
+        orders: 128,
+        status: 'Open',
+        customers: 567,
+        reviews: 234,
+        menuItems: 24,
+        lastOrders: [
+          { orderID: '#OD101', customer: 'Alice', amount: '180.000VND', status: 'Completed' },
+          { orderID: '#OD102', customer: 'Bob', amount: '170.000VND', status: 'Pending' },
+          { orderID: '#OD103', customer: 'Charlie', amount: '150.000VND', status: 'Completed' },
+        ],
+      };
 
       setRestaurant(fakeRestaurant);
       setModalVisible(!fakeRestaurant);
@@ -81,10 +98,10 @@ export default function DashboardScreen() {
 };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* HEADER */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Dashboard</Text>
+        <Text style={styles.headerTitle}>{ t('merchant.dashboard.header_title')}</Text>
         <Ionicons name="notifications-sharp" size={24} color="white" />
       </View>
 
@@ -128,24 +145,24 @@ export default function DashboardScreen() {
                 <MaterialIcons name="refresh" size={37} color={Colors.primary} style={styles.refreshIcon}/>
             </TouchableOpacity>
           </View>
-          <Text style={styles.ownerText}>Owner: {restaurant.owner}</Text>
+          <Text style={styles.ownerText}>{ t('merchant.dashboard.owner')}: {restaurant.owner}</Text>
 
           {/* KEY METRICS */}
           <View style={styles.statsContainer}>
             <View style={styles.statCard}>
               <FontAwesome5 name="dollar-sign" size={24} color={Colors.primary} />
               <Text style={styles.statValue}>{restaurant.revenue}</Text>
-              <Text style={styles.statLabel}>Revenue</Text>
+              <Text style={styles.statLabel}>{ t('merchant.dashboard.revenue')}</Text>
             </View>
             <View style={styles.statCard}>
               <Ionicons name="receipt-sharp" size={24} color={Colors.primary} />
               <Text style={styles.statValue}>{restaurant.orders}</Text>
-              <Text style={styles.statLabel}>Orders</Text>
+              <Text style={styles.statLabel}>{ t('merchant.dashboard.orders')}</Text>
             </View>
             <View style={styles.statCard}>
               <MaterialCommunityIcons name="food" size={24} color={Colors.primary} />
               <Text style={styles.statValue}>{restaurant.menuItems}</Text>
-              <Text style={styles.statLabel}>Menu Items</Text>
+              <Text style={styles.statLabel}>{ t('merchant.dashboard.menu_items')}</Text>
             </View>
           </View>
 
@@ -153,12 +170,12 @@ export default function DashboardScreen() {
             <View style={styles.statCard}>
               <Ionicons name="people" size={24} color={Colors.primary} />
               <Text style={styles.statValue}>{restaurant.customers}</Text>
-              <Text style={styles.statLabel}>Customers</Text>
+              <Text style={styles.statLabel}>{ t('merchant.dashboard.customer')}</Text>
             </View>
             <View style={styles.statCard}>
               <MaterialCommunityIcons name="star" size={24} color={Colors.primary} />
               <Text style={styles.statValue}>{restaurant.reviews}</Text>
-              <Text style={styles.statLabel}>Reviews</Text>
+              <Text style={styles.statLabel}>{ t('merchant.dashboard.reviews')}</Text>
             </View>
             <View style={styles.statCard}>
               <Ionicons
@@ -169,12 +186,12 @@ export default function DashboardScreen() {
               <Text style={[styles.statValue, restaurant.status === 'Open' ? styles.open : styles.closed]}>
                 {restaurant.status}
               </Text>
-              <Text style={styles.statLabel}>Status</Text>
+              <Text style={styles.statLabel}>{ t('merchant.dashboard.status')}</Text>
             </View>
           </View>
 
           {/* RECENT ORDERS */}
-          <Text style={styles.sectionTitle}>Recent Orders</Text>
+          <Text style={styles.sectionTitle}>{ t('merchant.dashboard.recent_orders')}</Text>
           <FlatList
             data={restaurant.lastOrders}
             keyExtractor={(item) => item.orderID}
@@ -183,15 +200,13 @@ export default function DashboardScreen() {
                 <Text style={styles.orderCustomer}>[{item.orderID}]</Text>
                 <Text style={styles.orderCustomer}>{item.customer}</Text>
                 <Text style={styles.orderAmount}>{item.amount}</Text>
-                <Text style={[styles.orderStatus, item.status === 'Completed' ? styles.completed : styles.pending]}>
-                  {item.status}
-                </Text>
+                
               </View>
             )}
           />
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -199,20 +214,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',
-    paddingTop: 30
+    alignItems: 'center',
+    height: hp(100)
   },
   header: {
     position: 'absolute', // Make it full width at the top
     top: 0,
     left: 0,
     right: 0,
-    paddingTop: Platform.OS === 'ios' ? 50 : 30,
+    paddingTop: Platform.OS === 'ios' ? 40 : 30,
     paddingHorizontal: 20,
     backgroundColor: Colors.primary,
-    padding: 20,
+    padding: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    height: hp(11)
   },
   headerTitle: {
     fontSize: 22,
@@ -228,19 +245,24 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   dashboard: {
-    padding: 20,
-    backgroundColor: 'white',
+    padding: hp(2),
+    width: "95%",
+    backgroundColor: '#FFF',
     borderRadius: 10,
-    margin: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 1, height: 2 },
+    shadowRadius: 2,
+    shadowOpacity: 0.3,
     elevation: 3,
+    marginTop: hp(13)
   },
   restaurantName: {
-    fontSize: 24,
+    fontSize: hp(3),
     fontWeight: 'bold',
     color: '#333',
   },
   ownerText: {
-    fontSize: 16,
+    fontSize: hp(2),
     color: '#666',
     marginBottom: 15,
   },
@@ -258,14 +280,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   statValue: {
-    fontSize: 20,
+    fontSize: hp(1.7),
     fontWeight: 'bold',
     color: '#333',
     marginTop: 5,
   },
   statLabel: {
-    fontSize: 14,
+    fontSize: hp(1.5),
     color: '#666',
+    fontFamily: "montserrat-medium"
   },
   open: {
     color: 'green',
@@ -289,7 +312,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   orderAmount: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
   },
   orderStatus: {

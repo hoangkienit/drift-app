@@ -188,8 +188,22 @@
       "error_invalid_house_number": "Số nhà không hợp lệ",
       "error_invalid_street_name": "Tên đường không hợp lệ",
       "error_no_results_found": "Không tìm thấy kết quả vị trí. Vui lòng thử lại sau!",
-      "error_fetching_data_failed": "Không thể lấy vị trí. Vui lòng thử lại sau!" 
-    }
+      "error_fetching_data_failed": "Không thể lấy vị trí. Vui lòng thử lại sau!",
+      "success_restaurant_created": "Xin chúc mừng! Nhà hàng mới của bạn đã được tạo."
+    },
+    "dashboard": {
+    "header_title": "Trang chủ",
+    "owner": "Chủ sở hữu",
+    "revenue": "Doanh thu",
+    "orders": "Đơn hàng",
+    "menu_items": "Món ăn",
+    "customer": "Khách hàng",
+    "reviews": "Đánh giá",
+    "status": "Trạng thái",
+    "status_open": "Mở cửa",
+    "status_close": "Đóng cửa",
+    "recent_orders": "Đơn hàng gần đây"
   }
-
 }
+}
+

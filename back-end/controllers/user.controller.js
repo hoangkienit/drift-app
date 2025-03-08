@@ -1,6 +1,7 @@
 const UserService = require("../services/user.service");
 const AvatarService = require('../services/avatar.service');
 const { updateInformationValidation, updatePasswordValidation } = require("../utils/validation");
+const getLanguage = require("../utils/getLanguage");
 
 class UserController {
     // 🔹 Get All Users
@@ -46,7 +47,7 @@ class UserController {
 
     // 🔹 Update User Information
     static updateUser = async (req, res) => {
-        const lang = req.headers["accept-language"];
+        const lang = getLanguage(req.headers["accept-language"]);
         const { id } = req.params;
         const { email, phone } = req.body;
 
@@ -82,7 +83,7 @@ class UserController {
 
     // 🔹 Update User Password
     static updatePassword = async (req, res) => {
-        const lang = req.headers["accept-language"];
+        const lang = getLanguage(req.headers["accept-language"]);
         const { id } = req.params;
         const { oldPassword, newPassword } = req.body;
 

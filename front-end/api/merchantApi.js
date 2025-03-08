@@ -33,8 +33,9 @@ export const createNewRestaurant = async (
 
     return response.data;
   } catch (error) {
-    console.error("Error creating new merchant:", error.response?.data || error);
-    throw new Error("Network error! Please check your connection.");
+    //console.error("Error in merchant API: ", error);
+    //console.error("Error creating new merchant:", error.response?.data);
+    throw error.response?.data;
   }
 };
 
