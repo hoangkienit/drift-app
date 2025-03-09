@@ -127,7 +127,8 @@
       "adjust_title": "Điều chỉnh",
       "add_to_cart": "Thêm vào giỏ hàng",
       "enter_note": "Ghi chú cho nhà hàng",
-      "cart_title": "Giỏ hàng"
+      "cart_title": "Giỏ hàng",
+      "no_rating": "Chưa có đánh giá"
     },
     "card": {
       "minutes": "phút",
@@ -197,12 +198,14 @@
     "revenue": "Doanh thu",
     "orders": "Đơn hàng",
     "menu_items": "Món ăn",
-    "customer": "Khách hàng",
+    "rating": "Xếp hạng",
     "reviews": "Đánh giá",
     "status": "Trạng thái",
     "status_open": "Mở cửa",
     "status_close": "Đóng cửa",
-    "recent_orders": "Đơn hàng gần đây"
+    "recent_orders": "Đơn hàng gần đây",
+    "error_system": "Lỗi hệ thống! Vui lòng thử lại sau!",
+    "no_orders_available": "Không có đơn hàng"
   }
 }
 }

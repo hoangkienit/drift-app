@@ -39,4 +39,55 @@ export const createNewRestaurant = async (
   }
 };
 
+export const getRestaurant = async (id, accessToken) => {
+  try {
+    const response = await axios.get(`${BASE_API_URL}/merchant/restaurant/${id}`, {
+      headers: {
+        "accept-language": await AsyncStorage.getItem('userLanguage'),
+        "Authorization": `Bearer ${accessToken}`
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error in merchant API: ", error);
+    //console.error("Error creating new merchant:", error.response?.data);
+    throw error.response?.data;
+  }
+};
+
+export const getAllRestaurants = async (accessToken) => {
+  try {
+    const response = await axios.get(`${BASE_API_URL}/merchant/restaurants`, {
+      headers: {
+        "accept-language": await AsyncStorage.getItem('userLanguage'),
+        "Authorization": `Bearer ${accessToken}`
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error in merchant API: ", error);
+    //console.error("Error creating new merchant:", error.response?.data);
+    throw error.response?.data;
+  }
+};
+
+export const getRecentOrders = async (id, accessToken) => {
+  try {
+    const response = await axios.get(`${BASE_API_URL}/order/recent-orders/${id}`, {
+      headers: {
+        "accept-language": await AsyncStorage.getItem('userLanguage'),
+        "Authorization": `Bearer ${accessToken}`
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error in order API: ", error);
+    //console.error("Error creating new merchant:", error.response?.data);
+    throw error.response?.data;
+  }
+};
+
 

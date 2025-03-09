@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -18,6 +18,8 @@ import { useNavigation, useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { getRecentOrders, getRestaurant } from '../../api/merchantApi';
+import { getAccessToken, getUserData } from "../../utils/storageHelper";
 
 export default function DashboardScreen() {
   const router = useRouter();
@@ -26,76 +28,57 @@ export default function DashboardScreen() {
 
 
   const [restaurant, setRestaurant] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [owner, setOwner] = useState('');
+
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Simulate fetching restaurant data
   useEffect(() => {
-    setTimeout(() => {
-      // const fakeRestaurant = {
-      //   id: '1',
-      //   name: 'Golden Sushi',
-      //   owner: 'John Doe',
-      //   revenue: '$12,340',
-      //   orders: 128,
-      //   status: 'Open',
-      //   customers: 567,
-      //   reviews: 234,
-      //   menuItems: 24,
-      //   lastOrders: [
-      //     { orderID: '#OD101', customer: 'Alice', amount: '$23.50', status: 'Completed' },
-      //     { orderID: '#OD102', customer: 'Bob', amount: '$18.75', status: 'Pending' },
-      //     { orderID: '#OD103', customer: 'Charlie', amount: '$30.00', status: 'Completed' },
-      //   ],
-      // };
+    fetchData();
+  })
+  const fetchData = async () => {
+  try {
+    setLoading(true);
+    const user = await getUserData();
+    const accessToken = await getAccessToken();
+    const restaurantRes = await getRestaurant(user.data?.user?._id, accessToken);
+    const orderRes = await getRecentOrders(user.data?.user?._id, accessToken);
 
-      
-    }, 1000);
-  }, []);
-
-  useFocusEffect(
-      React.useCallback(() => {
-        fetchRestaurantData();
-      }, [navigation])
-  );
-  
-  const fetchRestaurantData = async() => {
-    //const fakeRestaurant = null;
-    const fakeRestaurant = {
-        id: '1',
-        name: 'Golden Sushi',
-        owner: 'John Doe',
-        revenue: '12.500.000VND',
-        orders: 128,
-        status: 'Open',
-        customers: 567,
-        reviews: 234,
-        menuItems: 24,
-        lastOrders: [
-          { orderID: '#OD101', customer: 'Alice', amount: '180.000VND', status: 'Completed' },
-          { orderID: '#OD102', customer: 'Bob', amount: '170.000VND', status: 'Pending' },
-          { orderID: '#OD103', customer: 'Charlie', amount: '150.000VND', status: 'Completed' },
-        ],
-      };
-
-      setRestaurant(fakeRestaurant);
-      setModalVisible(!fakeRestaurant);
-      setLoading(false);
+    if (!restaurantRes.data.restaurant) {
+      setModalVisible(true); // Show modal if no restaurant
+    } else {
+      setModalVisible(false); // Hide modal if restaurant exists
+      setRestaurant(restaurantRes.data.restaurant);
+      setOrders(orderRes.data.recent_order);
+      setOwner(user.data?.user?.username);
+    }
+  } catch (error) {
+    setError({ message: t('merchant.dashboard.error_system') });
+    setTimeout(() => setError(null), 5000);
+  } finally {
+    setLoading(false);
   }
+  };
+
+useFocusEffect(
+  useCallback(() => {
+    //fetchData();
+  }, [])
+);
+
+const handleRefresh = async () => {
+  setLoading(true);
+  await fetchData();
+  setLoading(false);
+};
 
   const handleCreateRestaurant = () => {
     router.push('merchant/create-restaurant');
     setModalVisible(false);
   };
 
-  const handleRefresh = () => {
-    setLoading(true);
-  // Simulate fetching new data
-  setTimeout(() => {
-    setRestaurant({ ...restaurant, revenue: '$19,500' });
-    setLoading(false);
-  }, 2000);
-};
 
   return (
     <View style={styles.container}>
@@ -138,14 +121,15 @@ export default function DashboardScreen() {
           <ActivityIndicator size="large" color={Colors.primary} />
         </View>
       ) : restaurant && (
-        <View style={styles.dashboard}>
+          <View style={styles.dashboard}>
+            {error && <Text style={styles.errorText}>*{ error.message}</Text>}
           <View style={styles.headerRow}>
             <Text style={styles.restaurantName}>{restaurant.name}</Text>
               <TouchableOpacity onPress={handleRefresh}>
                 <MaterialIcons name="refresh" size={37} color={Colors.primary} style={styles.refreshIcon}/>
             </TouchableOpacity>
           </View>
-          <Text style={styles.ownerText}>{ t('merchant.dashboard.owner')}: {restaurant.owner}</Text>
+          <Text style={styles.ownerText}>{ t('merchant.dashboard.owner')}: {owner}</Text>
 
           {/* KEY METRICS */}
           <View style={styles.statsContainer}>
@@ -156,25 +140,25 @@ export default function DashboardScreen() {
             </View>
             <View style={styles.statCard}>
               <Ionicons name="receipt-sharp" size={24} color={Colors.primary} />
-              <Text style={styles.statValue}>{restaurant.orders}</Text>
+              <Text style={styles.statValue}>{orders.length}</Text>
               <Text style={styles.statLabel}>{ t('merchant.dashboard.orders')}</Text>
             </View>
             <View style={styles.statCard}>
               <MaterialCommunityIcons name="food" size={24} color={Colors.primary} />
-              <Text style={styles.statValue}>{restaurant.menuItems}</Text>
+              <Text style={styles.statValue}>{restaurant.foods.length}</Text>
               <Text style={styles.statLabel}>{ t('merchant.dashboard.menu_items')}</Text>
             </View>
           </View>
 
           <View style={styles.statsContainer}>
             <View style={styles.statCard}>
-              <Ionicons name="people" size={24} color={Colors.primary} />
-              <Text style={styles.statValue}>{restaurant.customers}</Text>
-              <Text style={styles.statLabel}>{ t('merchant.dashboard.customer')}</Text>
-            </View>
-            <View style={styles.statCard}>
               <MaterialCommunityIcons name="star" size={24} color={Colors.primary} />
-              <Text style={styles.statValue}>{restaurant.reviews}</Text>
+              <Text style={styles.statValue}>{restaurant.rating}</Text>
+              <Text style={styles.statLabel}>{ t('merchant.dashboard.rating')}</Text>
+            </View>
+              <View style={styles.statCard}>
+                <Ionicons name="chatbubbles-sharp" size={24} color={Colors.primary} />
+              <Text style={styles.statValue}>{restaurant.reviews.length}</Text>
               <Text style={styles.statLabel}>{ t('merchant.dashboard.reviews')}</Text>
             </View>
             <View style={styles.statCard}>
@@ -184,7 +168,7 @@ export default function DashboardScreen() {
                 color={restaurant.status === 'Open' ? 'green' : 'red'}
               />
               <Text style={[styles.statValue, restaurant.status === 'Open' ? styles.open : styles.closed]}>
-                {restaurant.status}
+                {restaurant.status == 'open' ? t('merchant.dashboard.status_open') : t('merchant.dashboard.status_close')}
               </Text>
               <Text style={styles.statLabel}>{ t('merchant.dashboard.status')}</Text>
             </View>
@@ -193,16 +177,22 @@ export default function DashboardScreen() {
           {/* RECENT ORDERS */}
           <Text style={styles.sectionTitle}>{ t('merchant.dashboard.recent_orders')}</Text>
           <FlatList
-            data={restaurant.lastOrders}
+            data={orders}
             keyExtractor={(item) => item.orderID}
             renderItem={({ item }) => (
               <View style={styles.orderItem}>
-                <Text style={styles.orderCustomer}>[{item.orderID}]</Text>
+                <Text style={styles.orderCustomer}>{item.orderID}</Text>
                 <Text style={styles.orderCustomer}>{item.customer}</Text>
                 <Text style={styles.orderAmount}>{item.amount}</Text>
                 
               </View>
-            )}
+              )}
+            ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}>{ t('merchant.dashboard.no_orders_available')}</Text>
+              </View>
+            }
+            scrollEnabled={orders.length != 0}
           />
         </View>
       )}
@@ -260,6 +250,7 @@ const styles = StyleSheet.create({
     fontSize: hp(3),
     fontWeight: 'bold',
     color: '#333',
+    fontFamily: 'montserrat-bold'
   },
   ownerText: {
     fontSize: hp(2),
@@ -281,7 +272,6 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: hp(1.7),
-    fontWeight: 'bold',
     color: '#333',
     marginTop: 5,
   },
@@ -297,9 +287,10 @@ const styles = StyleSheet.create({
     color: 'red',
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: 'bold',
     marginTop: 20,
+    fontFamily: 'montserrat-bold'
   },
   orderItem: {
     flexDirection: 'row',
@@ -314,6 +305,7 @@ const styles = StyleSheet.create({
   orderAmount: {
     fontSize: 15,
     fontWeight: 'bold',
+    fontFamily: "montserrat-medium"
   },
   orderStatus: {
     fontSize: 16,
@@ -381,5 +373,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-loaderContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  loaderContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  errorText: {
+    fontFamily: "montserrat-medium",
+    color: 'red',
+    fontSize: hp(1.8)
+  },
+  emptyContainer: {
+    alignItems: "center",
+    marginTop: 20,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "gray",
+  },
 });

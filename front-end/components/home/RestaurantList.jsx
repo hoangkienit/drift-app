@@ -1,15 +1,15 @@
 import React from "react";
 import { View, FlatList, StyleSheet } from "react-native";
-import RestaurantCard from "../RestaurantCard";
+import RestaurantCard from "../home/RestaurantCard";
 import { restaurantData } from "../../constants/data";
 
-export default function RestaurantList({t}) {
+export default function RestaurantList({t, restaurants}) {
   return (
     <View style={styles.listContainer}>
       <FlatList
-        data={restaurantData}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <RestaurantCard {...item} t={t} isOpen={true} />}
+        data={restaurants}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => <RestaurantCard data={item} t={t} isOpen={true} />}
       />
     </View>
   );

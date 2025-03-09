@@ -1,16 +1,23 @@
-const Merchant = require("../models/merchant.model");
 const getMessage = require("../utils/getMessage");
 const axios = require('axios')
 
+// Models
+const Merchant = require("../models/merchant.model");
+const User = require("../models/user.model");
+
 
 class MerchantService {
-    static async createRestaurant({ id , lang}, data) {
+    static async createRestaurant({ id, lang }, data) {
+        const user = await User.findOne({_id: id});
+        if (!user) {
+            throw new Error(getMessage("USER_NOT_FOUND", lang));
+        }
+
         const query = `${data.houseNumber} ${data.streetName}, Phường ${data.selectedWard}, ${data.selectedDistrict}, ${data.selectedCity}`;
 
         // Check restaurant exist
         const existedRestaurantName = await Merchant.findOne({ name: data.restaurantName });
         if (existedRestaurantName) {
-            console.log(existedRestaurantName);
             throw new Error(getMessage("RESTAURANT_ALREADY_EXISTED", lang));
         }
         
@@ -41,6 +48,10 @@ class MerchantService {
         });
 
         const savedMerchant = await newMerchant.save();
+
+        // Save restaurant data to it owner
+        user.restaurant = savedMerchant._id;
+        await user.save();
         return savedMerchant;
     }
     static async searchLocation(query, lang) {
@@ -61,6 +72,27 @@ class MerchantService {
             console.error("Error fetching location:", error.message);
             throw new Error(getMessage("FETCH_LOCATION_ERROR", lang));
         }
+    }
+
+    static async getRestaurant({ id, lang }) {
+        // Fetch the restaurant directly by joining User and Merchant
+        const userWithRestaurant = await User.findOne({ _id: id }).populate('restaurant'); 
+
+        if (!userWithRestaurant) {
+            throw new Error(getMessage("USER_NOT_FOUND", lang));
+        }
+
+        return userWithRestaurant.restaurant;
+    }
+
+    static async getAllRestaurants({ lang }) {
+        const restaurants = await Merchant.find();
+
+        if (!restaurants) {
+            throw new Error('No restaurant data');
+        }
+
+        return restaurants;
     }
 }
 

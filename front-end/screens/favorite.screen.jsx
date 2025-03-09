@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import RestaurantCard from "../components/RestaurantCard"; 
+import RestaurantCard from "../components/home/RestaurantCard"; 
 import { useTranslation } from "react-i18next";
 
 const FavoriteScreen = () => {

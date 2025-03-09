@@ -10,17 +10,15 @@ import {useCartStore} from "../stores/useCartStore"
 import CartBottomButton from "../components/restaurant/restaurant_detail/CartBottomButton";
 
 const RestaurantDetailScreen = ({ props, t }) => {
-  const { id, name, rating, minutes, avatar } = props;
   const useCartStoreZustand = useCartStore();
-  
   // Initialize scrollY as an Animated.Value
   const scrollY = useRef(new Animated.Value(0)).current;
 
   // Find the restaurant data based on the restaurant id
-  const restaurant = restaurantData.find((restaurant) => restaurant.id === id);
+  const restaurant = props;
 
   // Access the specific food items for the restaurant
-  const foodItemsForRestaurant = restaurant ? restaurant.foodItems : [];
+  const foodItemsForRestaurant = restaurant ? restaurant.foods : [];
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -30,8 +28,8 @@ const RestaurantDetailScreen = ({ props, t }) => {
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: false })}
         scrollEventThrottle={16}
       >
-        <RestaurantHeaderImage avatar={avatar} />
-        <RestaurantInfo name={name} rating={rating} minutes={minutes} t={t} />
+        <RestaurantHeaderImage avatar={props.coverImage} />
+        <RestaurantInfo name={props.name} description={props.description} rating={props.rating} minutes={0} t={t} />
 
         {foodItemsForRestaurant.map((food) => (
           <FoodCard key={food.id} food={food} t={t} restaurant={restaurant} useCartStore={useCartStoreZustand} />

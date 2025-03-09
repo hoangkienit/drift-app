@@ -5,7 +5,7 @@ import FoodCategory from "../home/FoodCategory";
 import FilterFacets from "../home/FilterFacets";
 import RestaurantList from "../home/RestaurantList";
 
-const HomeContent = ({ t }) => {
+const HomeContent = ({ t, restaurants }) => {
   return (
     <FlatList
       style={{ flex: 1 }}
@@ -20,7 +20,7 @@ const HomeContent = ({ t }) => {
       keyExtractor={(_, index) => index.toString()}
       renderItem={null}
       ListEmptyComponent={<View style={{ height: 10 }} />}
-      ListFooterComponent={<RestaurantList t={t} />}
+      ListFooterComponent={<RestaurantList t={t} restaurants={restaurants} />}
       contentContainerStyle={{ paddingBottom: 100 }}
     />
   );

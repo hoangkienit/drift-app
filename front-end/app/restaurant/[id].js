@@ -5,10 +5,10 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 const RestaurantDetail = () => {
-  const { id, name, avatar, rating, distance, minutes } = useLocalSearchParams();
+  const { data } = useLocalSearchParams();
   const navigation = useNavigation();
   const { t } = useTranslation();
-
+  const parsedData = data ? JSON.parse(data) : null;
   useEffect(() => {
     navigation.setOptions({
       headerShown: false
@@ -16,7 +16,7 @@ const RestaurantDetail = () => {
   })
 
   return (
-    <RestaurantDetailScreen props={{ id, name, avatar, rating, distance, minutes }} t={t} />
+    <RestaurantDetailScreen props={parsedData} t={t} />
   );
 };
 

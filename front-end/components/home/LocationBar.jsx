@@ -14,7 +14,7 @@ const LocationBar = ({ location }) => {
           {location
             ? truncateText(
                 `${location.name || ""}, ${location.street || ""}, ${location.district || ""}, ${location.city || ""}, ${location.country || ""}`,
-                40
+                30
               )
             : "Loading..."}
         </Text>

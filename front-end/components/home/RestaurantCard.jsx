@@ -2,9 +2,9 @@ import React from "react";
 import { useRouter } from "expo-router";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import { Colors } from "../constants/Colors";
+import { LinearGradient } from "expo-linear-gradient";
 
-const RestaurantCard = ({ id, avatar, name, rating, distance, minutes, t, isOpen }) => {
+const RestaurantCard = ({ data, t, isOpen }) => {
   const router = useRouter();
 
   return (
@@ -12,37 +12,39 @@ const RestaurantCard = ({ id, avatar, name, rating, distance, minutes, t, isOpen
       style={styles.card}
       onPress={() =>
         router.push({
-          pathname: `/restaurant/${id}`, // Navigates to /restaurant/1
-          params: { name, avatar, rating, distance, minutes }, // Passes props
+          pathname: `/restaurant/${data._id}`,
+          params: { data: JSON.stringify(data) },
         })
       }
     >
-      <Image source={{ uri: avatar }} style={styles.avatar} />
-
+      <Image source={{ uri: data.logo }} style={styles.avatar} />
       <View style={styles.infoContainer}>
-        {/* Open/Closed Box */}
-        <View style={[styles.openStatus, { backgroundColor: isOpen ? "#B2DFDB" : "#e6e8e8" }]}>
+        {/* Open/Closed Status */}
+        <LinearGradient
+          colors={isOpen ? ["#4CAF50", "#66BB6A"] : ["#B0BEC5", "#CFD8DC"]}
+          style={styles.openStatus}
+        >
           <Text style={styles.openStatusText}>{isOpen ? t("restaurant.card.open") : t("restaurant.card.closed")}</Text>
-        </View>
+        </LinearGradient>
 
         {/* Restaurant Name */}
-        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.name}>{data.name}</Text>
 
         {/* Rating */}
         <View style={styles.row}>
-          <Icon name="star" size={16} color="#FFD700" />
-          <Text style={styles.rating}>{rating}</Text>
+          <Icon name="star" size={18} color="#FFD700" />
+          <Text style={styles.rating}>{data.rating}</Text>
         </View>
 
-        {/* Distance and Minutes */}
+        {/* Distance & Time */}
         <View style={styles.row}>
           <View style={styles.infoColumn}>
             <Icon name="location-sharp" size={16} color="gray" />
-            <Text style={styles.detail}>{distance} km</Text>
+            <Text style={styles.detail}>0 km</Text>
           </View>
           <View style={styles.infoColumn}>
             <Icon name="time-sharp" size={16} color="gray" />
-            <Text style={styles.detail}>{minutes} {t("restaurant.card.minutes")}</Text>
+            <Text style={styles.detail}>0 {t("restaurant.card.minutes")}</Text>
           </View>
         </View>
       </View>
@@ -54,65 +56,65 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     backgroundColor: "#fff",
-    padding: 20,
-    marginVertical: 5,
+    padding: 10,
+    marginVertical: 8,
     marginHorizontal: 12,
-    borderRadius: 5,
+    borderRadius: 4,
     shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 6,
     elevation: 3,
     alignItems: "center",
   },
   avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 3,
+    width: 90,
+    height: 90,
+    borderRadius: 10,
   },
   infoContainer: {
     flex: 1,
-    marginLeft: 10,
+    marginLeft: 12,
   },
   openStatus: {
-    width: "33%",
     paddingVertical: 5,
-    borderRadius: 5,
+    paddingHorizontal: 10,
+    borderRadius: 3,
     alignItems: "center",
-    marginBottom: 5,
+    justifyContent: "center",
+    alignSelf: "flex-start",
   },
   openStatusText: {
     fontSize: 12,
     fontWeight: "bold",
-    color: "#000",
-    fontFamily: "montserrat-medium",
+    color: "#fff",
   },
   name: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: "bold",
-    fontFamily: "montserrat-bold",
+    marginTop: 5,
+    color: "#333",
+    fontFamily: 'montserrat-bold'
   },
   row: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 4,
+    marginTop: 6,
   },
   rating: {
-    fontSize: 14,
-    color: "#333",
+    fontSize: 15,
+    color: "#444",
     marginLeft: 5,
-    fontFamily: "montserrat-medium",
   },
   detail: {
     fontSize: 14,
     color: "gray",
     marginLeft: 5,
-    fontFamily: "montserrat-medium",
   },
   infoColumn: {
     flexDirection: "row",
     alignItems: "center",
-    marginRight: 15, // Space between columns
+    marginRight: 15,
   },
 });
 

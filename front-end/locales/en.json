@@ -126,7 +126,8 @@
       "adjust_title": "Adjust",
       "add_to_cart": "Add to Cart",
       "enter_note": "Your note for restaurant",
-      "cart_title": "Cart"
+      "cart_title": "Cart",
+      "no_rating": "No ratings yet"
     },
     "card": {
       "minutes": "min",
@@ -196,12 +197,14 @@
       "revenue": "Revenue",
       "orders": "Orders",
       "menu_items": "Menu Items",
-      "customer": "Customers",
+      "rating": "Rating",
       "reviews": "Reviews",
       "status": "Status",
       "status_open": "Open",
       "status_close": "Close",
-      "recent_orders": "Recent Orders"
+      "recent_orders": "Recent Orders",
+      "error_system": "System error! Please try again later!",
+      "no_orders_available": "No orders available"
     }
   }
 }

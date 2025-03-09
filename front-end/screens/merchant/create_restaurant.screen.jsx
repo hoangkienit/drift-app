@@ -27,7 +27,7 @@ const CreateRestaurantScreen = () => {
       headerTitleStyle: { color: "#fff", fontWeight: "bold", fontFamily: "montserrat-bold" },
       headerTintColor: "#fff",
       headerLeft: () => (
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity onPressIn={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={28} color="#fff" />
         </TouchableOpacity>
       ),

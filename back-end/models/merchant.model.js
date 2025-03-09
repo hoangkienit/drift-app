@@ -73,6 +73,10 @@ const merchantSchema = new mongoose.Schema({
         enum: ['fast_food', 'casual_dining', 'fine_dining', 'cafe', 'bakery', 'other'], 
         default: 'other' 
     },
+    revenue: {
+      type: Number,
+      default: 0
+    },
     foods: [{ type: mongoose.Schema.Types.ObjectId, ref: 'FoodItem' }],
     operatingHours: {
         open: { type: String, default: "08:00 AM" },
@@ -88,7 +92,6 @@ const merchantSchema = new mongoose.Schema({
         rating: { type: Number, min: 0, max: 5 },
         comment: { type: String }
     }],
-    menu: [{ type: mongoose.Schema.Types.ObjectId, ref: 'FoodItem' }],
     rating: { type: Number, default: 0, min: 0, max: 5 },
     status: { type: String, enum: ['open', 'closed'], default: 'closed' },
     //isVerified: { type: Boolean, default: false }
