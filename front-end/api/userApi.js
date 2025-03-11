@@ -1,11 +1,11 @@
 import axios from "axios";
-import { BASE_API_URL } from "../constants/constants";
+import { BASE_API_URL_V1 } from "../constants/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as mime from 'mime';
 
 export const updateUserInfo = async (userId, accessToken, phone, email) => {
   try {
-    const response = await axios.put(`${BASE_API_URL}/user/update-user/${userId}`, {
+    const response = await axios.put(`${BASE_API_URL_V1}/user/update-user/${userId}`, {
       phone,
       email,
     }, {
@@ -23,7 +23,7 @@ export const updateUserInfo = async (userId, accessToken, phone, email) => {
 };
 
 export const updatePassword = async (userId, accessToken, oldPassword, newPassword) => {
-  const response = await axios.put(`${BASE_API_URL}/user/update-password/${userId}`, {
+  const response = await axios.put(`${BASE_API_URL_V1}/user/update-password/${userId}`, {
       oldPassword,
       newPassword,
     }, {
@@ -58,7 +58,7 @@ export const updateAvatar = async (userId, accessToken, avatarUri) => {
     });
 
     const response = await axios.put(
-      `${BASE_API_URL}/user/update-avatar/${userId}`,
+      `${BASE_API_URL_V1}/user/update-avatar/${userId}`,
       formData,
       {
         headers: {

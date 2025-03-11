@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASE_API_URL } from "../constants/constants";
+import { BASE_API_URL_V1 } from "../constants/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
@@ -15,7 +15,7 @@ export const createNewRestaurant = async (
                 selectedDistrict,
                 selectedWard) => {
   try {
-    const response = await axios.post(`${BASE_API_URL}/merchant/create-restaurant/${id}`, {
+    const response = await axios.post(`${BASE_API_URL_V1}/merchant/create-restaurant/${id}`, {
                 restaurantName,
                 restaurantDescription,
                 selectedCategory,
@@ -41,7 +41,7 @@ export const createNewRestaurant = async (
 
 export const getRestaurant = async (id, accessToken) => {
   try {
-    const response = await axios.get(`${BASE_API_URL}/merchant/restaurant/${id}`, {
+    const response = await axios.get(`${BASE_API_URL_V1}/merchant/restaurant/${id}`, {
       headers: {
         "accept-language": await AsyncStorage.getItem('userLanguage'),
         "Authorization": `Bearer ${accessToken}`
@@ -58,7 +58,7 @@ export const getRestaurant = async (id, accessToken) => {
 
 export const getAllRestaurants = async (accessToken) => {
   try {
-    const response = await axios.get(`${BASE_API_URL}/merchant/restaurants`, {
+    const response = await axios.get(`${BASE_API_URL_V1}/merchant/restaurants`, {
       headers: {
         "accept-language": await AsyncStorage.getItem('userLanguage'),
         "Authorization": `Bearer ${accessToken}`
@@ -75,7 +75,7 @@ export const getAllRestaurants = async (accessToken) => {
 
 export const getRecentOrders = async (id, accessToken) => {
   try {
-    const response = await axios.get(`${BASE_API_URL}/order/recent-orders/${id}`, {
+    const response = await axios.get(`${BASE_API_URL_V1}/order/recent-orders/${id}`, {
       headers: {
         "accept-language": await AsyncStorage.getItem('userLanguage'),
         "Authorization": `Bearer ${accessToken}`

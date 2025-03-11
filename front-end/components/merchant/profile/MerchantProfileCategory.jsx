@@ -1,27 +1,39 @@
 import { View, Text, TouchableOpacity, StyleSheet, Switch, ScrollView } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import React, { useState } from 'react';
-import LogoutModal from './LogoutModal';
-import { clearUserData, clearAccessToken } from '../../utils/storageHelper';
-import { APP_VERSION } from '../../constants/constants';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, { useEffect, useState } from 'react';
+import LogoutModal from '../../profile/LogoutModal';
+import { clearUserData, clearAccessToken, clearRestaurantData } from '../../../utils/storageHelper';
+import { APP_VERSION } from '../../../constants/constants';
+import webSocketService from "../../../services/websocket.service";
 
-const UserProfileCategory = ({ t, router, user }) => {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
+const MerchantProfileCategory = ({ t, router, merchant }) => {
+    const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
+    const [isRestaurantOpened, setIsRestaurantOpened] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
-   const handleLogout = () => {
-     //Clear asyncStorage
-     clearUserData();
-     clearAccessToken();
-     router.replace('/authentication/sign-in');
-    setModalVisible(false);
-  };
+    useEffect(() => {
+        merchant?.status === 'open' ? setIsRestaurantOpened(true) : setIsRestaurantOpened(false);
+    }, []);
+
+    const handleLogout = async () => {
+        await clearUserData();
+        await clearAccessToken();
+        await clearRestaurantData();
+        router.replace('/authentication/sign-in');
+        setModalVisible(false);
+    };
+
+    const handleUpdateRestaurantStatus = (newStatus) => {
+        const merchantId = merchant?._id;
+        webSocketService.emit("UPDATE_RESTAURANT_STATUS", { merchantId, status: newStatus ? "open" : "closed" });
+    }
   
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 130 }}>
     <View style={styles.content}>
-        <Text style={styles.section_title}>{t('profile.user_category.information_category_section_title') }</Text>
+      <Text style={styles.section_title}>{t('merchant.profile.information_category_section_title')}</Text>
 
       {/* Payment */}
       <TouchableOpacity style={styles.item}>
@@ -51,7 +63,7 @@ const UserProfileCategory = ({ t, router, user }) => {
       </TouchableOpacity>
     </View>
       <View style={styles.content}>
-        <Text style={styles.section_title}>{t('profile.user_category.notification_category_section_title') }</Text>
+        <Text style={styles.section_title}>{t('merchant.profile.status_category_section_title')}</Text>
 
         {/* Notifications */}
       <View style={styles.item}>
@@ -60,14 +72,32 @@ const UserProfileCategory = ({ t, router, user }) => {
           <Text style={styles.text}>{t(`profile.user_category.notification`)}</Text>
         </View>
         <Switch
-          value={isEnabled}
-          onValueChange={() => setIsEnabled(prev => !prev)}
+          value={isNotificationEnabled}
+          onValueChange={() => setIsNotificationEnabled(prev => !prev)}
         />
+              </View>
+        {/* Restaurant Status */}
+        <View style={styles.item}>
+        <View style={styles.leftSection}>
+          <MaterialCommunityIcons name={isRestaurantOpened ? "store" : "store-off"} size={24} color="#666" style={styles.icon} />
+          <Text style={styles.text}>{t(`merchant.profile.switch_restaurant_status`)}</Text>
+        </View>
+        <Switch
+          value={isRestaurantOpened}
+                        onValueChange={() => {
+                            setIsRestaurantOpened(prevState => {
+                            const newStatus = !prevState;
+                            handleUpdateRestaurantStatus(newStatus);
+                            return newStatus;
+                        });
+                    }}
+        />
+        </View>
       </View>
-      </View> 
+          
 
      <View style={styles.content}>
-        <Text style={styles.section_title}>{t('profile.user_category.more_category_section_title') }</Text>
+        <Text style={styles.section_title}>{t('merchant.profile.more_category_section_title')}</Text>
 
        {/* Settings */}
       <TouchableOpacity style={styles.item}>
@@ -123,8 +153,8 @@ const UserProfileCategory = ({ t, router, user }) => {
       />
 
      <View style={styles.app_author_container}>
-        <Text style={styles.app_author}>{APP_VERSION}</Text>
-        <Text style={styles.app_author}>{t('profile.user_category.app_author')} Hoangkienit</Text>
+              <Text style={styles.app_author}>{APP_VERSION}</Text>
+        <Text style={styles.app_author}>{t('merchant.profile.app_author')} Hoangkienit</Text>
     </View> 
   </ScrollView>
   );
@@ -181,4 +211,4 @@ const styles = StyleSheet.create({
 },
 });
 
-export default UserProfileCategory;
+export default MerchantProfileCategory;

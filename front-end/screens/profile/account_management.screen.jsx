@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { router, useRouter } from "expo-router";
 import { useFocusEffect } from '@react-navigation/native';
 import { updateAvatar } from "../../api/userApi";
+import { isDataEqual } from "../../utils/lodashCompare";
 
 const AccountManagementScreen = () => {
   const navigation = useNavigation();
@@ -28,7 +29,7 @@ const AccountManagementScreen = () => {
   const fetchUserData = async () => {
         try {
           const data = await getUserData();
-        if (data) {
+        if (data && !isDataEqual(data, userData)) {
           setUserData(data);
         }
         } catch (error) {
@@ -84,11 +85,11 @@ const AccountManagementScreen = () => {
     try {
       setLoading(true);
       const accessToken = await getAccessToken();
-      const response = await updateAvatar(userData?.data?.user?._id, accessToken, imageUri);
+      const response = await updateAvatar(userData?._id, accessToken, imageUri);
       
       // Clear the old user data and replace with the new
       clearUserData();
-      await storeUserData(response);
+      await storeUserData(response.data.user);
 
       fetchUserData();
 
@@ -116,10 +117,10 @@ const AccountManagementScreen = () => {
       
       {/* Profile Section */}
       <View style={styles.profileSection}>
-        <Image source={{ uri: userData?.data?.user?.profileImg }} style={styles.avatar} />
+        <Image source={{ uri: userData?.profileImg }} style={styles.avatar} />
         <View style={styles.profileInfo}>
-          <Text style={styles.name}>{userData?.data?.user?.username}</Text>
-          <Text style={styles.email}>{userData?.data?.user?.email}</Text>
+          <Text style={styles.name}>{userData?.username}</Text>
+          <Text style={styles.email}>{userData?.email}</Text>
         </View>
         <TouchableOpacity style={styles.changeAvatarButton} onPress={pickImage}>
           <Ionicons name="camera" size={24} color="#fff" />
@@ -150,11 +151,11 @@ const AccountManagementScreen = () => {
         router.push({
           pathname: "/profile/account_management/edit_information",
           params: {
-            userId: userData?.data?.user?._id,
+            userId: userData?._id,
             accessToken: await getAccessToken(),
-            username: userData?.data?.user?.username,
-            phone: userData?.data?.user?.phone,
-            email: userData?.data?.user?.email
+            username: userData?.username,
+            phone: userData?.phone,
+            email: userData?.email
           }
         });
       }}>

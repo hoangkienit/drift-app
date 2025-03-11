@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import ProfileScreen from '../../screens/profile.screen';
+import MerchantProfileScreen from '../../screens/merchant/merchant_profile.screen';
+
 
 export default function Profile() {
   return (
-    <ProfileScreen/>
+    <MerchantProfileScreen/>
   );
 }

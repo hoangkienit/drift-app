@@ -93,7 +93,7 @@ const merchantSchema = new mongoose.Schema({
         comment: { type: String }
     }],
     rating: { type: Number, default: 0, min: 0, max: 5 },
-    status: { type: String, enum: ['open', 'closed'], default: 'closed' },
+    status: { type: String, enum: ['open', 'closed'], default: 'closed', required: true, },
     //isVerified: { type: Boolean, default: false }
 }, { timestamps: true });
 

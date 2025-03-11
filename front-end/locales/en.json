@@ -63,7 +63,11 @@
       "privacy_policy": "Privacy Policy",
       "customer_support": "Customer Support",
       "logout": "Log Out",
-      "about_us": "About Us"
+      "about_us": "About Us",
+      "information_category_section_title": "My Information",
+      "notification_category_section_title": "Notification",
+      "more_category_section_title": "More",
+      "app_author": "Developed by"
     },
     "modal": {
       "logout_title": "Are you sure you want to log out?",
@@ -132,7 +136,8 @@
     "card": {
       "minutes": "min",
       "closed": "Closed",
-      "open": "Open"
+      "open": "Open",
+      "new_restaurant_status": "New restaurant"
     }
   },
   "order": {
@@ -158,6 +163,7 @@
         "promotion": "Promotion"
     }
   },
+
   "merchant": {
     "no_restaurant_modal": {
       "modal_title": "No Restaurant Found",
@@ -205,6 +211,13 @@
       "recent_orders": "Recent Orders",
       "error_system": "System error! Please try again later!",
       "no_orders_available": "No orders available"
+    },
+    "profile": {
+      "information_category_section_title": "My Information",
+      "status_category_section_title": "Status",
+      "more_category_section_title": "More",
+      "app_author": "Developed by",
+      "switch_restaurant_status": "Restaurant status"
     }
   }
 }

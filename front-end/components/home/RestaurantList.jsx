@@ -9,7 +9,7 @@ export default function RestaurantList({t, restaurants}) {
       <FlatList
         data={restaurants}
         keyExtractor={(item) => item._id}
-        renderItem={({ item }) => <RestaurantCard data={item} t={t} isOpen={true} />}
+        renderItem={({ item }) => <RestaurantCard data={item} t={t}/>}
       />
     </View>
   );

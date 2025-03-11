@@ -1,55 +1,59 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView, ActivityIndicator } from 'react-native';
 import React, { useEffect, useState } from 'react'
-import UserProfileCategory from '../components/profile/UserProfileCategory';
+import UserProfileCategory from '../../components/profile/UserProfileCategory';
 import { useNavigation, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Colors } from '../constants/Colors';
-import { getUserData } from '../utils/storageHelper';
+import { Colors } from '../../constants/Colors';
+import { getUserData } from '../../utils/storageHelper';
 import { useFocusEffect } from '@react-navigation/native';
-import { isDataEqual } from '../utils/lodashCompare';
+import { isDataEqual } from '../../utils/lodashCompare';
+import MerchantProfileCategory from '../../components/merchant/profile/MerchantProfileCategory';
+import { getRestaurantData } from '../../utils/storageHelper';
 
-export default function ProfileScreen() {
+export default function MerchantProfileScreen() {
     const navigation = useNavigation();
   const { t } = useTranslation();
   const router = useRouter();
   const [userData, setUserData] = useState(null);
+    const [merchant, setMerchant] = useState(null);
+    
+    const [loading, setLoading] = useState(false);
 
   const fetchUserData = async () => {
     const data = await getUserData();
     if (data && !isDataEqual(data, userData)) {
       setUserData(data);
     }
-  };
+    };
+    
+    const fetchMerchantData = async () => {
+        setLoading(true);
+        const data = await getRestaurantData();
+        if (data && !isDataEqual(data, merchant)) {
+            setMerchant(data);
+        }
+        setLoading(false);
+    }
 
   useEffect(() => {
     navigation.setOptions({
       headerShown: false
     });
-
+    fetchUserData();
+    fetchMerchantData();
   }, []);
 
   useFocusEffect(
       React.useCallback(() => {
-        fetchUserData();
+          fetchUserData();
+          fetchMerchantData();
       }, [])
     );
   return (
     <View style={styles.container}>
-          <SafeAreaView>
-              {/* User Information Header */}
-          <View style={styles.header}>
-            <Image
-            source={{uri: userData?.profileImg}}
-              style={styles.avatar}
-            />
-            <View style={styles.userInfo}>
-            <Text style={styles.name}>{userData?.username}</Text>
-              <Text style={styles.phone}>{userData?.email}</Text>
-            </View>
-          </View>
-    
-          {/* User Category */}
-        <UserProfileCategory t={t} router={router}/>
+          <SafeAreaView> 
+              {/* User Category */}
+        {loading ? <ActivityIndicator size={"large"} color={"#fff"}/> : <MerchantProfileCategory t={t} router={router} merchant={merchant}/>}    
           </SafeAreaView>
         </View>
   )

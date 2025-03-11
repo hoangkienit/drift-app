@@ -19,7 +19,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { getRecentOrders, getRestaurant } from '../../api/merchantApi';
-import { getAccessToken, getUserData } from "../../utils/storageHelper";
+import { getAccessToken, getUserData, clearAccessToken, clearUserData, storeRestaurantData, getRestaurantData } from "../../utils/storageHelper";
+import { isDataEqual } from '../../utils/lodashCompare';
 
 export default function DashboardScreen() {
   const router = useRouter();
@@ -37,34 +38,49 @@ export default function DashboardScreen() {
 
   useEffect(() => {
     fetchData();
-  })
+  }, []);
   const fetchData = async () => {
   try {
     setLoading(true);
     const user = await getUserData();
     const accessToken = await getAccessToken();
-    const restaurantRes = await getRestaurant(user.data?.user?._id, accessToken);
-    const orderRes = await getRecentOrders(user.data?.user?._id, accessToken);
+    const restaurantRes = await getRestaurant(user._id, accessToken);
+    const orderRes = await getRecentOrders(user._id, accessToken);
 
-    if (!restaurantRes.data.restaurant) {
-      setModalVisible(true); // Show modal if no restaurant
+    const newRestaurant = restaurantRes.data.restaurant;
+    const newOrders = orderRes.data.recent_order;
+    const newOwner = user.username;
+
+    // Compare new data with existing state
+    if (
+      isDataEqual(newRestaurant, restaurant) &&
+      isDataEqual(newOrders, orders) &&
+      isDataEqual(newOwner, owner)
+    ) {
+      return; // Exit early if data hasn't changed
+    }
+
+    if (!newRestaurant) {
+      setModalVisible(true);
     } else {
-      setModalVisible(false); // Hide modal if restaurant exists
-      setRestaurant(restaurantRes.data.restaurant);
-      setOrders(orderRes.data.recent_order);
-      setOwner(user.data?.user?.username);
+      await storeRestaurantData(newRestaurant);
+
+      setModalVisible(false);
+      setRestaurant(newRestaurant);
+      setOrders(newOrders);
+      setOwner(newOwner);
     }
   } catch (error) {
-    setError({ message: t('merchant.dashboard.error_system') });
+    setError({ message: t('merchant.dashboard.error_system') + error.message});
     setTimeout(() => setError(null), 5000);
   } finally {
     setLoading(false);
   }
-  };
+};
 
 useFocusEffect(
   useCallback(() => {
-    //fetchData();
+    fetchData();
   }, [])
 );
 
@@ -78,6 +94,12 @@ const handleRefresh = async () => {
     router.push('merchant/create-restaurant');
     setModalVisible(false);
   };
+
+  const handleLogout = async() => {
+    await clearAccessToken();
+    await clearUserData();
+    router.replace('authentication/sign-in');
+  }
 
 
   return (
@@ -105,7 +127,7 @@ const handleRefresh = async () => {
       </TouchableOpacity>
 
       {/* Log Out Button */}
-      <TouchableOpacity style={styles.logOutButton}>
+      <TouchableOpacity style={styles.logOutButton} onPress={handleLogout}>
         <FontAwesome name="sign-out" size={18} color="#fff" style={styles.buttonIcon} />
         <Text style={styles.logOutButtonText}>
           {t("merchant.no_restaurant_modal.log_out_button")}
@@ -163,11 +185,11 @@ const handleRefresh = async () => {
             </View>
             <View style={styles.statCard}>
               <Ionicons
-                name={restaurant.status === 'Open' ? 'checkmark-circle' : 'close-circle'}
+                name={restaurant.status === 'open' ? 'checkmark-circle' : 'close-circle'}
                 size={24}
-                color={restaurant.status === 'Open' ? 'green' : 'red'}
+                color={restaurant.status === 'open' ? 'green' : 'red'}
               />
-              <Text style={[styles.statValue, restaurant.status === 'Open' ? styles.open : styles.closed]}>
+              <Text style={[styles.statValue, restaurant.status === 'open' ? styles.open : styles.closed]}>
                 {restaurant.status == 'open' ? t('merchant.dashboard.status_open') : t('merchant.dashboard.status_close')}
               </Text>
               <Text style={styles.statLabel}>{ t('merchant.dashboard.status')}</Text>
@@ -274,6 +296,7 @@ const styles = StyleSheet.create({
     fontSize: hp(1.7),
     color: '#333',
     marginTop: 5,
+    fontFamily: "montserrat-bold"
   },
   statLabel: {
     fontSize: hp(1.5),

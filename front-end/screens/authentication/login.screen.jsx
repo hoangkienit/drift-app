@@ -31,7 +31,7 @@ const Login = () => {
   const handleLogin = async () => {
     setError(null); // Clear the previous error
 
-    // REMEMBER TO VALIDATION INPUT IN HERE BEFORE SEND IT TO BACKEND
+    // TODO: VALIDATION INPUT IN HERE BEFORE SEND IT TO BACKEND
     // if (!username || !password) {
     //   setError(t('authentication.signin.error_empty_fields'));
     //   return;
@@ -41,8 +41,7 @@ const Login = () => {
 
     try {
       const response = await login(username, password);
-      console.log("Login data: ", response);
-      await storeUserData(response); // Store user data in local device
+      await storeUserData(response.data.user); // Store user data in local device
       await storeAccessToken(response.data.accessToken);
 
       setLoading(false);

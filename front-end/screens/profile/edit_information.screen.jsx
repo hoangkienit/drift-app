@@ -11,8 +11,10 @@ import { useTranslation } from "react-i18next";
 import { Colors } from "../../constants/Colors";
 import { updateUserInfo } from "../../api/userApi";
 
+
 // UTILS
 import { storeUserData, clearUserData } from '../../utils/storageHelper';
+import { isDataEqual } from "../../utils/lodashCompare";
 
 export default function EditInformationScreen() {
   const router = useRouter();
@@ -24,7 +26,7 @@ export default function EditInformationScreen() {
     navigation.setOptions({
       headerTitle: t('profile.account_management.edit_account_information.header_title'),
       headerLeft: () => (
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+        <TouchableOpacity onPressIn={() => router.back()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
       ),
@@ -46,7 +48,7 @@ export default function EditInformationScreen() {
     const loadLanguage = async () => {
       try {
         const storedLanguage = await AsyncStorage.getItem("userLanguage");
-        if (storedLanguage) {
+        if (storedLanguage && !isDataEqual(storedLanguage, language)) {
           setLanguage(storedLanguage);
         }
       } catch (error) {

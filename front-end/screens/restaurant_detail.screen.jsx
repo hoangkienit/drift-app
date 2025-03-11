@@ -5,7 +5,6 @@ import FloatingBackButton from "../components/restaurant/restaurant_detail/Float
 import RestaurantHeaderImage from "../components/restaurant/restaurant_detail/RestaurantHeaderImage";
 import RestaurantInfo from "../components/restaurant/restaurant_detail/RestaurantInfo";
 import FoodCard from '../components/restaurant/restaurant_detail/food/FoodCard';
-import { restaurantData } from "../constants/data";
 import {useCartStore} from "../stores/useCartStore"
 import CartBottomButton from "../components/restaurant/restaurant_detail/CartBottomButton";
 

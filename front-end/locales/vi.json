@@ -63,7 +63,11 @@
       "privacy_policy": "Chính sách bảo mật",
       "customer_support": "Hỗ trợ khách hàng",
       "logout": "Đăng xuất",
-      "about_us": "Về chúng tôi"
+      "about_us": "Về chúng tôi",
+      "information_category_section_title": "Thông tin của tôi",
+      "notification_category_section_title": "Thông báo",
+      "more_category_section_title": "Khác",
+      "app_author": "Phát triển bởi"
     },
     "modal": {
       "logout_title": "Bạn có chắc là muốn đăng xuất chứ?",
@@ -133,7 +137,8 @@
     "card": {
       "minutes": "phút",
       "closed": "Đóng cửa",
-      "open": "Đang mở"
+      "open": "Đang mở",
+      "new_restaurant_status": "Nhà hàng mới"
     }
   },
   "order": {
@@ -193,20 +198,28 @@
       "success_restaurant_created": "Xin chúc mừng! Nhà hàng mới của bạn đã được tạo."
     },
     "dashboard": {
-    "header_title": "Trang chủ",
-    "owner": "Chủ sở hữu",
-    "revenue": "Doanh thu",
-    "orders": "Đơn hàng",
-    "menu_items": "Món ăn",
-    "rating": "Xếp hạng",
-    "reviews": "Đánh giá",
-    "status": "Trạng thái",
-    "status_open": "Mở cửa",
-    "status_close": "Đóng cửa",
-    "recent_orders": "Đơn hàng gần đây",
-    "error_system": "Lỗi hệ thống! Vui lòng thử lại sau!",
-    "no_orders_available": "Không có đơn hàng"
+      "header_title": "Trang chủ",
+      "owner": "Chủ sở hữu",
+      "revenue": "Doanh thu",
+      "orders": "Đơn hàng",
+      "menu_items": "Món ăn",
+      "rating": "Xếp hạng",
+      "reviews": "Đánh giá",
+      "status": "Trạng thái",
+      "status_open": "Mở cửa",
+      "status_close": "Đóng cửa",
+      "recent_orders": "Đơn hàng gần đây",
+      "error_system": "Lỗi hệ thống! Vui lòng thử lại sau!",
+      "no_orders_available": "Không có đơn hàng"
+    },
+    "profile": {
+      "information_category_section_title": "Thông Tin Của Tôi",
+      "status_category_section_title": "Trạng Thái",
+      "more_category_section_title": "Khác",
+      "app_author": "Phát triển bởi",
+      "switch_restaurant_status": "Tình trạng nhà hàng"
+    }
+
   }
-}
 }
 

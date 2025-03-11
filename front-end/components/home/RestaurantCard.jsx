@@ -1,11 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
+import webSocketService from "../../services/websocket.service";
 
-const RestaurantCard = ({ data, t, isOpen }) => {
+const RestaurantCard = ({ data, t}) => {
   const router = useRouter();
+  const [restaurant, setRestaurant] = useState(null);
+  const [restaurantStatus, setRestaurantStatus] = useState('closed');
+
+  useEffect(() => {
+    setRestaurant(data);
+  },[]);
+
+  useEffect(() => {
+    const handleStatusUpdate = ({ merchantId: updatedId, status }) => {
+      if (updatedId === data._id) {
+        setRestaurant((prev) => ({ ...prev, status }));
+        setRestaurantStatus(status);
+      }
+    };
+
+    webSocketService.listen("RESTAURANT_STATUS_UPDATED", handleStatusUpdate);
+    return () => webSocketService.remove("RESTAURANT_STATUS_UPDATED", handleStatusUpdate);
+  }, [data._id]);
 
   return (
     <TouchableOpacity
@@ -21,10 +40,10 @@ const RestaurantCard = ({ data, t, isOpen }) => {
       <View style={styles.infoContainer}>
         {/* Open/Closed Status */}
         <LinearGradient
-          colors={isOpen ? ["#4CAF50", "#66BB6A"] : ["#B0BEC5", "#CFD8DC"]}
+          colors={restaurant?.status === 'open' ? ["#4CAF50", "#66BB6A"] : ["#B0BEC5", "#CFD8DC"]}
           style={styles.openStatus}
         >
-          <Text style={styles.openStatusText}>{isOpen ? t("restaurant.card.open") : t("restaurant.card.closed")}</Text>
+          <Text style={styles.openStatusText}>{restaurant?.status === 'open' ? t("restaurant.card.open") : t("restaurant.card.closed")}</Text>
         </LinearGradient>
 
         {/* Restaurant Name */}
@@ -33,7 +52,7 @@ const RestaurantCard = ({ data, t, isOpen }) => {
         {/* Rating */}
         <View style={styles.row}>
           <Icon name="star" size={18} color="#FFD700" />
-          <Text style={styles.rating}>{data.rating}</Text>
+          <Text style={styles.rating}>{data.rating > 0 ? data.rating : t('restaurant.card.new_restaurant_status')}</Text>
         </View>
 
         {/* Distance & Time */}
@@ -105,6 +124,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#444",
     marginLeft: 5,
+    fontFamily: 'montserrat-medium'
   },
   detail: {
     fontSize: 14,

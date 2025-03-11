@@ -1,1 +1,7 @@
-export const BASE_API_URL = "http://192.168.1.170:3000/api/v1";
+import Constants from 'expo-constants';
+
+const ipAddress = '192.168.1.182';
+
+export const BASE_API_URL_V1 = `http://${ipAddress}:3000/api/v1`;
+export const BASE_SOCKET_URL = `ws://${ipAddress}:3000`;
+export const APP_VERSION = `v${Constants.expoConfig.version}`;

@@ -1,5 +1,6 @@
 import * as SecureStore from "expo-secure-store";
 
+// USER DATA
 export const storeUserData = async (userData) => {
   try {
     await SecureStore.setItemAsync("user", JSON.stringify(userData), {
@@ -27,6 +28,8 @@ export const clearUserData = async () => {
   }
 };
 
+
+// ACCESS TOKEN
 export const storeAccessToken = async (accessToken) => {
   try {
     await SecureStore.setItemAsync("accessToken", accessToken, {
@@ -50,5 +53,33 @@ export const clearAccessToken = async () => {
     await SecureStore.deleteItemAsync("accessToken");
   } catch (error) {
     console.error("Error clearing access token", error);
+  }
+};
+
+// RESTAURANT DATA
+export const storeRestaurantData = async (restaurantData) => {
+  try {
+    await SecureStore.setItemAsync("restaurant", JSON.stringify(restaurantData), {
+      keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+    });
+  } catch (error) {
+    console.error("Error saving restaurant data", error);
+  }
+};
+
+export const getRestaurantData = async () => {
+  try {
+    const jsonValue = await SecureStore.getItemAsync("restaurant");
+    return jsonValue ? JSON.parse(jsonValue) : null;
+  } catch (error) {
+    console.error("Error retrieving restaurant data", error);
+  }
+};
+
+export const clearRestaurantData = async () => {
+  try {
+    await SecureStore.deleteItemAsync("restaurant");
+  } catch (error) {
+    console.error("Error clearing restaurant data", error);
   }
 };

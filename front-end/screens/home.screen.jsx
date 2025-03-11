@@ -16,11 +16,13 @@ export default function HomeScreen() {
   const [location, setLocation] = useState(null);
   const [restaurants, setRestaurants] = useState(null);
 
+  const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(false);
   
 
   useEffect(() => {
     getLocation(setLocation);
+    console.log(location);
     fetchRestaurants();
   }, []);
 
@@ -31,13 +33,19 @@ export default function HomeScreen() {
       const restaurantRes = await getAllRestaurants(accessToken);
 
       setRestaurants(restaurantRes.data.restaurants);
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
+      setLoading(false);
     } catch (error) {
       console.error(error);
       setLoading(false);
     }
+  }
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    setLoading(true);
+    await fetchRestaurants();
+    setLoading(false);
+    setRefreshing(false);
   }
 
   return (
@@ -49,7 +57,7 @@ export default function HomeScreen() {
           </View>
           : <>
             <HomeHeader location={location} useCartStore={useCartStoreZustand} t={t} />
-            <HomeContent t={t} restaurants={restaurants}/>
+            <HomeContent t={t} restaurants={restaurants} refreshing={ refreshing} onRefresh={onRefresh} />
             </>
         }
       </View>
