@@ -23,7 +23,7 @@ class WebSocketService {
     this.socket.emit(event, data);
   }
     
- remove(event, callback) {
+  remove(event, callback) {
     this.socket.off(event, callback);
   }
 

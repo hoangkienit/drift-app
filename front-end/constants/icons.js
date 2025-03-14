@@ -5,7 +5,8 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 export const icons = {
     home: (props) => <Entypo name="home" size={26} color="black" {...props} />,
-    dashboard: (props) => <MaterialCommunityIcons name="view-dashboard" size={24} color="black" {...props}/>,
+    dashboard: (props) => <MaterialCommunityIcons name="view-dashboard" size={24} color="black" {...props} />,
+    restaurant: (props) => <Ionicons name="restaurant-sharp" size={26} color="black" {...props}/>,
     profile: (props) => <AntDesign name="user" size={26} color="black" {...props} />,
     favorite: (props) => <AntDesign name="heart" size={26} color="black" {...props} />,
     notification: (props) => <Ionicons name="notifications" size={26} color="black" {...props}/>,

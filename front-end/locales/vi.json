@@ -51,7 +51,8 @@
     "order": "Đơn hàng",
     "favorite": "Yêu thích",
     "profile": "Tôi",
-    "notification": "Thông báo"
+    "notification": "Thông báo",
+    "restaurant": "Nhà hàng"
   },
   "profile": {
     "user_category": {

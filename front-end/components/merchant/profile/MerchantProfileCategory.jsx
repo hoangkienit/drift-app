@@ -7,6 +7,7 @@ import LogoutModal from '../../profile/LogoutModal';
 import { clearUserData, clearAccessToken, clearRestaurantData } from '../../../utils/storageHelper';
 import { APP_VERSION } from '../../../constants/constants';
 import webSocketService from "../../../services/websocket.service";
+import CustomSwitch from '../../CustomSwitch';
 
 const MerchantProfileCategory = ({ t, router, merchant }) => {
     const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
@@ -71,9 +72,9 @@ const MerchantProfileCategory = ({ t, router, merchant }) => {
           <Ionicons name="notifications" size={24} color="#666" style={styles.icon} />
           <Text style={styles.text}>{t(`profile.user_category.notification`)}</Text>
         </View>
-        <Switch
+        <CustomSwitch
           value={isNotificationEnabled}
-          onValueChange={() => setIsNotificationEnabled(prev => !prev)}
+          onToggle={() => setIsNotificationEnabled(prev => !prev)}
         />
               </View>
         {/* Restaurant Status */}
@@ -82,9 +83,9 @@ const MerchantProfileCategory = ({ t, router, merchant }) => {
           <MaterialCommunityIcons name={isRestaurantOpened ? "store" : "store-off"} size={24} color="#666" style={styles.icon} />
           <Text style={styles.text}>{t(`merchant.profile.switch_restaurant_status`)}</Text>
         </View>
-        <Switch
+        <CustomSwitch
           value={isRestaurantOpened}
-                        onValueChange={() => {
+                        onToggle={() => {
                             setIsRestaurantOpened(prevState => {
                             const newStatus = !prevState;
                             handleUpdateRestaurantStatus(newStatus);

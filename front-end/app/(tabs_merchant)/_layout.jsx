@@ -19,6 +19,10 @@ export default function TabLayout() {
               title: t('tabbar.order'),
               headerShown: false
           }} />
+          <Tabs.Screen name='restaurant' options={{
+              title: t('tabbar.restaurant'),
+              headerShown: false
+          }} />
           <Tabs.Screen name='profile' options={{
               title: t('tabbar.profile')
           }}/>

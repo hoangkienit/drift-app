@@ -51,7 +51,8 @@
     "order": "Order",
     "favorite": "Favourite",
     "profile": "Profile",
-    "notification": "Notification"
+    "notification": "Notification",
+    "restaurant": "Restaurant"
   },
   "profile": {
     "user_category": {
