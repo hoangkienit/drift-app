@@ -90,4 +90,42 @@ export const getRecentOrders = async (id, accessToken) => {
   }
 };
 
+export const getMerchantFoods = async (merchantId, accessToken) => {
+  try {
+    const response = await axios.get(`${BASE_API_URL_V1}/food/get-foods/${merchantId}`, {
+      headers: {
+        "accept-language": await AsyncStorage.getItem('userLanguage'),
+        "Authorization": `Bearer ${accessToken}`
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error in food API: ", error);
+    throw error.response?.data;
+  }
+};
+
+export const addNewFood = async (merchantId, accessToken, name, description, price, category, image) => {
+  try {
+    const response = await axios.post(`${BASE_API_URL_V1}/food/add-food/${merchantId}`, {
+      name,
+      description,
+      price,
+      category,
+      image
+    }, {
+      headers: {
+        "accept-language": await AsyncStorage.getItem('userLanguage'),
+        "Authorization": `Bearer ${accessToken}`
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error in food API: ", error.response?.data);
+    throw error.response?.data;
+  }
+};
+
 

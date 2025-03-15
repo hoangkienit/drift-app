@@ -239,6 +239,10 @@
       "cancel_modal_button": "Cancel",
       "add_food_button": "Add",
       "error_empty_field": "Must fill all fields"
+    },
+    "restaurant": {
+      "add_food_button": "Add food",
+      "empty_food": "You don't have any food in your restaurant"
     }
   }
 }

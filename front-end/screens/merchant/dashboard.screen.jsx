@@ -18,8 +18,8 @@ import { useNavigation, useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import { getRecentOrders, getRestaurant } from '../../api/merchantApi';
-import { getAccessToken, getUserData, clearAccessToken, clearUserData, storeRestaurantData, getRestaurantData } from "../../utils/storageHelper";
+import { getMerchantFoods, getRecentOrders, getRestaurant } from '../../api/merchantApi';
+import { getAccessToken, getUserData, clearAccessToken, clearUserData, storeRestaurantData, getRestaurantData, storeFoodData } from "../../utils/storageHelper";
 import { isDataEqual } from '../../utils/lodashCompare';
 
 export default function DashboardScreen() {
@@ -36,9 +36,6 @@ export default function DashboardScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
   const fetchData = async () => {
   try {
     setLoading(true);
@@ -46,6 +43,7 @@ export default function DashboardScreen() {
     const accessToken = await getAccessToken();
     const restaurantRes = await getRestaurant(user._id, accessToken);
     const orderRes = await getRecentOrders(user._id, accessToken);
+    const foodRes = await getMerchantFoods(restaurantRes.data.restaurant._id, accessToken);
 
     const newRestaurant = restaurantRes.data.restaurant;
     const newOrders = orderRes.data.recent_order;
@@ -64,6 +62,7 @@ export default function DashboardScreen() {
       setModalVisible(true);
     } else {
       await storeRestaurantData(newRestaurant);
+      await storeFoodData(foodRes.data.foods);
 
       setModalVisible(false);
       setRestaurant(newRestaurant);

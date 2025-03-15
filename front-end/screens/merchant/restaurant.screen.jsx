@@ -1,23 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import CustomSwitch from "../../components/CustomSwitch";
 import { Colors } from "../../constants/Colors";
 import { useRouter } from "expo-router";
-
-const initialFoodList = [
-  { id: "1", name: "Burger", price: "180.000d", image: "https://www.foodandwine.com/thmb/DI29Houjc_ccAtFKly0BbVsusHc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/crispy-comte-cheesburgers-FT-RECIPE0921-6166c6552b7148e8a8561f7765ddf20b.jpg", isAvailable: true },
-  { id: "2", name: "Pizza", price: "8.99", image: "https://via.placeholder.com/50", isAvailable: false },
-  { id: "3", name: "Sushi", price: "50.000d", image: "https://via.placeholder.com/50", isAvailable: false },
-];
+import { getFoodData } from "../../utils/storageHelper";
+import { useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from "react-i18next";
 
 const FoodScreen = () => {
-    const router = useRouter();
-    const [foodList, setFoodList] = useState(initialFoodList);
+  const router = useRouter();
+  const { t } = useTranslation();
+  const [foodList, setFoodList] = useState(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchFoodFromStorage();
+    }, [])
+  );
+  
+  const fetchFoodFromStorage = async () => {
+    const foods = await getFoodData();
+
+    setFoodList(foods);
+  }
 
     const toggleFoodAvailability = (id) => {
         setFoodList((prevList) =>
-        prevList.map((food) => (food.id === id ? { ...food, isAvailable: !food.isAvailable } : food))
+        prevList.map((food) => (food._id === id ? { ...food, status: food.status === 'available' ? 'unavailable' : 'available' } : food))
         );
     };
 
@@ -25,23 +35,28 @@ const FoodScreen = () => {
     <SafeAreaView style={styles.container}>
         <View style={{paddingHorizontal: 10, height: "100%"}}>
                 <TouchableOpacity style={styles.addButton} onPress={() => router.push('merchant/add_food')}>
-                <Text style={styles.addButtonText}>+ Add Food</Text>
+            <Text style={styles.addButtonText}>+ { t('merchant.restaurant.add_food_button')}</Text>
             </TouchableOpacity>
 
         <FlatList
             data={foodList}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item._id}
+            ListEmptyComponent={() => (
+              <View style={{flex: 1, justifyContent: 'center'}}>
+                <Text style={{ textAlign: 'center', fontFamily: 'montserrat-bold', color: 'gray' }}>{ t('merchant.restaurant.empty_food')}</Text>
+              </View>
+            )}
             renderItem={({ item }) => (
             <View style={styles.foodCard}>
                 <Image source={{ uri: item.image }} style={styles.foodImage} />
-            <View style={styles.foodDetails}>
-                <Text Text style={styles.foodName}>{item.name}</Text>
-                <Text style={styles.foodPrice}>{item.price}</Text>
-            </View>
-            <CustomSwitch value={item.isAvailable} onToggle={() => toggleFoodAvailability(item.id)} />
-            <TouchableOpacity style={styles.nextButton}>
-                <Ionicons name="chevron-forward" size={24} color="#999" />
-            </TouchableOpacity>
+                <View style={styles.foodDetails}>
+                  <Text Text style={styles.foodName}>{item.name}</Text>
+                  <Text style={styles.foodPrice}>{item.price} VND</Text>
+                </View>
+                <CustomSwitch value={item.status === 'available' ? true : false} onToggle={() => toggleFoodAvailability(item._id)} />
+                <TouchableOpacity style={styles.nextButton}>
+                  <Ionicons name="chevron-forward" size={24} color="#999" />
+                </TouchableOpacity>
             </View>
             )}
         />

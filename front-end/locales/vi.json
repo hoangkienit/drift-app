@@ -239,6 +239,10 @@
       "cancel_modal_button": "Hủy",
       "add_food_button": "Thêm",
       "error_empty_field": "Phải điền đầy đủ các trường"
+    },
+    "restaurant": {
+      "add_food_button": "Thêm món ăn",
+      "empty_food": "Bạn không có món ăn nào trong nhà hàng của mình"
     }
   }
 }

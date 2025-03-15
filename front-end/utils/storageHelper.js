@@ -83,3 +83,31 @@ export const clearRestaurantData = async () => {
     console.error("Error clearing restaurant data", error);
   }
 };
+
+// FOOD DATA
+export const storeFoodData = async (foodData) => {
+  try {
+    await SecureStore.setItemAsync("food", JSON.stringify(foodData), {
+      keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+    });
+  } catch (error) {
+    console.error("Error saving food data", error);
+  }
+};
+
+export const getFoodData = async () => {
+  try {
+    const jsonValue = await SecureStore.getItemAsync("food");
+    return jsonValue ? JSON.parse(jsonValue) : null;
+  } catch (error) {
+    console.error("Error retrieving food data", error);
+  }
+};
+
+export const clearFoodData = async () => {
+  try {
+    await SecureStore.deleteItemAsync("food");
+  } catch (error) {
+    console.error("Error clearing food data", error);
+  }
+};

@@ -11,13 +11,16 @@ import {
   TouchableWithoutFeedback, 
   Keyboard, 
   Platform,
-  Modal
+  Modal,
+  ActivityIndicator
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Colors } from "../../constants/Colors";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { addNewFood } from "../../api/merchantApi";
+import { getAccessToken, getRestaurantData, storeFoodData } from "../../utils/storageHelper";
 
 
 const AddFoodScreen = () => {
@@ -30,6 +33,7 @@ const AddFoodScreen = () => {
   const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
 
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -67,28 +71,39 @@ const AddFoodScreen = () => {
     }
   };
 
-  const handleAddFood = () => {
-    setError(null);
+  const handleAddFood = async() => {
+    try {
+      setError(null);
+      setLoading(true);
 
-    if (!foodName || !description || !category || !price) {
-      setError({message: t('merchant.add_food.error_empty_field')})
-      return;
-    }
+      if (!foodName || !description || !category || !price) {
+        setError({ message: t('merchant.add_food.error_empty_field') });
+        setLoading(false);
+        return;
+      }
 
-    // TODO: validate input
+      // TODO: validate input
 
-    const newFood = {
-      id: Date.now().toString(),
-      name: foodName,
-      description,
-      category,
-      price: `${price}đ`,
-      image,
-      isAvailable: true,
-    };
+      const merchant = await getRestaurantData();
+      const accessToken = await getAccessToken();
 
-    console.log("New Food:", newFood);
-    navigation.goBack(); 
+      const response = await addNewFood(
+        merchant._id,
+        accessToken,
+        foodName,
+        description,
+        price,
+        category,
+        image
+      );
+
+      await storeFoodData(response.data.foods);
+      setLoading(false);
+      navigation.goBack();
+    } catch (error) {
+      setError({ message: error.message });
+      setLoading(false);
+    } 
   };
 
   return (
@@ -157,8 +172,8 @@ const AddFoodScreen = () => {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.addButton} onPressIn={handleAddFood}>
-              <Text style={styles.addButtonText}>{t('merchant.add_food.add_food_button')}</Text>
+            <TouchableOpacity style={styles.addButton} onPressIn={handleAddFood} disabled={loading}>
+              {loading ? <ActivityIndicator size={"small"} color={"#fff"}></ActivityIndicator>: <Text style={styles.addButtonText}>{t('merchant.add_food.add_food_button')}</Text>}
             </TouchableOpacity>
           </View>
         </ScrollView>
