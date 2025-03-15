@@ -6,7 +6,7 @@ const OrderController = require('../controllers/order.controller');
 
 
 // GET RECENT ORDER || GET
-router.get('/recent-orders/:merchantId',   OrderController.getRecentOrders);
+router.get('/recent-orders/:merchantId',authMiddleware,  OrderController.getRecentOrders);
 
 
 module.exports = router;

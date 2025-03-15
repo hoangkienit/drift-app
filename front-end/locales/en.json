@@ -219,6 +219,26 @@
       "more_category_section_title": "More",
       "app_author": "Developed by",
       "switch_restaurant_status": "Restaurant status"
+    },
+    "add_food": {
+      "header_title": "Add new food",
+      "add_image_button": "Add image",
+      "food_name_input": "Food name",
+      "food_name_input_placeholder": "Enter your food name",
+      "food_description_input": "Food description",
+      "food_description_input_placeholder": "Enter food description",
+      "food_price_input": "Food price",
+      "food_price_input_placeholder": "Enter food price",
+      "food_category_picker": "Category",
+      "food_category_placeholder": "Select category",
+      "category_appetizer": "Appetizer",
+      "category_main_course": "Main course",
+      "category_dessert": "Dessert",
+      "category_drink": "Drink",
+      "category_other": "Other",
+      "cancel_modal_button": "Cancel",
+      "add_food_button": "Add",
+      "error_empty_field": "Must fill all fields"
     }
   }
 }

@@ -219,8 +219,27 @@
       "more_category_section_title": "Khác",
       "app_author": "Phát triển bởi",
       "switch_restaurant_status": "Tình trạng nhà hàng"
+    },
+    "add_food": {
+      "header_title": "Thêm món ăn",
+      "add_image_button": "Thêm ảnh",
+      "food_name_input": "Tên món ăn",
+      "food_name_input_placeholder": "Nhập tên món ăn",
+      "food_description_input": "Mô tả món ăn",
+      "food_description_input_placeholder": "Nhập mô tả món ăn",
+      "food_price_input": "Giá món ăn",
+      "food_price_input_placeholder": "Nhập giá món ăn",
+      "food_category_picker": "Danh mục",
+      "food_category_placeholder": "Chọn danh mục",
+      "category_appetizer": "Khai vị",
+      "category_main_course": "Món chính",
+      "category_dessert": "Tráng miệng",
+      "category_drink": "Thức uống",
+      "category_other": "Khác",
+      "cancel_modal_button": "Hủy",
+      "add_food_button": "Thêm",
+      "error_empty_field": "Phải điền đầy đủ các trường"
     }
-
   }
 }
 

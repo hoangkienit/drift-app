@@ -35,6 +35,7 @@ app.use('/api/v1/auth', require('./routes/auth.route'));
 app.use('/api/v1/user', require('./routes/user.route'));
 app.use('/api/v1/merchant', require('./routes/merchant.route'));
 app.use('/api/v1/order', require('./routes/order.route'));
+app.use('/api/v1/food', require('./routes/food.route'));
 
 // Attach WebSocket service
 socketService(io);

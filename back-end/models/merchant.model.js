@@ -77,7 +77,7 @@ const merchantSchema = new mongoose.Schema({
       type: Number,
       default: 0
     },
-    foods: [{ type: mongoose.Schema.Types.ObjectId, ref: 'FoodItem' }],
+    foods: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Food' }],
     operatingHours: {
         open: { type: String, default: "08:00 AM" },
         close: { type: String,  default: "10:00 PM" }
