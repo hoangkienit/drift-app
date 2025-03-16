@@ -40,7 +40,7 @@ class FoodService {
         return updatedMerchant.foods;
     }
 
-    static async getAllFoods({ merchantId, lang }) {
+    static async getAllFoodsByMerchantId({ merchantId, lang }) {
         const merchant = await Merchant.findById(merchantId)
             .populate("foods")
             .select("foods")
@@ -51,6 +51,32 @@ class FoodService {
         }
 
         return merchant.foods;
+    }
+
+    static async getFoodById({ foodId, lang }) {
+        const food = await Food.findById(foodId)
+            .lean();
+
+        if (!food) {
+            throw new Error("Food not found");
+        }
+
+        return food;
+    }
+
+    static async updateFoodAvatar({ id, imageUrl }) {
+        const food = await Food.findByIdAndUpdate(
+            id,
+            { $set: { image: imageUrl } },  // ✅ Ensure avatar field is updated
+            { new: true }
+        );
+    
+        if (!food) {
+            console.error("Failed to update food avatar. Food not found.");
+            return null;
+        }
+    
+        return [];
     }
 }
 

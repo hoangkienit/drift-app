@@ -2,6 +2,7 @@ import axios from "axios";
 import { BASE_API_URL_V1 } from "../constants/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as mime from 'mime';
+import { getFileType } from "../utils";
 
 export const updateUserInfo = async (userId, accessToken, phone, email) => {
   try {
@@ -34,18 +35,6 @@ export const updatePassword = async (userId, accessToken, oldPassword, newPasswo
     });
     console.log(response);
     return response.data;
-};
-
-const allowedExtensions = ["jpg", "jpeg", "png"];
-
-const getFileType = (uri) => {
-  const fileExtension = uri.split('.').pop().toLowerCase();
-  
-  if (!allowedExtensions.includes(fileExtension)) {
-    throw new Error("Invalid file type. Only JPG and PNG are allowed.");
-  }
-
-  return fileExtension === "png" ? "image/png" : "image/jpeg";
 };
 
 export const updateAvatar = async (userId, accessToken, avatarUri) => {

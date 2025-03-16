@@ -11,7 +11,7 @@ router.post('/create-restaurant/:id', authMiddleware, MerchantController.createN
 router.get('/restaurant/:id', authMiddleware, MerchantController.getRestaurant);
 
 // GET ALL RESTAURANT || GET
-router.get('/restaurants',   MerchantController.getAllRestaurants);
+router.get('/restaurants', authMiddleware,  MerchantController.getAllRestaurants);
 
 
 module.exports = router;

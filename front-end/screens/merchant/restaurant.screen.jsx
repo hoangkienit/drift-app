@@ -68,7 +68,7 @@ const FoodScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "#f5f5f5" },
-  addButton: { backgroundColor: Colors.primary, padding: 12, borderRadius: 8, alignItems: "center", marginBottom: 12 },
+  addButton: { backgroundColor: Colors.primary, padding: 14, borderRadius: 8, alignItems: "center", marginBottom: 12 },
   addButtonText: { color: "white", fontSize: 16, fontWeight: "bold",fontFamily: "montserrat-bold" },
   foodCard: { flexDirection: "row", alignItems: "center", backgroundColor: "white", padding: 12, borderRadius: 8, marginBottom: 10 },
   foodImage: { width: 50, height: 50, borderRadius: 2, marginRight: 12 },

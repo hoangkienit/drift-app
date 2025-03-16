@@ -5,7 +5,7 @@ const getMessage = require("../utils/getMessage");
 
 const User = require("../models/user.model");
 
-class AvatarService {
+class ImageService {
   constructor() {
     cloudinary.config({
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -14,8 +14,30 @@ class AvatarService {
     });
   }
 
-  async processAndUploadAvatar(file, oldProfileImgUri) {
-  try {
+  /**
+   * Process and upload images for different entities
+   * @param {Object} file - Uploaded file object
+   * @param {String} entityType - "user_avatar", "restaurant_avatar", "restaurant_cover", "restaurant_food"
+   * @param {String} oldImageUrl - Previous image URL (optional)
+   */
+
+  async processAndUploadAvatar(file, entityType, oldProfileImgUri) {
+    try {
+
+      let folder = '';
+    
+      if (entityType === "user_avatar") {
+        folder = "uploads/user_avatar";
+      } else if (entityType === "restaurant_avatar") {
+        folder = `uploads/restaurant_avatar`;
+      } else if (entityType === "restaurant_food") {
+        folder = `uploads/restaurant_food`;
+      } else if (entityType === "restaurant_cover") {
+        folder = `uploads/restaurant_cover`;
+        imageSize = { width: 1200, height: 600 }; // Larger size for cover images
+      } else {
+        throw new Error("Invalid entity type");
+      }
     const resizedImageBuffer = await sharp(file.path)
       .resize(300, 300)
       .toFormat("png")
@@ -33,7 +55,7 @@ class AvatarService {
     // Upload image using a promise
     const cloudinaryResponse = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
-        { folder: "uploads", public_id: `avatar_${Date.now()}` },
+        { folder: folder, public_id: `avatar_${Date.now()}` },
         (error, result) => {
           if (error) return reject(new Error(error.message));
           if (!result || !result.secure_url) return reject(new Error("Upload failed with no result."));
@@ -59,7 +81,7 @@ class AvatarService {
       } catch (unlinkError) {
         console.error("Failed to delete file:", unlinkError.message);
       }
-    }, 1000);
+    }, 2000);
 
     return cloudinaryResponse;
 
@@ -72,5 +94,5 @@ class AvatarService {
 
 }
 
-module.exports = new AvatarService();
+module.exports = new ImageService();
 

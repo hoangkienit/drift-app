@@ -1,6 +1,7 @@
 import axios from "axios";
 import { BASE_API_URL_V1 } from "../constants/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getFileType } from "../utils";
 
 
 export const createNewRestaurant = async (
@@ -126,6 +127,35 @@ export const addNewFood = async (merchantId, accessToken, name, description, pri
     console.error("Error in food API: ", error.response?.data);
     throw error.response?.data;
   }
+  
+};
+
+export const uploadFoodAvatar = async (accessToken, avatarUri) => {
+  try {
+    console.log(avatarUri);
+    const formData = new FormData();
+    formData.append("avatar", {
+      uri: avatarUri,
+      name: `avatar_${avatarUri.split('.').pop()}`,
+      type: getFileType(avatarUri),
+    });
+
+    const response = await axios.post(`${BASE_API_URL_V1}/food/upload-food-avatar`,
+      formData,
+      {
+        headers: {
+        "Content-Type": "multipart/form-data",
+        "accept-language": await AsyncStorage.getItem('userLanguage'),
+        "Authorization": `Bearer ${accessToken}`
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error in food upload avatar API: ", error);
+    throw error.response?.data;
+  }
+  
 };
 
 

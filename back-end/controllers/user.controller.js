@@ -1,5 +1,5 @@
 const UserService = require("../services/user.service");
-const AvatarService = require('../services/avatar.service');
+const ImageService = require('../services/image.service');
 const { updateInformationValidation, updatePasswordValidation } = require("../utils/validation");
 const getLanguage = require("../utils/getLanguage");
 
@@ -126,7 +126,7 @@ class UserController {
         // Fetch current user to get old avatar URL
         const user = await UserService.getUserById(id);
         
-        const imageUrl = await AvatarService.processAndUploadAvatar(req.file, user.profileImg);
+        const imageUrl = await ImageService.processAndUploadAvatar(req.file, "user_avatar", user.profileImg);
 
         if (!imageUrl) {
             return res.status(500).json({ success: false, error: "Image upload failed" });

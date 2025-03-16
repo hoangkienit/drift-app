@@ -124,7 +124,7 @@ const UserProfileCategory = ({ t, router, user }) => {
 
      <View style={styles.app_author_container}>
         <Text style={styles.app_author}>{APP_VERSION}</Text>
-        <Text style={styles.app_author}>{t('profile.user_category.app_author')} Hoangkienit</Text>
+        <Text style={styles.app_author}>Hoangkienit ©{new Date().getFullYear()}</Text>
     </View> 
   </ScrollView>
   );

@@ -154,8 +154,8 @@ const MerchantProfileCategory = ({ t, router, merchant }) => {
       />
 
      <View style={styles.app_author_container}>
-              <Text style={styles.app_author}>{APP_VERSION}</Text>
-        <Text style={styles.app_author}>{t('merchant.profile.app_author')} Hoangkienit</Text>
+        <Text style={styles.app_author}>{APP_VERSION}</Text>
+        <Text style={styles.app_author}>Hoangkienit ©{new Date().getFullYear()}</Text>
     </View> 
   </ScrollView>
   );

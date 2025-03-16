@@ -93,7 +93,7 @@ const AccountManagementScreen = () => {
 
       fetchUserData();
 
-      setModalMessage(`✅ ${t('profile.account_management.avatar_update_success')}`);
+      setModalMessage(`${t('profile.account_management.avatar_update_success')}`);
       setModalVisible(true);
     } catch (error) {
       setModalMessage(t('profile.account_management.avatar_update_failed'));
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: 'montserrat-bold'
   },
   profileSection: {
@@ -252,9 +252,9 @@ const styles = StyleSheet.create({
   },
   modalContainer: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" },
   modalContent: { width: 300, backgroundColor: "#fff", padding: 20, borderRadius: 10, alignItems: "center" },
-  modalText: { fontSize: 16, marginBottom: 10, fontFamily: 'montserrat-medium' },
+  modalText: { fontSize: 16, marginBottom: 10, },
   modalButton: { backgroundColor: Colors.primary, padding: 10, borderRadius: 5, paddingHorizontal: 20 },
-  modalButtonText: { color: "#fff", fontSize: 16, fontFamily: 'montserrat-medium' },
+  modalButtonText: { color: "#fff", fontSize: 16, fontFamily: 'montserrat-bold' },
   loaderContainer: {
     position: "absolute",
     top: 0,

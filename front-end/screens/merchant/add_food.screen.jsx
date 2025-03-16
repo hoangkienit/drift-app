@@ -19,7 +19,7 @@ import { useNavigation } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Colors } from "../../constants/Colors";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { addNewFood } from "../../api/merchantApi";
+import { addNewFood, uploadFoodAvatar } from "../../api/merchantApi";
 import { getAccessToken, getRestaurantData, storeFoodData } from "../../utils/storageHelper";
 
 
@@ -60,16 +60,43 @@ const AddFoodScreen = () => {
   }, [navigation, t]);
 
   const selectImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: 'images',
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
+    try {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    
+        if (status === "denied") {
+          Alert.alert(
+            t('profile.account_management.permission_denied'),
+            t('profile.account_management.denied_message'),
+            [
+              { text: t('profile.account_management.alert_cancel_button'), style: "cancel" },
+              { text: t('profile.account_management.alert_open_setting_button'), onPress: () => Linking.openSettings() }
+            ]
+          );
+          return;
+        }
+    
+        if (status !== "granted") {
+          return;
+        }
+    
+        const result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: 'images',
+          allowsEditing: true,
+          aspect: [1, 1],
+          quality: 0.7,
+        });
+    
+        if (!result.canceled) {
+          const selectedImage = result.assets[0].uri;
+          setImage(selectedImage);
+        } else {
+          console.log("User cancelled image selection");
+        }
+      } catch (error) {
+        console.error("Error selecting image:", error);
+    } finally {
+      console.log(image);
+      }
   };
 
   const handleAddFood = async() => {
@@ -88,6 +115,8 @@ const AddFoodScreen = () => {
       const merchant = await getRestaurantData();
       const accessToken = await getAccessToken();
 
+      const foodImgRes = await uploadFoodAvatar(accessToken, image);
+
       const response = await addNewFood(
         merchant._id,
         accessToken,
@@ -95,14 +124,14 @@ const AddFoodScreen = () => {
         description,
         price,
         category,
-        image
+        foodImgRes.data.food_img
       );
 
       await storeFoodData(response.data.foods);
       setLoading(false);
       navigation.goBack();
     } catch (error) {
-      setError({ message: error.message });
+      setError({ message: error?.message || "System error" });
       setLoading(false);
     } 
   };
@@ -131,7 +160,7 @@ const AddFoodScreen = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.container}>
-            <TouchableOpacity style={styles.imagePicker} onPress={selectImage}>
+            <TouchableOpacity style={styles.imagePicker} onPressIn={selectImage}>
               {image ? (
                 <Image source={{ uri: image }} style={styles.foodImage} />
               ) : (
@@ -245,8 +274,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   foodImage: {
-    width: 100,
-    height: 100,
+    width: 120,
+    height: 120,
     borderRadius: 10,
   },
   imagePlaceholder: {

@@ -1,4 +1,5 @@
 const FoodService = require("../services/food.service");
+const ImageService = require('../services/image.service');
 const getLanguage = require("../utils/getLanguage");
 
 class FoodController {
@@ -35,12 +36,12 @@ class FoodController {
     }
 
     // 🔹 Get All Foods
-    static async getAllFoods(req, res) {
+    static async getAllFoodsByMerchantId(req, res) {
         try {
             const { merchantId } = req.params;
             const lang = getLanguage(req.headers["accept-language"]);
 
-            const result = await FoodService.getAllFoods({ merchantId, lang});
+            const result = await FoodService.getAllFoodsByMerchantId({ merchantId, lang});
 
             return res.status(201).json({
                 success: true,
@@ -57,7 +58,37 @@ class FoodController {
             });
         }
     }
-
+    
+    // 🔹 Upload Food Avatar
+    static async uploadFoodAvatar(req, res) {
+            const { foodId } = req.params;
+    
+        try {
+          if (!req.file) {
+            return res.status(400).json({ success: false, error: 'No file uploaded' });
+            }
+    
+            // // Fetch current user to get old avatar URL
+            // const food = await FoodService.getFoodById(foodId);
+            
+            const imageUrl = await ImageService.processAndUploadAvatar(req.file, "restaurant_food", null);
+    
+            if (!imageUrl) {
+                return res.status(500).json({ success: false, error: "Image upload failed" });
+            }
+    
+          res.json({
+            success: true,
+            message: 'Image uploaded successfully!',
+              data: {
+                food_img: imageUrl
+            },
+          });
+        } catch (error) {
+            console.log("Error", error);
+          res.status(500).json({ success: false, error: error.message });
+        }
+      }
 }
 
 module.exports = FoodController;
