@@ -30,7 +30,8 @@ const AddFoodScreen = () => {
   const [foodName, setFoodName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(0);
+  const [displayPrice, setDisplayPrice] = useState("");
   const [image, setImage] = useState(null);
 
   const [loading, setLoading] = useState(false);
@@ -106,6 +107,22 @@ const AddFoodScreen = () => {
     } 
   };
 
+  const formatNumber = (value) => {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
+  const handleChange = (text) => {
+    // Remove non-numeric characters
+    const numericValue = text.replace(/\D/g, "");
+
+    // Convert to number
+    const amount = numericValue ? parseInt(numericValue, 10) : 0;
+
+    // Update state
+    setPrice(amount); // Store as number
+    setDisplayPrice(formatNumber(amount)); // Format for display
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -151,8 +168,8 @@ const AddFoodScreen = () => {
               <View style={styles.priceContainer}>
                 <TextInput
                   style={styles.priceInput}
-                  value={price}
-                  onChangeText={setPrice}
+                  value={displayPrice}
+                  onChangeText={handleChange}
                   placeholder={t('merchant.add_food.food_price_input_placeholder')}
                   keyboardType="numeric"
                   placeholderTextColor="#999"

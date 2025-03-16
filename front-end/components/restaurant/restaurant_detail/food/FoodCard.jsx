@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, Animated } from 'react
 import ToppingModal from './ToppingModal';
 import FoodAmountAdjuster from './FoodAmountAdjuster';
 import { Colors } from '../../../../constants/Colors';
+import { formatToVND } from '../../../../utils/formatter';
 
 const FoodCard = ({ food, t, restaurant, useCartStore }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -30,7 +31,7 @@ const FoodCard = ({ food, t, restaurant, useCartStore }) => {
     const foodItem = {
       id: Math.random().toString(),
       name: food.name,
-      img: food.imageUrl,
+      img: food.image,
       price: food.price,
       quantity: amount,
       toppings: selectedToppings,
@@ -67,12 +68,12 @@ const FoodCard = ({ food, t, restaurant, useCartStore }) => {
   return (
     <Animated.View style={[styles.card, { transform: [{ scale: scaleValue }] }]}>
       {/* Food Image */}
-      <Image source={{ uri: food.imageUrl }} style={styles.foodImage} />
+      <Image source={{ uri: food.image }} style={styles.foodImage} />
 
       {/* Card Content */}
       <View style={styles.cardContent}>
         <Text style={styles.foodName}>{food.name}</Text>
-        <Text style={styles.foodPrice}>${food.price}</Text>
+        <Text style={styles.foodPrice}>{formatToVND(food.price)}</Text>
       </View>
 
       {/* Add Button */}
@@ -110,8 +111,8 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Align image to center vertically
   },
   foodImage: {
-    width: 100, // Image width
-    height: 100, // Image height
+    width: 80, // Image width
+    height: 80, // Image height
     borderRadius: 10,
     marginLeft: 10, // Space the image from the left edge
   },
@@ -123,9 +124,10 @@ const styles = StyleSheet.create({
   foodName: {
     fontSize: 17,
     fontFamily: 'montserrat-bold',
+    color: 'gray'
   },
   foodPrice: {
-    fontSize: 16,
+    fontSize: 14,
     color: Colors.primary,
     fontFamily: 'montserrat-bold',
   },

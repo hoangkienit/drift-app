@@ -7,6 +7,7 @@ import { useRouter } from "expo-router";
 import { getFoodData } from "../../utils/storageHelper";
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from "react-i18next";
+import { formatToVND } from "../../utils/formatter";
 
 const FoodScreen = () => {
   const router = useRouter();
@@ -51,7 +52,7 @@ const FoodScreen = () => {
                 <Image source={{ uri: item.image }} style={styles.foodImage} />
                 <View style={styles.foodDetails}>
                   <Text Text style={styles.foodName}>{item.name}</Text>
-                  <Text style={styles.foodPrice}>{item.price} VND</Text>
+                  <Text style={styles.foodPrice}>{formatToVND(item.price)}</Text>
                 </View>
                 <CustomSwitch value={item.status === 'available' ? true : false} onToggle={() => toggleFoodAvailability(item._id)} />
                 <TouchableOpacity style={styles.nextButton}>

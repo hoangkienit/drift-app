@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, Modal, TouchableOpacity, FlatList, Image, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../../../constants/Colors";
+import { formatToVND } from "../../../utils/formatter";
 
 export default function CartModal({ visible, onClose, useCartStore, t }) {
   const { cart, removeFromCart, updateQuantity, clearCart, totalAmount } = useCartStore;
@@ -56,7 +57,7 @@ export default function CartModal({ visible, onClose, useCartStore, t }) {
                         </>
                       )}
                       
-                      <Text style={styles.foodPrice}>${item.price ? item.price.toFixed(2) : "N/A"}</Text>
+                      <Text style={styles.foodPrice}>{item.price ? formatToVND(item.price) : "N/A"}</Text>
                     </View>
 
                     {/* Quantity Adjuster */}
@@ -85,7 +86,7 @@ export default function CartModal({ visible, onClose, useCartStore, t }) {
               />
 
               {/* Total Price */}
-              { cart.length === 0 ? <Text style={styles.totalPrice}></Text> : <Text style={styles.totalPrice}>{t('home.cart_modal.total_price')}: ${totalAmount().toFixed(2)}</Text>}
+              { cart.length === 0 ? <Text style={styles.totalPrice}></Text> : <Text style={styles.totalPrice}>{t('home.cart_modal.total_price')}: {formatToVND(totalAmount())}</Text>}
 
               {/* Place Order Button */}
               <TouchableOpacity style={[styles.placeOrderButton, cart.length === 0 && styles.disabledButton]} disabled={cart.length === 0}>
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
     fontFamily: 'montserrat-medium',
   },
   totalPrice: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     textAlign: "right",
     marginTop: 10,
@@ -262,8 +263,8 @@ const styles = StyleSheet.create({
   },
   cancelText: {
     color: "white",
-    fontSize: 16,
-    fontFamily: 'montserrat-medium'
+    fontSize: 14,
+    fontFamily: 'montserrat-bold'
   },
   confirmButton: {
     backgroundColor: Colors.primary,
@@ -273,7 +274,7 @@ const styles = StyleSheet.create({
   },
   confirmText: {
     color: "white",
-    fontSize: 16,
-    fontFamily: 'montserrat-medium'
+    fontSize: 14,
+    fontFamily: 'montserrat-bold'
   },
 });
