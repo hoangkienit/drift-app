@@ -58,6 +58,30 @@ class FoodController {
             });
         }
     }
+
+    // 🔹 Get Food By Id
+    static async getFoodById(req, res) {
+        try {
+            const { foodId } = req.params;
+            const lang = getLanguage(req.headers["accept-language"]);
+
+            const result = await FoodService.getFoodById({ foodId, lang});
+
+            return res.status(201).json({
+                success: true,
+                message: "Successfully get food data",
+                data: {
+                    food: result
+                }
+            })
+        } catch (error) {
+            console.log(error.message)
+            return res.status(500).json({
+                success: false,
+                message: error.message
+            });
+        }
+    }
     
     // 🔹 Upload Food Avatar
     static async uploadFoodAvatar(req, res) {

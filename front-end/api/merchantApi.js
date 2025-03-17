@@ -132,7 +132,10 @@ export const addNewFood = async (merchantId, accessToken, name, description, pri
 
 export const uploadFoodAvatar = async (accessToken, avatarUri) => {
   try {
-    console.log(avatarUri);
+    if (!avatarUri) {
+      const defaultUri = 'https://www.opentable.com/img/restimages/274.jpg';
+      avatarUri = defaultUri;
+    }
     const formData = new FormData();
     formData.append("avatar", {
       uri: avatarUri,
@@ -158,4 +161,18 @@ export const uploadFoodAvatar = async (accessToken, avatarUri) => {
   
 };
 
+export const getFoodById = async (foodId, accessToken) => {
+  try {
+    const response = await axios.get(`${BASE_API_URL_V1}/food/get-food/${foodId}`, {
+      headers: {
+        "accept-language": await AsyncStorage.getItem('userLanguage'),
+        "Authorization": `Bearer ${accessToken}`
+      }
+    });
 
+    return response.data;
+  } catch (error) {
+    console.error("Error in food API: ", error);
+    throw error.response?.data;
+  }
+};

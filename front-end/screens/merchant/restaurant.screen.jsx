@@ -55,7 +55,14 @@ const FoodScreen = () => {
                   <Text style={styles.foodPrice}>{formatToVND(item.price)}</Text>
                 </View>
                 <CustomSwitch value={item.status === 'available' ? true : false} onToggle={() => toggleFoodAvailability(item._id)} />
-                <TouchableOpacity style={styles.nextButton}>
+                <TouchableOpacity style={styles.nextButton} onPressIn={() => {
+                  router.push({
+                    pathname: 'merchant/food-detail',
+                    params: {
+                      foodId: item._id
+                    }
+                  })
+                }}>
                   <Ionicons name="chevron-forward" size={24} color="#999" />
                 </TouchableOpacity>
             </View>

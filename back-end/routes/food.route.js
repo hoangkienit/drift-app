@@ -9,6 +9,9 @@ const FoodController = require('../controllers/food.controller');
 // GET ALL FOODS OF MERCHANT || GET
 router.get('/get-foods/:merchantId', authMiddleware, FoodController.getAllFoodsByMerchantId);
 
+// GET FOOD BY ID || GET
+router.get('/get-food/:foodId', authMiddleware, FoodController.getFoodById);
+
 // ADD NEW FOOD || POST
 router.post('/add-food/:merchantId', authMiddleware, FoodController.addNewFood);
 
